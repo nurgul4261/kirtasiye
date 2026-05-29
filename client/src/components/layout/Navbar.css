@@ -1,0 +1,87 @@
+.navbar {
+  background: var(--text);
+  border-bottom: 4px solid var(--honey);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  /* Petek desen navbar'da */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32L28 66zm0-2l26-15V19L28 4 2 19v30l26 15z' fill='%23e67e22' fill-opacity='0.05'/%3E%3Cpath d='M28 100L0 84V52l28-16 28 16v32L28 100zm0-2l26-15V53L28 38 2 53v30l26 15z' fill='%23e67e22' fill-opacity='0.05'/%3E%3C/svg%3E");
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: 24px;
+}
+.navbar-brand {
+  font-family: 'VT323', monospace;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--honey-light);
+  text-decoration: none;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 #96281b;
+  text-transform: uppercase;
+}
+.navbar-brand:hover { color: #fdf6e3; }
+.navbar-links {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.navbar-links a {
+  text-decoration: none;
+  color: #c8b89a;
+  font-family: 'Special Elite', monospace;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+.navbar-links a:hover {
+  color: var(--honey-light);
+  border-color: var(--honey);
+  background: rgba(230,126,34,0.1);
+}
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cart-btn {
+  position: relative;
+  text-decoration: none;
+  color: #c8b89a;
+  font-family: 'Special Elite', monospace;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border: 1px solid #c8b89a;
+  transition: all 0.15s;
+}
+.cart-btn:hover {
+  color: var(--honey-light);
+  border-color: var(--honey);
+  background: rgba(230,126,34,0.1);
+}
+.cart-count {
+  position: absolute;
+  top: -8px; right: -8px;
+  background: var(--honey);
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px; height: 18px;
+  border: 1px solid var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+}
+.user-menu { display: flex; align-items: center; gap: 12px; }
+.user-name { font-size: 12px; font-family: 'Special Elite', monospace; color: #c8b89a; text-transform: uppercase; letter-spacing: 1px; }
+.logout-btn { padding: 6px 12px; font-size: 11px; background: transparent; color: #c8b89a; border-color: #c8b89a; box-shadow: 2px 2px 0 #c8b89a; }
+.logout-btn:hover { background: var(--honey); color: var(--text); border-color: var(--honey); box-shadow: 2px 2px 0 var(--text); }
