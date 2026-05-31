@@ -1,12 +1,11 @@
 .footer {
-  background: var(--text);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32L28 66zm0-2l26-15V19L28 4 2 19v30l26 15z' fill='%23e67e22' fill-opacity='0.07'/%3E%3Cpath d='M28 100L0 84V52l28-16 28 16v32L28 100zm0-2l26-15V53L28 38 2 53v30l26 15z' fill='%23e67e22' fill-opacity='0.07'/%3E%3C/svg%3E");
-  color: #c8b89a;
+  background: linear-gradient(135deg, #3d3340, #5a4560);
+  color: #c8b8d0;
   text-align: center;
-  padding: 20px 0;
-  font-family: 'Special Elite', monospace;
-  font-size: 13px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  border-top: 4px solid var(--honey);
+  padding: 24px 0;
+  font-size: 14px;
+  margin-top: 64px;
+}
+.footer span {
+  color: var(--primary);
 }

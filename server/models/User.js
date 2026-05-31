@@ -13,6 +13,8 @@ const userSchema = new mongoose.Schema({
     zipCode: String,
   },
   isAdmin: { type: Boolean, default: false },
+  resetToken: { type: String },
+  resetTokenExpiry: { type: Date },
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {
@@ -26,3 +28,4 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 module.exports = mongoose.model('User', userSchema);
+// resetToken alanları zaten schema'ya eklenecek - ayrı migration gerekmez

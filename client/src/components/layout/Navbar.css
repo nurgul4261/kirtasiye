@@ -1,29 +1,69 @@
 .navbar {
-  background: var(--text);
-  border-bottom: 4px solid var(--honey);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 100;
-  /* Petek desen navbar'da */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32L28 66zm0-2l26-15V19L28 4 2 19v30l26 15z' fill='%23e67e22' fill-opacity='0.05'/%3E%3Cpath d='M28 100L0 84V52l28-16 28 16v32L28 100zm0-2l26-15V53L28 38 2 53v30l26 15z' fill='%23e67e22' fill-opacity='0.05'/%3E%3C/svg%3E");
+  box-shadow: 0 2px 16px rgba(192, 132, 160, 0.08);
 }
 .navbar-inner {
   display: flex;
   align-items: center;
-  height: 64px;
-  gap: 24px;
+  height: 100px;
+  gap: 32px;
 }
 .navbar-brand {
-  font-family: 'VT323', monospace;
-  font-size: 26px;
-  font-weight: 400;
-  color: var(--honey-light);
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 0 #96281b;
-  text-transform: uppercase;
 }
-.navbar-brand:hover { color: #fdf6e3; }
+
+/* Yeni eklenen marka metni stilleri */
+.navbar-brand-text {
+  position: relative; /* Vurgu çizgisi için */
+  font-size: 32px; /* Daha büyük */
+  font-weight: 900; /* Daha kalın */
+  background-image: linear-gradient(
+    135deg,
+    var(--primary),
+    #475569
+  ); /* Marka rengi ve koyu gri/lacivert degrade */
+  background-clip: text; /* Metne degradeyi uygula */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; /* Metnin içini şeffaf yap */
+  color: transparent; /* Fallback */
+  letter-spacing: -0.5px; /* Daha modern ve sıkı */
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-position 0.2s ease,
+    text-shadow 0.2s ease;
+  text-shadow: 0 1px 2px rgba(30, 41, 59, 0.1); /* Derinlik katar */
+}
+
+.navbar-brand-text::after {
+  content: "";
+  position: absolute;
+  bottom: -6px; /* Metnin altında */
+  left: 0;
+  width: 30px; /* Başlangıç genişliği */
+  height: 4px; /* Çizgi kalınlığı */
+  background-color: var(--primary); /* Marka rengi */
+  border-radius: 99px;
+  transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.navbar-brand-text:hover {
+  transform: scale(1.05); /* Daha fazla büyüme */
+  background-position: 100% center; /* Degradeyi kaydırarak daha fazla renk vurgusu */
+  text-shadow: 0 4px 8px rgba(var(--primary-rgb), 0.2); /* Daha yumuşak, renkli gölge */
+}
+
+.navbar-brand-text:hover::after {
+  width: 100%; /* Tam genişliğe yayılır */
+}
+
 .navbar-links {
   display: flex;
   gap: 4px;
@@ -31,19 +71,16 @@
 }
 .navbar-links a {
   text-decoration: none;
-  color: #c8b89a;
-  font-family: 'Special Elite', monospace;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 6px 14px;
-  border: 1px solid transparent;
-  transition: all 0.15s;
+  color: var(--text-light);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 99px;
+  transition: all 0.2s ease;
 }
 .navbar-links a:hover {
-  color: var(--honey-light);
-  border-color: var(--honey);
-  background: rgba(230,126,34,0.1);
+  color: var(--primary);
+  background: var(--primary-light);
 }
 .navbar-actions {
   display: flex;
@@ -53,35 +90,92 @@
 .cart-btn {
   position: relative;
   text-decoration: none;
-  color: #c8b89a;
-  font-family: 'Special Elite', monospace;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 6px 14px;
-  border: 1px solid #c8b89a;
-  transition: all 0.15s;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 18px;
+  border: 2px solid var(--border);
+  border-radius: 99px;
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .cart-btn:hover {
-  color: var(--honey-light);
-  border-color: var(--honey);
-  background: rgba(230,126,34,0.1);
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 .cart-count {
   position: absolute;
-  top: -8px; right: -8px;
-  background: var(--honey);
-  color: var(--text);
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(135deg, var(--primary), var(--lavender));
+  color: white;
   font-size: 10px;
-  font-weight: 700;
-  width: 18px; height: 18px;
-  border: 1px solid var(--text);
+  font-weight: 800;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: monospace;
 }
-.user-menu { display: flex; align-items: center; gap: 12px; }
-.user-name { font-size: 12px; font-family: 'Special Elite', monospace; color: #c8b89a; text-transform: uppercase; letter-spacing: 1px; }
-.logout-btn { padding: 6px 12px; font-size: 11px; background: transparent; color: #c8b89a; border-color: #c8b89a; box-shadow: 2px 2px 0 #c8b89a; }
-.logout-btn:hover { background: var(--honey); color: var(--text); border-color: var(--honey); box-shadow: 2px 2px 0 var(--text); }
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.profile-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 99px;
+  background: var(--primary-light);
+  color: var(--primary);
+  transition: all 0.2s ease;
+}
+.profile-link:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+}
+.logout-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  background: transparent;
+  border: 2px solid var(--border);
+  color: var(--text-light);
+  border-radius: 99px;
+  box-shadow: none;
+}
+.logout-btn:hover {
+  background: #fde8ee;
+  border-color: var(--danger);
+  color: var(--danger);
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .navbar-inner {
+    padding: 0 16px;
+    gap: 12px;
+    height: 70px;
+  }
+  /* Mobil görünüm için yazı boyutu optimize edildi */
+  .navbar-brand-text {
+    font-size: 24px;
+  }
+  .navbar-links {
+    display: none;
+  }
+  .cart-btn {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+}

@@ -1,5 +1,12 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const User = require('../models/User');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+});
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
@@ -89,4 +96,75 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getProfile, updateProfile };
+// @desc    Şifremi unuttum
+// @route   POST /api/auth/forgot-password
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'Bu email ile kayıtlı kullanıcı bulunamadı' });
+    }
+    const token = crypto.randomBytes(32).toString('hex');
+    user.resetToken = token;
+    user.resetTokenExpiry = Date.now() + 60 * 60 * 1000; // 1 saat
+    await user.save();
+
+    const resetUrl = `http://localhost:5173/reset-password/${token}`;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: 'Şifre Sıfırlama – Kovan Kırtasiye',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #eee; border-radius: 8px;">
+          <h2 style="color: #d4500a;">🍯 Kovan Kırtasiye</h2>
+          <p style="margin: 20px 0;">Merhaba <strong>${user.name}</strong>,</p>
+          <p>Şifre sıfırlama talebinde bulundunuz. Aşağıdaki butona tıklayarak yeni şifrenizi belirleyebilirsiniz.</p>
+          <div style="text-align: center; margin: 32px 0;">
+            <a href="${resetUrl}" style="background: #d4500a; color: white; padding: 14px 32px; text-decoration: none; border-radius: 4px; font-weight: 600; display: inline-block;">
+              Şifremi Sıfırla
+            </a>
+          </div>
+          <p style="color: #999; font-size: 13px;">Bu link 1 saat geçerlidir. Eğer bu talebi siz yapmadıysanız bu emaili görmezden gelebilirsiniz.</p>
+          <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;">
+          <p style="font-size: 12px; color: #999;">Kovan Kırtasiye • kovankirtasiye@gmail.com</p>
+        </div>
+      `,
+    });
+
+    res.json({ message: 'Şifre sıfırlama linki emailinize gönderildi' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Email gönderilemedi' });
+  }
+};
+
+// @desc    Şifre sıfırla
+// @route   POST /api/auth/reset-password/:token
+const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Link geçersiz veya süresi dolmuş' });
+    }
+
+    user.password = password;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+    await user.save();
+
+    res.json({ message: 'Şifreniz başarıyla güncellendi' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { register, login, getProfile, updateProfile, forgotPassword, resetPassword };

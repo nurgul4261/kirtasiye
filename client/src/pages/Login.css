@@ -1,39 +1,7 @@
-.login-page {
-  min-height: calc(100vh - 140px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 20px;
-}
-.login-card {
-  width: 100%;
-  max-width: 420px;
-  padding: 36px;
-}
-.login-card h2 {
-  font-size: 24px;
-  font-weight: 800;
-  margin-bottom: 24px;
-  text-align: center;
-}
-.login-btn {
-  width: 100%;
-  padding: 13px;
-  font-size: 16px;
-  margin-top: 8px;
-}
-.toggle-text {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  color: var(--text-light);
-}
-.toggle-btn {
-  background: none;
-  border: none;
-  color: var(--primary);
-  font-weight: 600;
-  cursor: pointer;
-  margin-left: 6px;
-  padding: 0;
-}
+.login-page { min-height: calc(100vh - 120px); display: flex; align-items: center; justify-content: center; padding: 32px 20px; }
+.login-card { width: 100%; max-width: 420px; padding: 40px; }
+.login-card h2 { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 28px; text-align: center; letter-spacing: -0.5px; }
+.login-btn { width: 100%; padding: 13px; font-size: 15px; margin-top: 8px; }
+.toggle-text { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-light); }
+.toggle-btn { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; margin-left: 6px; padding: 0; box-shadow: none; font-size: 14px; text-decoration: underline; }
+.toggle-btn:hover { transform: none; box-shadow: none; }

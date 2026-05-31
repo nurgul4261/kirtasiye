@@ -60,6 +60,13 @@ export default function Login() {
           <button type="submit" className="btn-primary login-btn" disabled={loading}>
             {loading ? 'Lütfen bekleyin...' : isLogin ? 'Giriş Yap' : 'Kayıt Ol'}
           </button>
+          {isLogin && (
+            <p style={{ textAlign: 'center', marginTop: 12 }}>
+              <Link to="/forgot-password" style={{ color: 'var(--text-light)', fontSize: 13, textDecoration: 'none' }}>
+                Şifremi unuttum
+              </Link>
+            </p>
+          )}
         </form>
         <p className="toggle-text">
           {isLogin ? 'Hesabın yok mu?' : 'Zaten hesabın var mı?'}
