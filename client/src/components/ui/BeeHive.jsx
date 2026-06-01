@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 export default function BeeHive({ width = 400, height = 300 }) {
   const canvasRef = useRef(null);
@@ -6,18 +6,64 @@ export default function BeeHive({ width = 400, height = 300 }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     const HEX_SIZE = 22;
     const hexes = [];
     let bee = { x: 0, y: 0, targetIdx: 0, progress: 0, angle: 0 };
     let path = [];
 
     const KOVAN_PATTERN = [
-      [0,1],[0,2],[0,3],[0,4],[0,5],[1,3],[2,2],[2,4],[3,1],[3,5],
-      [5,2],[5,3],[5,4],[6,1],[6,5],[7,0],[7,6],[8,1],[8,5],[9,2],[9,3],[9,4],
-      [11,1],[11,2],[12,3],[12,4],[13,3],[13,2],[14,1],
-      [16,5],[16,4],[16,3],[16,2],[17,1],[18,2],[18,3],[18,4],[18,5],[17,3],
-      [20,5],[20,4],[20,3],[20,2],[20,1],[21,2],[22,3],[23,2],[23,1],[23,3],[23,4],[23,5],
+      [0, 1],
+      [0, 2],
+      [0, 3],
+      [0, 4],
+      [0, 5],
+      [1, 3],
+      [2, 2],
+      [2, 4],
+      [3, 1],
+      [3, 5],
+      [5, 2],
+      [5, 3],
+      [5, 4],
+      [6, 1],
+      [6, 5],
+      [7, 0],
+      [7, 6],
+      [8, 1],
+      [8, 5],
+      [9, 2],
+      [9, 3],
+      [9, 4],
+      [11, 1],
+      [11, 2],
+      [12, 3],
+      [12, 4],
+      [13, 3],
+      [13, 2],
+      [14, 1],
+      [16, 5],
+      [16, 4],
+      [16, 3],
+      [16, 2],
+      [17, 1],
+      [18, 2],
+      [18, 3],
+      [18, 4],
+      [18, 5],
+      [17, 3],
+      [20, 5],
+      [20, 4],
+      [20, 3],
+      [20, 2],
+      [20, 1],
+      [21, 2],
+      [22, 3],
+      [23, 2],
+      [23, 1],
+      [23, 3],
+      [23, 4],
+      [23, 5],
     ];
 
     function hexCenter(col, row) {
@@ -47,7 +93,7 @@ export default function BeeHive({ width = 400, height = 300 }) {
 
     function buildPath() {
       const shuffled = [...hexes].sort(() => Math.random() - 0.5);
-      path = shuffled.map(h => hexes.indexOf(h));
+      path = shuffled.map((h) => hexes.indexOf(h));
     }
     buildPath();
 
@@ -69,9 +115,9 @@ export default function BeeHive({ width = 400, height = 300 }) {
           ctx.fill();
         }
       } else {
-        ctx.fillStyle = 'rgba(255,255,255,0.05)';
+        ctx.fillStyle = "rgba(255,255,255,0.05)";
         ctx.fill();
-        ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+        ctx.strokeStyle = "rgba(255,255,255,0.18)";
         ctx.lineWidth = 1;
         ctx.stroke();
       }
@@ -83,8 +129,8 @@ export default function BeeHive({ width = 400, height = 300 }) {
       ctx.rotate(angle);
 
       const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, 16);
-      grad.addColorStop(0, 'rgba(245,200,66,0.35)');
-      grad.addColorStop(1, 'rgba(245,200,66,0)');
+      grad.addColorStop(0, "rgba(245,200,66,0.35)");
+      grad.addColorStop(1, "rgba(245,200,66,0)");
       ctx.beginPath();
       ctx.arc(0, 0, 16, 0, Math.PI * 2);
       ctx.fillStyle = grad;
@@ -93,55 +139,55 @@ export default function BeeHive({ width = 400, height = 300 }) {
       const flap = Math.sin(Date.now() * 0.03) * 4;
       ctx.beginPath();
       ctx.ellipse(-3, -7 + flap, 5, 3.5, -0.3, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(200,230,255,0.75)';
+      ctx.fillStyle = "rgba(200,230,255,0.75)";
       ctx.fill();
-      ctx.strokeStyle = 'rgba(160,200,240,0.5)';
+      ctx.strokeStyle = "rgba(160,200,240,0.5)";
       ctx.lineWidth = 0.5;
       ctx.stroke();
 
       ctx.beginPath();
       ctx.ellipse(3, -7 + flap, 5, 3.5, 0.3, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(200,230,255,0.75)';
+      ctx.fillStyle = "rgba(200,230,255,0.75)";
       ctx.fill();
-      ctx.strokeStyle = 'rgba(160,200,240,0.5)';
+      ctx.strokeStyle = "rgba(160,200,240,0.5)";
       ctx.lineWidth = 0.5;
       ctx.stroke();
 
       ctx.beginPath();
       ctx.ellipse(0, 0, 8, 5.5, 0, 0, Math.PI * 2);
-      ctx.fillStyle = '#f5c842';
+      ctx.fillStyle = "#f5c842";
       ctx.fill();
-      ctx.strokeStyle = '#7a5010';
+      ctx.strokeStyle = "#7a5010";
       ctx.lineWidth = 0.8;
       ctx.stroke();
 
-      [-2.5, 0, 2.5].forEach(xOff => {
+      [-2.5, 0, 2.5].forEach((xOff) => {
         ctx.beginPath();
         ctx.moveTo(xOff, -5.5);
         ctx.lineTo(xOff, 5.5);
-        ctx.strokeStyle = 'rgba(80,40,0,0.45)';
+        ctx.strokeStyle = "rgba(80,40,0,0.45)";
         ctx.lineWidth = 1.2;
         ctx.stroke();
       });
 
       ctx.beginPath();
       ctx.arc(6.5, -1.5, 1.5, 0, Math.PI * 2);
-      ctx.fillStyle = '#1a1a1a';
+      ctx.fillStyle = "#1a1a1a";
       ctx.fill();
       ctx.beginPath();
       ctx.arc(7, -2, 0.5, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      ctx.fillStyle = "rgba(255,255,255,0.8)";
       ctx.fill();
 
       ctx.beginPath();
       ctx.moveTo(5, -5);
       ctx.quadraticCurveTo(9, -11, 11, -13);
-      ctx.strokeStyle = '#7a5010';
+      ctx.strokeStyle = "#7a5010";
       ctx.lineWidth = 0.8;
       ctx.stroke();
       ctx.beginPath();
       ctx.arc(11, -13, 1.5, 0, Math.PI * 2);
-      ctx.fillStyle = '#f5c842';
+      ctx.fillStyle = "#f5c842";
       ctx.fill();
 
       ctx.restore();
@@ -155,7 +201,7 @@ export default function BeeHive({ width = 400, height = 300 }) {
       const dt = Math.min(ts - lastTime, 50);
       lastTime = ts;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      hexes.forEach(h => drawHex(h));
+      hexes.forEach((h) => drawHex(h));
 
       bee.progress += SPEED * (dt / 16);
 
@@ -165,7 +211,10 @@ export default function BeeHive({ width = 400, height = 300 }) {
         bee.targetIdx++;
         if (bee.targetIdx >= path.length) {
           setTimeout(() => {
-            hexes.forEach(h => { h.filled = false; h.fillProgress = 0; });
+            hexes.forEach((h) => {
+              h.filled = false;
+              h.fillProgress = 0;
+            });
             bee.targetIdx = 0;
             buildPath();
           }, 1500);
@@ -186,7 +235,7 @@ export default function BeeHive({ width = 400, height = 300 }) {
         bee.angle = Math.atan2(to.y - from.y, to.x - from.x);
       }
 
-      hexes.forEach(h => {
+      hexes.forEach((h) => {
         if (h.filled && h.fillProgress < 1) h.fillProgress += 0.03;
       });
 
@@ -203,7 +252,7 @@ export default function BeeHive({ width = 400, height = 300 }) {
       ref={canvasRef}
       width={width}
       height={height}
-      style={{ display: 'block', maxWidth: '100%' }}
+      style={{ display: "block", maxWidth: "100%" }}
     />
   );
 }

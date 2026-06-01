@@ -74,7 +74,7 @@ export default function Home() {
 
           {/* Sağ Taraf: Arı animasyonu */}
           <div className="hero-right">
-            <BeeHive width={400} height={300} />
+            <BeeHive width={550} height={300} />
           </div>
         </div>
       </section>

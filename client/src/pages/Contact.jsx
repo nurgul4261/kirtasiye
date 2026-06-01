@@ -48,18 +48,6 @@ export default function Contact() {
             <h3>Bize Ulaşın</h3>
 
             <div className="info-item">
-              <span className="info-icon">📍</span>
-              <div>
-                <strong>Adres</strong>
-                <p>
-                  Kovan Kırtasiye
-                  <br />
-                  Konya, Türkiye
-                </p>
-              </div>
-            </div>
-
-            <div className="info-item">
               <span className="info-icon">📞</span>
               <div>
                 <strong>Telefon</strong>
@@ -72,18 +60,6 @@ export default function Contact() {
               <div>
                 <strong>Email</strong>
                 <p>kovankirtasiye@gmail.com</p>
-              </div>
-            </div>
-
-            <div className="info-item">
-              <span className="info-icon">🕐</span>
-              <div>
-                <strong>Çalışma Saatleri</strong>
-                <p>
-                  Pzt–Cmt: 09:00–18:00
-                  <br />
-                  Pazar: Kapalı
-                </p>
               </div>
             </div>
           </div>
