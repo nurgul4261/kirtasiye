@@ -41,7 +41,7 @@ const getProducts = (cats) => {
   const hediyelik = cats.find((c) => c.slug === "hediyelik")._id;
 
   return [
-    // ── DEFTER ──
+    // DEFTER
     {
       name: "A5 Noktalı Not Defteri",
       description:
@@ -51,7 +51,7 @@ const getProducts = (cats) => {
       brand: "Kovan",
       category: defter,
       image:
-        "https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&q=80",
+        "https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=500&q=80",
       rating: 4.7,
       numReviews: 12,
     },
@@ -64,7 +64,7 @@ const getProducts = (cats) => {
       brand: "Kovan",
       category: defter,
       image:
-        "https://images.unsplash.com/photo-1544816155-12df9643f363?w=400&q=80",
+        "https://images.unsplash.com/photo-1517842645767-c639042777db?w=500&q=80",
       rating: 4.3,
       numReviews: 8,
     },
@@ -77,7 +77,7 @@ const getProducts = (cats) => {
       brand: "Kovan",
       category: defter,
       image:
-        "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&q=80",
+        "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=500&q=80",
       rating: 4.9,
       numReviews: 21,
     },
@@ -90,7 +90,7 @@ const getProducts = (cats) => {
       brand: "Kovan",
       category: defter,
       image:
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
+        "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=500&q=80",
       rating: 4.8,
       numReviews: 15,
     },
@@ -103,12 +103,12 @@ const getProducts = (cats) => {
       brand: "Kovan",
       category: defter,
       image:
-        "https://images.unsplash.com/photo-1589998059171-988d887df646?w=400&q=80",
+        "https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?w=500&q=80",
       rating: 4.5,
       numReviews: 9,
     },
 
-    // ── KALEM ──
+    // KALEM
     {
       name: "Profesyonel Eskiz Kalem Seti (12'li)",
       description:
@@ -118,20 +118,20 @@ const getProducts = (cats) => {
       brand: "Faber",
       category: kalem,
       image:
-        "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80",
+        "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=500&q=80",
       rating: 4.8,
       numReviews: 18,
     },
     {
       name: "Suluboya Boya Kalemi Seti (24'lü)",
       description:
-        "Su bazlı, canlı renkli 24 adet suluboya kalemi. Boyama kitapları ve illüstrasyon için.",
+        "Su bazlı, canlı renkli 24 adet suluboya kalemi. Boyama kitapları için.",
       price: 89.9,
       stock: 40,
       brand: "Staedtler",
       category: kalem,
       image:
-        "https://images.unsplash.com/photo-1560421683-6856ea585c78?w=400&q=80",
+        "https://images.unsplash.com/photo-1560421683-6856ea585c78?w=500&q=80",
       rating: 4.6,
       numReviews: 14,
     },
@@ -144,20 +144,20 @@ const getProducts = (cats) => {
       brand: "Koh-i-noor",
       category: kalem,
       image:
-        "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80",
+        "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=500&q=80",
       rating: 4.7,
       numReviews: 11,
     },
     {
       name: "Keçeli Kalem Seti (20'li)",
       description:
-        "20 canlı renk, çift uçlu (ince ve kalın). Planlayıcı ve bullet journal için mükemmel.",
+        "20 canlı renk, çift uçlu. Planlayıcı ve bullet journal için mükemmel.",
       price: 74.9,
       stock: 55,
       brand: "Stabilo",
       category: kalem,
       image:
-        "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=400&q=80",
+        "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&q=80",
       rating: 4.5,
       numReviews: 22,
     },
@@ -170,221 +170,214 @@ const getProducts = (cats) => {
       brand: "Mungyo",
       category: kalem,
       image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=80",
+        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&q=80",
       rating: 4.4,
       numReviews: 7,
     },
 
-    // ── KUTU OYUNLARI ──
+    // KUTU OYUNLARI
     {
       name: "Catan - Strateji Kutu Oyunu",
-      description:
-        "Dünyaca ünlü kaynak yönetimi ve strateji oyunu. 3-4 oyuncu, 10+ yaş. Ortalama süre: 60-120 dk.",
+      description: "Kaynak yönetimi ve strateji oyunu. 3-4 oyuncu, 10+ yaş.",
       price: 549.9,
       stock: 12,
       brand: "Mayfair Games",
       category: kutu,
       image:
-        "https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&q=80",
+        "https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=500&q=80",
       rating: 4.9,
       numReviews: 34,
     },
     {
       name: "Dixit - Hayal Gücü Oyunu",
-      description:
-        "Yaratıcılığı ve hayal gücünü geliştiren kart oyunu. 3-6 oyuncu, 8+ yaş.",
+      description: "Yaratıcılığı geliştiren kart oyunu. 3-6 oyuncu, 8+ yaş.",
       price: 389.9,
       stock: 15,
       brand: "Libellud",
       category: kutu,
       image:
-        "https://images.unsplash.com/photo-1606503153255-59d5e417b8b4?w=400&q=80",
+        "https://images.unsplash.com/photo-1606503153255-59d5e417b8b4?w=500&q=80",
       rating: 4.8,
       numReviews: 28,
     },
     {
       name: "Azul - Taş Döşeme Oyunu",
       description:
-        "Mozaik taş döşeme temalı strateji oyunu. 2-4 oyuncu, 8+ yaş. Soyut strateji.",
+        "Mozaik taş döşeme temalı strateji oyunu. 2-4 oyuncu, 8+ yaş.",
       price: 459.9,
       stock: 10,
       brand: "Plan B Games",
       category: kutu,
       image:
-        "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=400&q=80",
+        "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=500&q=80",
       rating: 4.9,
       numReviews: 19,
     },
     {
       name: "Dobble - Refleks Kart Oyunu",
-      description:
-        "Hızlı refleks ve dikkat oyunu. 2-8 oyuncu, 6+ yaş. Ailece oynanabilir.",
+      description: "Hızlı refleks ve dikkat oyunu. 2-8 oyuncu, 6+ yaş.",
       price: 199.9,
       stock: 25,
       brand: "Asmodee",
       category: kutu,
       image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=80",
+        "https://images.unsplash.com/photo-1632501641765-e568d28b0015?w=500&q=80",
       rating: 4.7,
       numReviews: 41,
     },
     {
       name: "Pandemic - İşbirliği Oyunu",
       description:
-        "Dünyayı salgın hastalıklardan kurtarın! 2-4 oyuncu, 8+ yaş. Kooperatif strateji.",
+        "Dünyayı salgın hastalıklardan kurtarın! 2-4 oyuncu, 8+ yaş.",
       price: 499.9,
       stock: 8,
       brand: "Z-Man Games",
       category: kutu,
       image:
-        "https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&q=80",
+        "https://images.unsplash.com/photo-1565689876697-e467b6c54da8?w=500&q=80",
       rating: 4.8,
       numReviews: 16,
     },
     {
       name: "Codenames - Kelime Oyunu",
-      description:
-        "Ekip tabanlı kelime çağrışım oyunu. 4-8 oyuncu, 14+ yaş. Parti oyunu klasiği.",
+      description: "Ekip tabanlı kelime çağrışım oyunu. 4-8 oyuncu, 14+ yaş.",
       price: 279.9,
       stock: 18,
       brand: "Czech Games",
       category: kutu,
       image:
-        "https://images.unsplash.com/photo-1606503153255-59d5e417b8b4?w=400&q=80",
+        "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?w=500&q=80",
       rating: 4.6,
       numReviews: 23,
     },
 
-    // ── HOBİ ──
+    // HOBİ
     {
       name: "Yağlı Boya Başlangıç Kiti",
-      description:
-        "24 renk yağlı boya, 3 fırça, palet, tuval ve tiner dahil. Başlangıç için eksiksiz set.",
+      description: "24 renk yağlı boya, 3 fırça, palet, tuval ve tiner dahil.",
       price: 349.9,
       stock: 20,
       brand: "Kovan Hobi",
       category: hobi,
       image:
-        "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400&q=80",
+        "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=500&q=80",
       rating: 4.7,
       numReviews: 13,
     },
     {
       name: "Akrilik Boya Profesyonel Kit",
-      description:
-        "36 renk akrilik boya, 5 fırça, 2 tuval, palet. Hızlı kurur, su ile temizlenir.",
+      description: "36 renk akrilik boya, 5 fırça, 2 tuval, palet.",
       price: 289.9,
       stock: 25,
       brand: "Kovan Hobi",
       category: hobi,
       image:
-        "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80",
+        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=500&q=80",
       rating: 4.8,
       numReviews: 17,
     },
     {
       name: "Epoksi Reçine Başlangıç Seti",
       description:
-        "500gr A+B epoksi reçine, pigment boyalar, silikon kalıplar ve karıştırma araçları.",
+        "500gr A+B epoksi reçine, pigment boyalar, silikon kalıplar.",
       price: 449.9,
       stock: 15,
       brand: "Kovan Hobi",
       category: hobi,
       image:
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
+        "https://images.unsplash.com/photo-1615486511484-92e172cc4fe0?w=500&q=80",
       rating: 4.9,
       numReviews: 24,
     },
     {
       name: "Suluboya Sanat Kiti",
       description:
-        "24 renk suluboya, 4 fırça, suluboya kağıdı bloğu (20 yaprak). Profesyonel kalite.",
+        "24 renk suluboya, 4 fırça, suluboya kağıdı bloğu (20 yaprak).",
       price: 219.9,
       stock: 30,
       brand: "Kovan Hobi",
       category: hobi,
       image:
-        "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400&q=80",
+        "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=500&q=80",
       rating: 4.6,
       numReviews: 10,
     },
     {
       name: "Mandala Boyama Kiti",
       description:
-        "Mandala şablonları, ince uçlu keçeli kalemler ve rehber kitapçık. Meditasyon ve hobi.",
+        "Mandala şablonları, ince uçlu keçeli kalemler ve rehber kitapçık.",
       price: 159.9,
       stock: 35,
       brand: "Kovan Hobi",
       category: hobi,
       image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=80",
+        "https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=500&q=80",
       rating: 4.5,
       numReviews: 8,
     },
 
-    // ── HEDİYELİK ──
+    // HEDİYELİK
     {
       name: "El Yapımı Yağlı Boya Kutu",
       description:
-        "Ahşap üzerine el boyaması çiçek desenli dekoratif kutu. 20x15x8 cm. Her biri özgün.",
+        "Ahşap üzerine el boyaması çiçek desenli dekoratif kutu. 20x15x8 cm.",
       price: 279.9,
       stock: 10,
       brand: "Kovan Atölye",
       category: hediyelik,
       image:
-        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400&q=80",
+        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&q=80",
       rating: 5.0,
       numReviews: 6,
     },
     {
       name: "Bambu Servis Tepsisi",
       description:
-        "Doğal bambu, el yapımı oval servis tepsisi. 40x28 cm, saplı model. Kahvaltı ve sunum için.",
+        "Doğal bambu, el yapımı oval servis tepsisi. 40x28 cm, saplı model.",
       price: 199.9,
       stock: 18,
       brand: "Kovan Atölye",
       category: hediyelik,
       image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=80",
+        "https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=500&q=80",
       rating: 4.8,
       numReviews: 9,
     },
     {
       name: "Yağlı Boya Desenli Tepsi",
       description:
-        "MDF üzerine yağlı boya çiçek desenli dikdörtgen tepsi. 35x25 cm, vernikli yüzey.",
+        "MDF üzerine yağlı boya çiçek desenli dikdörtgen tepsi. 35x25 cm.",
       price: 319.9,
       stock: 12,
       brand: "Kovan Atölye",
       category: hediyelik,
       image:
-        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400&q=80",
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
       rating: 4.9,
       numReviews: 11,
     },
     {
       name: "Hasır Sepet Seti (3'lü)",
-      description:
-        "El örmesi doğal hasır sepet, 3 farklı boy. Depolama ve dekorasyon için. S-M-L set.",
+      description: "El örmesi doğal hasır sepet, 3 farklı boy. S-M-L set.",
       price: 249.9,
       stock: 14,
       brand: "Kovan Atölye",
       category: hediyelik,
       image:
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
+        "https://images.unsplash.com/photo-1595256841226-bde3c53c26a8?w=500&q=80",
       rating: 4.7,
       numReviews: 7,
     },
     {
       name: "Özel Tasarım Hediye Seti",
       description:
-        "Yağlı boya kutu + bambu tepsi + mini defter kombini. Özel ambalajlı hediye seti.",
+        "Yağlı boya kutu + bambu tepsi + mini defter kombini. Özel ambalajlı.",
       price: 599.9,
       stock: 8,
       brand: "Kovan Atölye",
       category: hediyelik,
       image:
-        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400&q=80",
+        "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&q=80",
       rating: 5.0,
       numReviews: 4,
     },
@@ -395,28 +388,18 @@ const seedDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB bağlandı");
-
-    // Temizle
     await Category.deleteMany({});
     await Product.deleteMany({});
     console.log("Eski veriler silindi");
-
-    // Kategorileri ekle
     const createdCats = await Category.insertMany(categories);
     console.log(`${createdCats.length} kategori eklendi`);
-
-    // Ürünleri ekle
     const products = getProducts(createdCats);
     const createdProducts = await Product.insertMany(products);
     console.log(`${createdProducts.length} ürün eklendi`);
-
     console.log("\n✅ Seed tamamlandı!");
-    console.log("Kategoriler:", createdCats.map((c) => c.name).join(", "));
     process.exit(0);
   } catch (error) {
     console.error("Seed hatası:", error);
     process.exit(1);
   }
 };
-
-seedDB();
