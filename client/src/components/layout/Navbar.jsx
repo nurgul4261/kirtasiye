@@ -42,13 +42,7 @@ export default function Navbar() {
           ) : (
             <Link
               to="/login"
-              className="btn-primary"
-              style={{
-                padding: "8px 18px",
-                borderRadius: 4,
-                textDecoration: "none",
-                fontSize: 14,
-              }}
+              className="login-btn" // btn-primary yerine yeni sınıfımız
             >
               Giriş Yap
             </Link>
