@@ -31,6 +31,12 @@ const categories = [
     slug: "hediyelik",
     description: "Yağlı boya kutular, tepsiler, bambu ürünler",
   },
+  {
+    name: "Kağıt",
+    slug: "kagit",
+    description:
+      "Eskiz kağıtları, renkli kartonlar, origami ve dokulu kağıtlar",
+  },
 ];
 
 const getProducts = (cats) => {
@@ -39,6 +45,7 @@ const getProducts = (cats) => {
   const kutu = cats.find((c) => c.slug === "kutu-oyunlari")._id;
   const hobi = cats.find((c) => c.slug === "hobi")._id;
   const hediyelik = cats.find((c) => c.slug === "hediyelik")._id;
+  const kagit = cats.find((c) => c.slug === "kagit")._id; // Yeni kategori bağlantısı
 
   return [
     // ── DEFTER ──
@@ -46,7 +53,7 @@ const getProducts = (cats) => {
       name: "A5 Noktalı Not Defteri",
       description:
         "Bullet journal ve not almak için ideal, 160 sayfa noktalı A5 defter. Sert kapak, şeritli ayraç.",
-      stock: 2, // Son 2 ürün uyarısı için
+      stock: 2,
       brand: "Kovan",
       category: defter,
       image: "",
@@ -280,6 +287,52 @@ const getProducts = (cats) => {
       image: "",
       rating: 5.0,
       numReviews: 4,
+    },
+
+    // ── KAĞIT ÇEŞİTLERİ ──
+    {
+      name: "A4 Premium Kraft Çizim Bloknotu",
+      description:
+        "Karakalem ve eskiz çalışmaları için ideal, 50 yaprak 120gr kaliteli kraft kağıdı.",
+      stock: 12,
+      brand: "Kovan",
+      category: kagit,
+      image: "",
+      rating: 4.6,
+      numReviews: 15,
+    },
+    {
+      name: "Renkli Fon Kartonu Seti (20 Renk)",
+      description:
+        "Okul projeleri, origami ve el sanatları projeleri için ideal 20 farklı canlı renkte A4 karton seti.",
+      stock: 2, // Son 2 ürün uyarısı için
+      brand: "Kovan Hobi",
+      category: kagit,
+      image: "",
+      rating: 4.8,
+      numReviews: 22,
+    },
+    {
+      name: "Özel Dokulu Origami Kağıtları",
+      description:
+        "Geleneksel motifli ve çift taraflı renkli, katlaması kolay 15x15 cm boyutlarında 80 yaprak origami seti.",
+      stock: 2,
+      brand: "Kovan Hobi",
+      category: kagit,
+      image: "",
+      rating: 4.9,
+      numReviews: 11,
+    },
+    {
+      name: "%100 Pamuk Suluboya Kağıdı (A5)",
+      description:
+        "Profesyonel suluboya çalışmaları için emici ve dayanıklı, 300gr soğuk dokulu 20 yaprak blok.",
+      stock: 8,
+      brand: "Canson",
+      category: kagit,
+      image: "",
+      rating: 4.9,
+      numReviews: 31,
     },
   ];
 };

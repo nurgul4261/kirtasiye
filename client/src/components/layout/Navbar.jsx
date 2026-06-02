@@ -27,7 +27,7 @@ export default function Navbar() {
         </div>
         <div className="navbar-actions">
           <Link to="/cart" className="cart-btn">
-            🛒 Sepet
+            🛒
             {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
           </Link>
           {user ? (

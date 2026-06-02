@@ -2,10 +2,16 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 import ProductCard from "../components/ui/ProductCard";
-import BeeHive from "../components/ui/BeeHive";
 import "./Home.css";
 
-const WORDS = ["Defter", "Kalem", "Kutu Oyunu", "Hobi Kiti", "Hediyelik"];
+const WORDS = [
+  "Defter",
+  "Kalem",
+  "Kutu Oyunu",
+  "Hobi Kiti",
+  "Hediyelik",
+  "Kağıt",
+];
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -29,7 +35,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
-          api.get("/products?pageSize=8"),
+          api.get("/products?pageSize=4"),
           api.get("/categories"),
         ]);
         setFeaturedProducts(productsRes.data.products);
@@ -44,87 +50,82 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
-      {/* 2 Sütunlu Modern Hero Alanı */}
-      <section className="hero">
-        <div className="container hero-grid">
-          {/* Sol Taraf: Başlık, Açıklama ve Alttaki Buton */}
-          <div className="hero-left">
-            <h1>
-              İhtiyacınız Olan
-              <br />
-              <span
-                className={`hero-word ${animating ? "fade-out" : "fade-in"}`}
-              >
-                {WORDS[wordIndex]}
-              </span>
-              <br />
-              Burada!
-            </h1>
+    <div className="home-wrapper">
+      {/* 1. BÖLÜM: 20201207170713.jpg Arka Planlı ve Gri Katmanlı Hero Alanı */}
+      <section className="storex-hero">
+        {/* Resmin üstündeki yazıların rahat okunması için gri sis katmanı */}
+        <div className="storex-hero-overlay"></div>
 
-            <p className="hero-desc">
-              Defter, kalem, kutu oyunu, hobi kiti ve hediyelikler — hızlı
-              teslimat, uygun fiyat.
-            </p>
-
-            <Link to="/products" className="hero-btn">
-              Ürünleri Keşfet →
-            </Link>
-          </div>
-
-          {/* Sağ Taraf: Arı animasyonu */}
-          <div className="hero-right">
-            <BeeHive width={550} height={300} />
-          </div>
+        <div className="storex-hero-content">
+          <h1>
+            İhtiyacınız Olan Tüm <br />
+            <span className={`hero-word ${animating ? "fade-out" : "fade-in"}`}>
+              {WORDS[wordIndex]}
+            </span>{" "}
+            Çeşitleri
+          </h1>
+          <p>
+            Aradığınız tüm kırtasiye, hobi ve eğlence ürünleri tek bir adreste.
+          </p>
+          <Link to="/products" className="storex-hero-btn">
+            ŞİMDİ ALIŞVERİŞE BAŞLA
+          </Link>
         </div>
       </section>
 
-      {/* Kategoriler */}
+      {/* 2. BÖLÜM: Kategori Izgarası (3+3 Dengeli Düzen) */}
       {categories.length > 0 && (
-        <section className="section">
-          <div className="container">
-            <h2 className="section-title">Kategoriler</h2>
-            <div className="categories-grid">
-              {categories.map((cat, index) => {
+        <section className="storex-section">
+          <div className="storex-container">
+            <div className="storex-categories-grid">
+              {categories.map((cat) => {
                 const icons = {
                   defter: "📓",
                   kalem: "✏️",
                   "kutu-oyunlari": "🧩",
                   hobi: "🎨",
                   hediyelik: "🎁",
+                  kagit: "📄",
                 };
                 const icon = icons[cat.slug] || "📦";
-                const bgClass = `cat-bg-${(index % 5) + 1}`;
 
                 return (
                   <Link
                     key={cat._id}
                     to={`/products?category=${cat._id}`}
-                    className={`category-card ${bgClass}`}
+                    className="storex-category-card"
                   >
-                    <span className="cat-icon">{icon}</span>
-                    <span className="cat-name">{cat.name}</span>
+                    <div className="storex-cat-content">
+                      <span className="storex-cat-icon">{icon}</span>
+                      <div className="storex-cat-overlay">
+                        <span className="storex-cat-name">{cat.name}</span>
+                      </div>
+                    </div>
                   </Link>
                 );
               })}
+            </div>
+
+            <div className="storex-center-btn-wrapper">
+              <Link to="/products" className="storex-all-cats-btn">
+                TÜM KATEGORİLERİ GÖR
+              </Link>
             </div>
           </div>
         </section>
       )}
 
-      {/* Ürünler */}
-      <section className="section">
-        <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">Öne Çıkan Ürünler</h2>
-            <Link to="/products" className="see-all">
-              Tümünü Gör →
-            </Link>
+      {/* 3. BÖLÜM: Günün Fırsatları */}
+      <section className="storex-section storex-bg-light">
+        <div className="storex-container">
+          <div className="storex-section-header">
+            <h2 className="storex-section-title">GÜNÜN FIRSATLARI</h2>
           </div>
+
           {loading ? (
-            <div className="loading">Yükleniyor...</div>
+            <div className="storex-loading">Yükleniyor...</div>
           ) : (
-            <div className="products-grid">
+            <div className="storex-products-grid">
               {featuredProducts.map((p) => (
                 <ProductCard key={p._id} product={p} />
               ))}

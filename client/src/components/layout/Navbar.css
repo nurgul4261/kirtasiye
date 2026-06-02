@@ -72,7 +72,7 @@
 .navbar-links a {
   text-decoration: none;
   color: var(--text-light);
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 600;
   padding: 8px 16px;
   border-radius: 99px;
@@ -91,9 +91,11 @@
   position: relative;
   text-decoration: none;
   color: var(--text);
-  font-size: 14px;
+
+  font-size: 26px;
   font-weight: 700;
-  padding: 9px 18px;
+  padding: 6px 24px;
+  margin-top: 6px;
   border: 2px solid var(--border);
   border-radius: 99px;
   background: var(--white);
@@ -154,7 +156,7 @@
   font-weight: 700;
   color: var(--text);
   text-decoration: none;
-  padding: 8px 16px;
+  padding: 15px 16px;
   border-radius: 99px;
   background: var(--primary-light);
   color: var(--primary);
@@ -166,16 +168,18 @@
   transform: translateY(-2px);
 }
 .logout-btn {
-  padding: 9px 18px; /* Sepet butonu ile tam aynı boyut */
-  font-size: 13px;
+  text-decoration: none;
+  font-size: 14px;
   font-weight: 700;
+  padding: 15px 24px;
+  border-radius: 99px; /* Tam yuvarlak kenarlar */
   background: transparent;
   border: 2px solid var(--border);
   color: var(--text-light);
-  border-radius: 99px; /* Tam yuvarlak form */
-  box-shadow: var(--shadow-card);
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); /* Aynı yumuşak geçiş efekti */
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
 }
 
 .logout-btn:hover {
