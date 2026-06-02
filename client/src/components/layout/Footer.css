@@ -1,11 +1,186 @@
 .footer {
   background: linear-gradient(135deg, #3d3340, #5a4560);
   color: #c8b8d0;
-  text-align: center;
-  padding: 24px 0;
+  padding: 48px 0 0 0;
   font-size: 14px;
   margin-top: 64px;
 }
-.footer span {
-  color: var(--primary);
+
+.footer-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  text-align: left;
+}
+
+.footer-col h4 {
+  font-family: "Syne", sans-serif;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.footer-logo {
+  font-family: "Syne", sans-serif;
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.brand-col p {
+  line-height: 1.6;
+  color: #bfaec7;
+  max-width: 320px;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 12px;
+}
+
+/* Linkler ve Buton Linkleri */
+.footer-col ul li a,
+.footer-link-btn {
+  color: #c8b8d0;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.footer-col ul li a:hover,
+.footer-link-btn:hover {
+  color: white;
+  transform: translateX(4px); /* Hafif sağa kayma efekti */
+}
+
+/* Alt Çizgi Alanı */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 24px 0;
+  text-align: center;
+  font-size: 13px;
+  color: #9c8aab;
+}
+
+.footer-bottom span {
+  color: var(
+    --primary,
+    #bda2cb
+  ); /* Kendi renk değişkenin varsa çeker yoksa fallback */
+  font-weight: 600;
+}
+
+/* --- MODAL (SÖZLEŞME PENCERESİ) STİLLERİ --- */
+.footer-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.footer-modal-card {
+  background: white;
+  color: #333;
+  width: 100%;
+  max-width: 650px;
+  max-height: 80vh;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.footer-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-modal-header h3 {
+  font-family: "Syne", sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0;
+  color: #3d3340;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #3d3340;
+}
+
+.footer-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  text-align: left;
+}
+
+.footer-modal-body p {
+  margin-bottom: 16px;
+}
+
+/* Mobil Uyum */
+@media (max-width: 768px) {
+  .footer-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .brand-col p {
+    max-width: 100%;
+  }
+  .footer-col h4 {
+    margin-bottom: 12px;
+  }
 }
