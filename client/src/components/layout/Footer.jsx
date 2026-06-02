@@ -20,7 +20,7 @@ export default function Footer() {
     },
     hakkimizda: {
       title: "Hakkımızda",
-      text: `Kovan Kırtasiye, hobi tutkunlarını, kırtasiye aşıklarını ve masa oyunu severleri ortak bir "kovanda" buluşturmak amacıyla kuruldu. Özenle seçilmiş kalemlerden defterlere, yaratıcılığınızı besleyecek hobi kitlerinden sevdiklerinizle keyifli vakit geçireceğiniz kutu oyunlarına kadar geniş bir ürün yelpazesi sunuyoruz. Amacımız, dijitalleşen dünyada analog dokunuşların ve üretkenliğin tadını çıkarmanızı sağlayacak kaliteli ürünleri en modern e-ticaret deneyimiyle kapınıza getirmektir.`,
+      text: `Kovan Kırtasiye, hobi tutkunlarını, kırtasiye aşıklarını ve kutu oyunu severleri ortak bir "kovanda" buluşturmak amacıyla kuruldu. Özenle seçilmiş kalemlerden defterlere, yaratıcılığınızı besleyecek hobi kitlerinden sevdiklerinizle keyifli vakit geçireceğiniz kutu oyunlarına kadar geniş bir ürün yelpazesi sunuyoruz. Amacımız, dijitalleşen dünyada analog dokunuşların ve üretkenliğin tadını çıkarmanızı sağlayacak kaliteli ürünleri en modern e-ticaret deneyimiyle kapınıza getirmektir.`,
     },
   };
 
