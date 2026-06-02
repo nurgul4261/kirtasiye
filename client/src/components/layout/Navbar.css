@@ -208,8 +208,9 @@
     font-size: 12px;
   }
   .login-btn {
-    padding: 7px 12px;
-    font-size: 12px;
+    padding: 5px 12px;
+    font-size: 10px;
+    text-align: center;
   }
   .logout-btn {
     padding: 7px 12px;
