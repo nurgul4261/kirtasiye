@@ -1,12 +1,9 @@
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const User = require("../models/User");
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
@@ -109,13 +106,13 @@ const forgotPassword = async (req, res) => {
     }
     const token = crypto.randomBytes(32).toString("hex");
     user.resetToken = token;
-    user.resetTokenExpiry = Date.now() + 60 * 60 * 1000; // 1 saat
+    user.resetTokenExpiry = Date.now() + 60 * 60 * 1000;
     await user.save();
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await resend.emails.send({
+      from: "Kovan Kırtasiye <onboarding@resend.dev>",
       to: user.email,
       subject: "Şifre Sıfırlama – Kovan Kırtasiye",
       html: `
