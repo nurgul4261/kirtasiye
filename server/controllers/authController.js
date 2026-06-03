@@ -1,15 +1,15 @@
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
-const User = require('../models/User');
+const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+const User = require("../models/User");
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
 });
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
 // @desc    Kullanıcı kaydı
@@ -19,7 +19,7 @@ const register = async (req, res) => {
     const { name, email, password, phone } = req.body;
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: 'Bu email zaten kayıtlı' });
+      return res.status(400).json({ message: "Bu email zaten kayıtlı" });
     }
     const user = await User.create({ name, email, password, phone });
     res.status(201).json({
@@ -49,7 +49,7 @@ const login = async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
-      res.status(401).json({ message: 'Email veya şifre hatalı' });
+      res.status(401).json({ message: "Email veya şifre hatalı" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -60,7 +60,7 @@ const login = async (req, res) => {
 // @route   GET /api/auth/profile
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select('-password');
+    const user = await User.findById(req.user._id).select("-password");
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -89,7 +89,7 @@ const updateProfile = async (req, res) => {
         token: generateToken(updated._id),
       });
     } else {
-      res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+      res.status(404).json({ message: "Kullanıcı bulunamadı" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -103,19 +103,21 @@ const forgotPassword = async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'Bu email ile kayıtlı kullanıcı bulunamadı' });
+      return res
+        .status(404)
+        .json({ message: "Bu email ile kayıtlı kullanıcı bulunamadı" });
     }
-    const token = crypto.randomBytes(32).toString('hex');
+    const token = crypto.randomBytes(32).toString("hex");
     user.resetToken = token;
     user.resetTokenExpiry = Date.now() + 60 * 60 * 1000; // 1 saat
     await user.save();
 
-    const resetUrl = `http://localhost:5173/reset-password/${token}`;
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: user.email,
-      subject: 'Şifre Sıfırlama – Kovan Kırtasiye',
+      subject: "Şifre Sıfırlama – Kovan Kırtasiye",
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #eee; border-radius: 8px;">
           <h2 style="color: #d4500a;">🍯 Kovan Kırtasiye</h2>
@@ -133,10 +135,10 @@ const forgotPassword = async (req, res) => {
       `,
     });
 
-    res.json({ message: 'Şifre sıfırlama linki emailinize gönderildi' });
+    res.json({ message: "Şifre sıfırlama linki emailinize gönderildi" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Email gönderilemedi' });
+    res.status(500).json({ message: "Email gönderilemedi" });
   }
 };
 
@@ -153,7 +155,9 @@ const resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: 'Link geçersiz veya süresi dolmuş' });
+      return res
+        .status(400)
+        .json({ message: "Link geçersiz veya süresi dolmuş" });
     }
 
     user.password = password;
@@ -161,10 +165,17 @@ const resetPassword = async (req, res) => {
     user.resetTokenExpiry = undefined;
     await user.save();
 
-    res.json({ message: 'Şifreniz başarıyla güncellendi' });
+    res.json({ message: "Şifreniz başarıyla güncellendi" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { register, login, getProfile, updateProfile, forgotPassword, resetPassword };
+module.exports = {
+  register,
+  login,
+  getProfile,
+  updateProfile,
+  forgotPassword,
+  resetPassword,
+};
