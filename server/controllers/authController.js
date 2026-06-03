@@ -112,7 +112,7 @@ const forgotPassword = async (req, res) => {
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
 
     await resend.emails.send({
-      from: "Kovan Kırtasiye <onboarding@resend.dev>",
+      from: "Kovan Kırtasiye <bilgi@kovankirtasiye.com.tr>",
       to: user.email,
       subject: "Şifre Sıfırlama – Kovan Kırtasiye",
       html: `
