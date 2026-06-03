@@ -8,6 +8,7 @@ connectDB();
 
 const app = express();
 
+// 1. CORS Yapılandırmasını Güçlendirdik
 app.use(
   cors({
     origin: [
@@ -16,9 +17,15 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
     ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   }),
 );
+
+// 2. Tarayıcıların gönderdiği OPTIONS (Preflight) isteklerini rotalara girmeden en üstte yanıtla
+app.options("*", cors());
+
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -29,7 +36,7 @@ app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/categories", require("./routes/categoryRoutes"));
 app.use("/api/contact", require("./routes/contactRoutes"));
-app.use("/api/upsell", require("./routes/upsellRoutes")); // ← yeni
+app.use("/api/upsell", require("./routes/upsellRoutes"));
 
 app.get("/", (req, res) => res.send("Kırtasiye API çalışıyor"));
 
