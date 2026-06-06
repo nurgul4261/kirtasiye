@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.kovankirtasiye.com.tr/sitemap.xml
