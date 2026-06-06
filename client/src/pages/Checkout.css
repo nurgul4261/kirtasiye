@@ -1,13 +1,141 @@
-.checkout-page { padding: 36px 24px; }
-.checkout-page h1 { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 28px; letter-spacing: -0.5px; }
-.checkout-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
-.checkout-form { padding: 28px; }
-.checkout-form h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; }
-.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
-.submit-btn { width: 100%; padding: 14px; font-size: 15px; margin-top: 8px; }
-.order-summary { padding: 24px; }
-.order-summary h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-.order-item { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; color: var(--text-light); }
-hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
-.order-total { display: flex; justify-content: space-between; font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; margin-top: 12px; }
-@media (max-width: 768px) { .checkout-layout { grid-template-columns: 1fr; } }
+.checkout-page {
+  padding: 36px 24px;
+}
+.checkout-page h1 {
+  font-family: "Syne", sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 28px;
+  letter-spacing: -0.5px;
+}
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  align-items: start;
+}
+.checkout-form {
+  padding: 28px;
+}
+.checkout-form h3 {
+  font-family: "Syne", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  margin-top: 8px;
+}
+.order-summary {
+  padding: 24px;
+}
+.order-summary h3 {
+  font-family: "Syne", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: var(--text-light);
+}
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+}
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  font-family: "Syne", sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  margin-top: 12px;
+}
+/* Kupon */
+.coupon-section {
+  margin: 12px 0;
+}
+
+.coupon-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.coupon-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.coupon-btn {
+  padding: 8px 16px;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.coupon-btn:hover {
+  background: #4338ca;
+}
+.coupon-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.coupon-applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.coupon-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ef4444;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.coupon-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #888;
+}
+
+.discount-row {
+  color: #16a34a;
+  font-weight: 600;
+}
+@media (max-width: 768px) {
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+}

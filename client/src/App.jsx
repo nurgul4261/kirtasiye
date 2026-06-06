@@ -22,6 +22,7 @@ import AdminUsers from "./pages/admin/Users";
 import AdminCategories from "./pages/admin/Categories";
 import "./App.css";
 import AdminUpsell from "./pages/admin/UpsellPage";
+import AdminCoupons from "./pages/admin/AdminCoupons";
 
 function App() {
   return (
@@ -98,6 +99,14 @@ function App() {
             element={
               <AdminRoute>
                 <AdminUpsell />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/coupons"
+            element={
+              <AdminRoute>
+                <AdminCoupons />
               </AdminRoute>
             }
           />

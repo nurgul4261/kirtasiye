@@ -37,6 +37,7 @@ app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/categories", require("./routes/categoryRoutes"));
 app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/upsell", require("./routes/upsellRoutes"));
+app.use("/api/coupons", require("./routes/couponRoutes"));
 
 app.get("/", (req, res) => res.send("Kırtasiye API çalışıyor"));
 

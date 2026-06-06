@@ -17,6 +17,7 @@
 .navbar-brand {
   display: flex;
   align-items: center;
+  gap: 10px;
   text-decoration: none;
 }
 
@@ -87,6 +88,13 @@
   align-items: center;
   gap: 12px;
 }
+
+.navbar-logo {
+  height: 72px;
+  width: auto;
+  object-fit: contain;
+}
+
 .cart-btn {
   position: relative;
   text-decoration: none;
@@ -203,6 +211,11 @@
   .navbar-links {
     display: none;
   }
+
+  .navbar-logo {
+    height: 48px;
+  }
+
   .cart-btn {
     padding: 7px 12px;
     font-size: 12px;

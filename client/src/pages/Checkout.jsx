@@ -1,33 +1,68 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
-import { toast } from 'react-toastify';
-import './Checkout.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+import api from "../services/api";
+import { toast } from "react-toastify";
+import "./Checkout.css";
 
 export default function Checkout() {
   const { cartItems, totalPrice, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [discount, setDiscount] = useState(0); // yüzde
+  const [couponApplied, setCouponApplied] = useState(false);
+
   const [form, setForm] = useState({
-    name: user?.name || '',
-    phone: '',
-    street: '',
-    city: '',
-    district: '',
-    zipCode: '',
-    notes: '',
+    name: user?.name || "",
+    phone: "",
+    street: "",
+    city: "",
+    district: "",
+    zipCode: "",
+    notes: "",
   });
 
-  const shippingPrice = totalPrice > 500 ? 0 : 29.90;
+  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const shippingPrice = totalPrice > 500 ? 0 : 29.9;
+  const discountAmount = couponApplied ? (totalPrice * discount) / 100 : 0;
+  const finalTotal = totalPrice - discountAmount + shippingPrice;
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleCoupon = async () => {
+    if (!couponCode.trim()) return toast.warn("Kupon kodu girin");
+    if (couponApplied) return toast.warn("Zaten bir kupon uygulandı");
+    setCouponLoading(true);
+    try {
+      const { data } = await api.post("/coupons/validate", {
+        code: couponCode,
+        totalQuantity,
+      });
+      setDiscount(data.discountPercent);
+      setCouponApplied(true);
+      toast.success(data.message);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Kupon geçersiz");
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const removeCoupon = () => {
+    setCouponApplied(false);
+    setDiscount(0);
+    setCouponCode("");
+    toast.info("Kupon kaldırıldı");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (cartItems.length === 0) return toast.error('Sepet boş');
+    if (cartItems.length === 0) return toast.error("Sepet boş");
     setLoading(true);
     try {
       const orderItems = cartItems.map((item) => ({
@@ -38,19 +73,21 @@ export default function Checkout() {
         quantity: item.quantity,
       }));
       const { notes, ...shippingAddress } = form;
-      await api.post('/orders', {
+      await api.post("/orders", {
         orderItems,
         shippingAddress,
         itemsPrice: totalPrice,
         shippingPrice,
-        totalPrice: totalPrice + shippingPrice,
+        discountAmount,
+        totalPrice: finalTotal,
+        couponCode: couponApplied ? couponCode.toUpperCase() : null,
         notes,
       });
       clearCart();
-      toast.success('Siparişiniz alındı! Teşekkürler 🎉');
-      navigate('/');
+      toast.success("Siparişiniz alındı! Teşekkürler 🎉");
+      navigate("/");
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Sipariş oluşturulamadı');
+      toast.error(err.response?.data?.message || "Sipariş oluşturulamadı");
     } finally {
       setLoading(false);
     }
@@ -65,37 +102,76 @@ export default function Checkout() {
           <div className="form-row">
             <div className="form-group">
               <label>Ad Soyad</label>
-              <input name="name" value={form.name} onChange={handleChange} required />
+              <input
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="form-group">
               <label>Telefon</label>
-              <input name="phone" value={form.phone} onChange={handleChange} required />
+              <input
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
           <div className="form-group">
             <label>Adres</label>
-            <textarea name="street" value={form.street} onChange={handleChange} required rows={2} />
+            <textarea
+              name="street"
+              value={form.street}
+              onChange={handleChange}
+              required
+              rows={2}
+            />
           </div>
           <div className="form-row">
             <div className="form-group">
               <label>İl</label>
-              <input name="city" value={form.city} onChange={handleChange} required />
+              <input
+                name="city"
+                value={form.city}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="form-group">
               <label>İlçe</label>
-              <input name="district" value={form.district} onChange={handleChange} required />
+              <input
+                name="district"
+                value={form.district}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="form-group">
               <label>Posta Kodu</label>
-              <input name="zipCode" value={form.zipCode} onChange={handleChange} />
+              <input
+                name="zipCode"
+                value={form.zipCode}
+                onChange={handleChange}
+              />
             </div>
           </div>
           <div className="form-group">
             <label>Sipariş Notu (Opsiyonel)</label>
-            <textarea name="notes" value={form.notes} onChange={handleChange} rows={2} />
+            <textarea
+              name="notes"
+              value={form.notes}
+              onChange={handleChange}
+              rows={2}
+            />
           </div>
-          <button type="submit" className="btn-primary submit-btn" disabled={loading}>
-            {loading ? 'İşleniyor...' : 'Siparişi Ver'}
+          <button
+            type="submit"
+            className="btn-primary submit-btn"
+            disabled={loading}
+          >
+            {loading ? "İşleniyor..." : "Siparişi Ver"}
           </button>
         </form>
 
@@ -103,13 +179,74 @@ export default function Checkout() {
           <h3>Sipariş Özeti</h3>
           {cartItems.map((item) => (
             <div key={item._id} className="order-item">
-              <span>{item.name} x{item.quantity}</span>
+              <span>
+                {item.name} x{item.quantity}
+              </span>
               <span>{(item.price * item.quantity).toFixed(2)} ₺</span>
             </div>
           ))}
           <hr />
-          <div className="order-item"><span>Kargo</span><span>{shippingPrice === 0 ? 'Ücretsiz' : `${shippingPrice} ₺`}</span></div>
-          <div className="order-total"><span>Toplam</span><span>{(totalPrice + shippingPrice).toFixed(2)} ₺</span></div>
+
+          {/* Kupon alanı */}
+          <div className="coupon-section">
+            {!couponApplied ? (
+              <div className="coupon-input-row">
+                <input
+                  type="text"
+                  placeholder="Kupon kodu"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                  className="coupon-input"
+                />
+                <button
+                  type="button"
+                  className="coupon-btn"
+                  onClick={handleCoupon}
+                  disabled={couponLoading}
+                >
+                  {couponLoading ? "..." : "Uygula"}
+                </button>
+              </div>
+            ) : (
+              <div className="coupon-applied">
+                <span>🎉 %{discount} indirim uygulandı</span>
+                <button
+                  type="button"
+                  onClick={removeCoupon}
+                  className="coupon-remove"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+            {totalQuantity < 20 && (
+              <p className="coupon-hint">
+                💡 20+ ürün alımlarında kupon kullanabilirsiniz
+              </p>
+            )}
+          </div>
+
+          <hr />
+          <div className="order-item">
+            <span>Ara Toplam</span>
+            <span>{totalPrice.toFixed(2)} ₺</span>
+          </div>
+          {couponApplied && (
+            <div className="order-item discount-row">
+              <span>İndirim (%{discount})</span>
+              <span>-{discountAmount.toFixed(2)} ₺</span>
+            </div>
+          )}
+          <div className="order-item">
+            <span>Kargo</span>
+            <span>
+              {shippingPrice === 0 ? "Ücretsiz" : `${shippingPrice} ₺`}
+            </span>
+          </div>
+          <div className="order-total">
+            <span>Toplam</span>
+            <span>{finalTotal.toFixed(2)} ₺</span>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../services/api";
 import AdminLayout from "./AdminLayout";
 import { toast } from "react-toastify";
 import "./UpsellPage.css";
@@ -11,12 +11,9 @@ export default function UpsellPage() {
   const [upsells, setUpsells] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem("token");
-  const headers = { Authorization: `Bearer ${token}` };
-
   useEffect(() => {
-    axios
-      .get("/api/products?pageSize=1000", { headers })
+    api
+      .get("/products?pageSize=1000")
       .then((r) => setProducts(r.data.products || r.data))
       .catch(() => toast.error("Ürünler yüklenemedi"));
   }, []);
@@ -24,8 +21,8 @@ export default function UpsellPage() {
   useEffect(() => {
     if (!mainProduct) return setUpsells([]);
     setLoading(true);
-    axios
-      .get(`/api/upsell/admin/${mainProduct}`, { headers })
+    api
+      .get(`/upsell/admin/${mainProduct}`)
       .then((r) => setUpsells(r.data))
       .catch(() => toast.error("Upsell'ler yüklenemedi"))
       .finally(() => setLoading(false));
@@ -37,29 +34,22 @@ export default function UpsellPage() {
     if (mainProduct === suggestedProduct)
       return toast.warn("Aynı ürünü seçemezsiniz");
     try {
-      await axios.post(
-        "/api/upsell/admin",
-        {
-          main_product_id: mainProduct,
-          suggested_product_id: suggestedProduct,
-        },
-        { headers },
-      );
+      await api.post("/upsell/admin", {
+        main_product_id: mainProduct,
+        suggested_product_id: suggestedProduct,
+      });
       toast.success("Eklendi!");
       setSuggestedProduct("");
-      const r = await axios.get(`/api/upsell/admin/${mainProduct}`, {
-        headers,
-      });
+      const r = await api.get(`/upsell/admin/${mainProduct}`);
       setUpsells(r.data);
     } catch (err) {
-      const msg = err.response?.data?.message || "Eklenemedi";
-      toast.error(msg);
+      toast.error(err.response?.data?.message || "Eklenemedi");
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/upsell/admin/${id}`, { headers });
+      await api.delete(`/upsell/admin/${id}`);
       setUpsells((prev) => prev.filter((u) => u._id !== id));
       toast.success("Silindi");
     } catch {
@@ -87,9 +77,7 @@ export default function UpsellPage() {
                 ))}
               </select>
             </div>
-
             <span className="upsell-arrow">→</span>
-
             <div className="form-group">
               <label>Önerilecek Ürün</label>
               <select
@@ -118,7 +106,6 @@ export default function UpsellPage() {
               Mevcut Öneriler —{" "}
               <em>{products.find((p) => p._id === mainProduct)?.name}</em>
             </h3>
-
             {loading ? (
               <p className="loading-text">Yükleniyor...</p>
             ) : upsells.length === 0 ? (

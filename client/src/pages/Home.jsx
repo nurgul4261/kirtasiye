@@ -58,15 +58,12 @@ export default function Home() {
 
         <div className="storex-hero-content">
           <h1>
-            İhtiyacınız Olan Tüm <br />
+            Aradığınız <br />
             <span className={`hero-word ${animating ? "fade-out" : "fade-in"}`}>
               {WORDS[wordIndex]}
             </span>{" "}
             Çeşitleri
           </h1>
-          <p>
-            Aradığınız tüm kırtasiye, hobi ve eğlence ürünleri tek bir adreste.
-          </p>
           <Link to="/products" className="storex-hero-btn">
             ŞİMDİ ALIŞVERİŞE BAŞLA
           </Link>
