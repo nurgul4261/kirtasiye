@@ -13,7 +13,7 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [couponCode, setCouponCode] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
-  const [discount, setDiscount] = useState(0); // yüzde
+  const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
 
   const [form, setForm] = useState({
@@ -26,7 +26,6 @@ export default function Checkout() {
     notes: "",
   });
 
-  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const shippingPrice = totalPrice > 500 ? 0 : 29.9;
   const discountAmount = couponApplied ? (totalPrice * discount) / 100 : 0;
   const finalTotal = totalPrice - discountAmount + shippingPrice;
@@ -41,7 +40,7 @@ export default function Checkout() {
     try {
       const { data } = await api.post("/coupons/validate", {
         code: couponCode,
-        totalQuantity,
+        cartItems: cartItems.map((i) => ({ _id: i._id, quantity: i.quantity })),
       });
       setDiscount(data.discountPercent);
       setCouponApplied(true);
@@ -187,7 +186,6 @@ export default function Checkout() {
           ))}
           <hr />
 
-          {/* Kupon alanı */}
           <div className="coupon-section">
             {!couponApplied ? (
               <div className="coupon-input-row">
@@ -219,9 +217,9 @@ export default function Checkout() {
                 </button>
               </div>
             )}
-            {totalQuantity < 20 && (
+            {!cartItems.some((i) => i.quantity >= 20) && (
               <p className="coupon-hint">
-                💡 20+ ürün alımlarında kupon kullanabilirsiniz
+                💡 Aynı üründen 20+ adet alımda kupon kullanabilirsiniz
               </p>
             )}
           </div>

@@ -61,7 +61,7 @@ router.patch("/:id/toggle", protect, admin, async (req, res) => {
 
 // Müşteri: kupon doğrula
 router.post("/validate", async (req, res) => {
-  const { code, totalQuantity } = req.body;
+  const { code, cartItems } = req.body;
   if (!code) return res.status(400).json({ message: "Kupon kodu gerekli" });
 
   try {
@@ -78,9 +78,13 @@ router.post("/validate", async (req, res) => {
         .status(400)
         .json({ message: "Kupon kullanım limitine ulaşmış" });
 
-    if (totalQuantity < coupon.minQuantity)
+    const qualifies = cartItems.some(
+      (item) => item.quantity >= coupon.minQuantity,
+    );
+
+    if (!qualifies)
       return res.status(400).json({
-        message: `Bu kupon en az ${coupon.minQuantity} ürün için geçerlidir (sepetinizde ${totalQuantity} ürün var)`,
+        message: `Bu kupon tek bir üründen en az ${coupon.minQuantity} adet alımda geçerlidir`,
       });
 
     res.json({
