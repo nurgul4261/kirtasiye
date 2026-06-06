@@ -124,7 +124,7 @@ export default function CouponPage() {
               />
             </div>
             <div className="form-group">
-              <label>Kullanım Limiti (boş=sınırsız)</label>
+              <label>Kullanım Limiti</label>
               <input
                 name="usageLimit"
                 type="number"
