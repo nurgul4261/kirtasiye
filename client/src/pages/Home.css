@@ -3,11 +3,11 @@
    (Login sayfasıyla tam uyumlu, modern ve güçlü)
    ========================================================================== */
 :root {
-  --primary: #523d59; /* Giriş panelinin ana tonuna uygun mat koyu mürdüm */
-  --primary-light: #f5f0f6; /* "Tümünü Gör" gibi alanlar için soft arka plan */
-  --text: #1f1a24; /* Güçlü, okunaklı ana yazı rengi */
-  --text-light: #6b6370; /* Toggle text kıvamında hafifletilmiş açıklama rengi */
-  --radius-custom: 16px; /* Login card keskinliğinde modern köşe yuvarlatma */
+  --primary: #1a2744;
+  --primary-light: #eef1f8;
+  --text: #1a2744;
+  --text-light: #6b7a99;
+  --radius-custom: 16px;
 }
 
 .home-wrapper {

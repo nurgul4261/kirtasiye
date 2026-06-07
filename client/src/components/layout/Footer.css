@@ -1,6 +1,6 @@
 .footer {
-  background: linear-gradient(135deg, #3d3340, #5a4560);
-  color: #c8b8d0;
+  background: linear-gradient(135deg, #1a2744, #2d3f6e);
+  color: #a8b4cc;
   padding: 48px 0 0 0;
   font-size: 14px;
   margin-top: 64px;
@@ -16,7 +16,7 @@
 
 .footer-col h4 {
   font-family: "Syne", sans-serif;
-  color: white;
+  color: #f5a800;
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -34,7 +34,7 @@
 
 .brand-col p {
   line-height: 1.6;
-  color: #bfaec7;
+  color: #a8b4cc;
   max-width: 320px;
 }
 
@@ -48,10 +48,9 @@
   margin-bottom: 12px;
 }
 
-/* Linkler ve Buton Linkleri */
 .footer-col ul li a,
 .footer-link-btn {
-  color: #c8b8d0;
+  color: #a8b4cc;
   text-decoration: none;
   background: none;
   border: none;
@@ -65,28 +64,23 @@
 
 .footer-col ul li a:hover,
 .footer-link-btn:hover {
-  color: white;
-  transform: translateX(4px); /* Hafif sağa kayma efekti */
+  color: #f5a800;
+  transform: translateX(4px);
 }
 
-/* Alt Çizgi Alanı */
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 24px 0;
   text-align: center;
   font-size: 13px;
-  color: #9c8aab;
+  color: #6b7a99;
 }
 
 .footer-bottom span {
-  color: var(
-    --primary,
-    #bda2cb
-  ); /* Kendi renk değişkenin varsa çeker yoksa fallback */
+  color: #f5a800;
   font-weight: 600;
 }
 
-/* --- MODAL (SÖZLEŞME PENCERESİ) STİLLERİ --- */
 .footer-modal-overlay {
   position: fixed;
   top: 0;
@@ -139,7 +133,7 @@
   font-size: 18px;
   font-weight: 800;
   margin: 0;
-  color: #3d3340;
+  color: #1a2744;
 }
 
 .close-btn {
@@ -153,7 +147,7 @@
 }
 
 .close-btn:hover {
-  color: #3d3340;
+  color: #1a2744;
 }
 
 .footer-modal-body {
@@ -169,7 +163,6 @@
   margin-bottom: 16px;
 }
 
-/* Mobil Uyum */
 @media (max-width: 768px) {
   .footer-layout {
     grid-template-columns: 1fr;

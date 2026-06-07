@@ -39,8 +39,8 @@ export default function Footer() {
         <div className="footer-col brand-col">
           <h3 className="footer-logo">Kovan Kırtasiye</h3>
           <p>
-            Kalem, defter, kutu oyunları, hediyelik ve hobi kitleri ile
-            hayatınıza renk katın.
+            Defter, kutu oyunları, hediyelik ve hobi kitleri ile hayatınıza renk
+            katın.
           </p>
         </div>
 
