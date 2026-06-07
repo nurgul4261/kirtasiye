@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
@@ -25,6 +25,23 @@ export default function Checkout() {
     zipCode: "",
     notes: "",
   });
+
+  useEffect(() => {
+    api
+      .get("/auth/profile")
+      .then(({ data }) => {
+        setForm((f) => ({
+          ...f,
+          name: data.name || "",
+          phone: data.phone || "",
+          street: data.address?.street || "",
+          city: data.address?.city || "",
+          district: data.address?.district || "",
+          zipCode: data.address?.zipCode || "",
+        }));
+      })
+      .catch(() => {});
+  }, []);
 
   const shippingPrice = totalPrice > 500 ? 0 : 29.9;
   const discountAmount = couponApplied ? (totalPrice * discount) / 100 : 0;
