@@ -78,11 +78,9 @@ export default function Home() {
               {categories.map((cat) => {
                 const icons = {
                   defter: "📓",
-                  kalem: "✏️",
                   "kutu-oyunlari": "🧩",
                   hobi: "🎨",
                   hediyelik: "🎁",
-                  kagit: "📄",
                 };
                 const icon = icons[cat.slug] || "📦";
 
