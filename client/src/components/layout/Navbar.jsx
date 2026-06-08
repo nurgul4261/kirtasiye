@@ -19,7 +19,7 @@ export default function Navbar() {
         {/* Logo görseli yerine metin tabanlı marka ismi eklendi */}
         <Link to="/" className="navbar-brand">
           <img src="/logo.png" alt="Kovan Kırtasiye" className="navbar-logo" />
-          <span className="navbar-brand-text">Kovan Kırtasiye</span>
+          {/*<span className="navbar-brand-text">Kovan Kırtasiye</span>*/}
         </Link>
         <div className="navbar-links">
           <Link to="/products">Ürünler</Link>
