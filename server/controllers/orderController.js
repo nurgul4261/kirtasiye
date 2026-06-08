@@ -1,5 +1,8 @@
 const Order = require("../models/Order");
 const Product = require("../models/Product");
+const { Resend } = require("resend");
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // @desc    Sipariş oluştur
 // @route   POST /api/orders
@@ -12,7 +15,6 @@ const createOrder = async (req, res) => {
       return res.status(400).json({ message: "Sepet boş" });
     }
 
-    // 1. GÜVENLİK ADIMI: Fiyatları ve Toplam Adeti Backend'de Hesapla (Frontend'e güvenme)
     let calculatedItemsPrice = 0;
     let totalQuantity = 0;
 
@@ -23,37 +25,27 @@ const createOrder = async (req, res) => {
           .status(404)
           .json({ message: `Ürün bulunamadı: ${item.name}` });
       }
-
-      // Anlık stok kontrolü
       if (product.stock < item.quantity) {
-        return res
-          .status(400)
-          .json({
-            message: `${product.name} için yeterli stok yok. Güncel stok: ${product.stock}`,
-          });
+        return res.status(400).json({
+          message: `${product.name} için yeterli stok yok. Güncel stok: ${product.stock}`,
+        });
       }
-
-      // Gerçek fiyatı DB'den alıp hesapla
       calculatedItemsPrice += product.price * item.quantity;
       totalQuantity += item.quantity;
     }
 
-    // 2. Kupon ve İndirim Hesaplama
     const VALID_COUPON = "KIRTASIYE20";
     let discountAmount = 0;
     let appliedCoupon = "";
 
     if (couponCode && couponCode.trim() !== "") {
       const formattedCode = couponCode.trim().toUpperCase();
-
       if (formattedCode === VALID_COUPON) {
         if (totalQuantity < 20) {
           return res.status(400).json({
             message: `Bu kupon sadece 20 adet ve üzeri siparişlerde geçerlidir. Mevcut adet: ${totalQuantity}`,
           });
         }
-
-        // İndirimi DB fiyatı üzerinden hesapla
         discountAmount = Math.round(calculatedItemsPrice * 0.1 * 100) / 100;
         appliedCoupon = VALID_COUPON;
       } else {
@@ -61,29 +53,75 @@ const createOrder = async (req, res) => {
       }
     }
 
-    // İndirimli son fiyatları belirle
     const finalItemsPrice = calculatedItemsPrice - discountAmount;
     const finalTotalPrice = finalItemsPrice + Number(shippingPrice || 0);
 
-    // 3. Eşzamanlı Stok Düşürme
     for (const item of orderItems) {
       await Product.findByIdAndUpdate(item.product, {
         $inc: { stock: -item.quantity },
       });
     }
 
-    // 4. Siparişi Kaydet
     const order = await Order.create({
       user: req.user._id,
       orderItems,
       shippingAddress,
-      itemsPrice: calculatedItemsPrice, // İndirimsiz ham fiyat (opsiyonel, istersen finalItemsPrice da yazabilirsin)
+      itemsPrice: calculatedItemsPrice,
       shippingPrice,
-      totalPrice: finalTotalPrice, // PayTR'ye ve DB'ye gidecek gerçek, güvenli son tutar
+      totalPrice: finalTotalPrice,
       discountAmount,
       couponCode: appliedCoupon,
       notes,
     });
+
+    // ── Admin email bildirimi ──
+    try {
+      const itemsHtml = orderItems
+        .map(
+          (item) =>
+            `<tr>
+          <td style="padding:8px;border-bottom:1px solid #eee">${item.name}</td>
+          <td style="padding:8px;border-bottom:1px solid #eee;text-align:center">${item.quantity}</td>
+          <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(item.price * item.quantity).toFixed(2)} ₺</td>
+        </tr>`,
+        )
+        .join("");
+
+      await resend.emails.send({
+        from: "Kovan Kırtasiye <onboarding@resend.dev>",
+        to: process.env.EMAIL_USER,
+        subject: `🛒 Yeni Sipariş! #${order._id.toString().slice(-6).toUpperCase()}`,
+        html: `
+          <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;border:1px solid #eee;border-radius:8px">
+            <h2 style="color:#1a2744">🛒 Yeni Sipariş Geldi!</h2>
+            <p><strong>Sipariş No:</strong> #${order._id.toString().slice(-6).toUpperCase()}</p>
+            <p><strong>Müşteri:</strong> ${shippingAddress.name}</p>
+            <p><strong>Telefon:</strong> ${shippingAddress.phone}</p>
+            <p><strong>Adres:</strong> ${shippingAddress.street}, ${shippingAddress.district} / ${shippingAddress.city}</p>
+            ${notes ? `<p><strong>Not:</strong> ${notes}</p>` : ""}
+            <table style="width:100%;border-collapse:collapse;margin:16px 0">
+              <thead>
+                <tr style="background:#f5f5f5">
+                  <th style="padding:8px;text-align:left">Ürün</th>
+                  <th style="padding:8px;text-align:center">Adet</th>
+                  <th style="padding:8px;text-align:right">Tutar</th>
+                </tr>
+              </thead>
+              <tbody>${itemsHtml}</tbody>
+            </table>
+            ${discountAmount > 0 ? `<p style="color:#16a34a"><strong>İndirim:</strong> -${discountAmount.toFixed(2)} ₺</p>` : ""}
+            <p><strong>Kargo:</strong> ${shippingPrice === 0 ? "Ücretsiz" : `${shippingPrice} ₺`}</p>
+            <p style="font-size:18px;font-weight:bold;color:#1a2744">Toplam: ${finalTotalPrice.toFixed(2)} ₺</p>
+            <a href="https://www.kovankirtasiye.com.tr/admin/orders" 
+               style="display:inline-block;margin-top:16px;padding:12px 24px;background:#1a2744;color:white;text-decoration:none;border-radius:8px;font-weight:600">
+              Admin Panele Git
+            </a>
+          </div>
+        `,
+      });
+    } catch (emailErr) {
+      console.error("Bildirim emaili gönderilemedi:", emailErr.message);
+    }
 
     res.status(201).json(order);
   } catch (error) {
@@ -91,7 +129,6 @@ const createOrder = async (req, res) => {
   }
 };
 
-// Diğer fonksiyonlar (getMyOrders, getOrderById, getAllOrders, updateOrderStatus) tamamen doğru, onlarda hiçbir hata yok.
 const getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id }).sort({

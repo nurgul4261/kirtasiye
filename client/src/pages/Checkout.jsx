@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import { toast } from "react-toastify";
+import turkiyeIller from "../data/turkiye-iller";
 import "./Checkout.css";
 
 export default function Checkout() {
@@ -26,6 +27,9 @@ export default function Checkout() {
     notes: "",
   });
 
+  // Seçili ile göre ilçe listesi
+  const ilceler = form.city ? turkiyeIller[form.city] || [] : [];
+
   useEffect(() => {
     api
       .get("/auth/profile")
@@ -47,8 +51,15 @@ export default function Checkout() {
   const discountAmount = couponApplied ? (totalPrice * discount) / 100 : 0;
   const finalTotal = totalPrice - discountAmount + shippingPrice;
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    // İl değişince ilçeyi sıfırla
+    if (name === "city") {
+      setForm((f) => ({ ...f, city: value, district: "" }));
+    } else {
+      setForm((f) => ({ ...f, [name]: value }));
+    }
+  };
 
   const handleCoupon = async () => {
     if (!couponCode.trim()) return toast.warn("Kupon kodu girin");
@@ -148,21 +159,40 @@ export default function Checkout() {
           <div className="form-row">
             <div className="form-group">
               <label>İl</label>
-              <input
+              <select
                 name="city"
                 value={form.city}
                 onChange={handleChange}
                 required
-              />
+              >
+                <option value="">İl seçiniz</option>
+                {Object.keys(turkiyeIller)
+                  .sort()
+                  .map((il) => (
+                    <option key={il} value={il}>
+                      {il}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div className="form-group">
               <label>İlçe</label>
-              <input
+              <select
                 name="district"
                 value={form.district}
                 onChange={handleChange}
                 required
-              />
+                disabled={!form.city}
+              >
+                <option value="">
+                  {form.city ? "İlçe seçiniz" : "Önce il seçiniz"}
+                </option>
+                {ilceler.map((ilce) => (
+                  <option key={ilce} value={ilce}>
+                    {ilce}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-group">
               <label>Posta Kodu</label>
