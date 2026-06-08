@@ -47,7 +47,7 @@ export default function Home() {
       {/* 1. BÖLÜM: 20201207170713.jpg Arka Planlı ve Gri Katmanlı Hero Alanı */}
       <section className="storex-hero">
         {/* Resmin üstündeki yazıların rahat okunması için gri sis katmanı */}
-        <div className="storex-hero-overlay"></div>
+        {/*<div className="storex-hero-overlay"></div>*/}
 
         <div className="storex-hero-content">
           <h1>
