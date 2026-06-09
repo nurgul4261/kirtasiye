@@ -68,12 +68,21 @@
   transform: translateX(4px);
 }
 
+/* Yeniden Düzenlenen Alt Kısa Alanı */
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 24px 0;
-  text-align: center;
   font-size: 13px;
   color: #6b7a99;
+}
+
+/* Telif ve İmzanın Yan Yana Durmasını Sağlayan Esnek Yapı */
+.footer-bottom-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .footer-bottom span {
@@ -81,6 +90,25 @@
   font-weight: 600;
 }
 
+/* Türkçe Tasarımcı İmzası Stilleri */
+.designer-credit {
+  font-size: 13px;
+  color: #6b7a99;
+  letter-spacing: 0.3px;
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+}
+
+.designer-credit:hover {
+  opacity: 1; /* Üzerine gelindiğinde parlasın */
+}
+
+.designer-credit span {
+  color: #f5a800;
+  font-weight: 600;
+}
+
+/* Modal Stilleri */
 .footer-modal-overlay {
   position: fixed;
   top: 0;
@@ -163,6 +191,7 @@
   margin-bottom: 16px;
 }
 
+/* Medya Sorguları */
 @media (max-width: 768px) {
   .footer-layout {
     grid-template-columns: 1fr;
@@ -175,5 +204,12 @@
   }
   .footer-col h4 {
     margin-bottom: 12px;
+  }
+  /* Mobilde imzaların ortalı görünmesi için */
+  .footer-bottom-content {
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 8px;
   }
 }

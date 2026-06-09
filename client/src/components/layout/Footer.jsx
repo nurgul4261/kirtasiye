@@ -346,9 +346,12 @@ Bizim için ticaret, sadece bir ürünün teslim edilmesinden ibaret değildir. 
       </div>
 
       <div className="footer-bottom">
-        <div className="container">
+        <div className="container footer-bottom-content">
           <p>
-            © 2026 <span>Kovan Kırtasiye</span>. Tüm hakları saklıdır.
+            &copy; 2026 <span>Kovan Kırtasiye</span>. Tüm Hakları Saklıdır.
+          </p>
+          <p className="designer-credit">
+            <span>nrgl</span> tarafından tasarlandı ve kodlandı
           </p>
         </div>
       </div>
