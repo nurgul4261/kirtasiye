@@ -1,8 +1,6 @@
 const Product = require("../models/Product");
 const { cloudinary } = require("../config/cloudinary");
 
-// @desc    Tüm ürünleri getir
-// @route   GET /api/products
 const getProducts = async (req, res) => {
   try {
     const pageSize = Number(req.query.pageSize) || 12;
@@ -31,8 +29,6 @@ const getProducts = async (req, res) => {
   }
 };
 
-// @desc    Tek ürün getir
-// @route   GET /api/products/:id
 const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate(
@@ -49,8 +45,6 @@ const getProductById = async (req, res) => {
   }
 };
 
-// @desc    Ürün oluştur (Admin)
-// @route   POST /api/products
 const createProduct = async (req, res) => {
   try {
     console.log("req.file:", req.file);
@@ -73,8 +67,6 @@ const createProduct = async (req, res) => {
   }
 };
 
-// @desc    Ürün güncelle (Admin)
-// @route   PUT /api/products/:id
 const updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -95,8 +87,6 @@ const updateProduct = async (req, res) => {
   }
 };
 
-// @desc    Ürün sil (Admin)
-// @route   DELETE /api/products/:id
 const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
@@ -110,8 +100,6 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-// @desc    Ürüne yorum ekle
-// @route   POST /api/products/:id/reviews
 const createProductReview = async (req, res) => {
   try {
     const { rating, comment } = req.body;
