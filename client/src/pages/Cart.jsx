@@ -119,7 +119,7 @@ export default function Cart() {
             </span>
           </div>
           {shippingPrice === 0 && (
-            <p className="free-shipping">✅ 500 ₺ üzeri ücretsiz kargo</p>
+            <p className="free-shipping">✅ 2000 ₺ üzeri ücretsiz kargo</p>
           )}
           <div className="summary-total">
             <span>Toplam</span>
