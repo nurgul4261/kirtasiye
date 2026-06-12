@@ -84,10 +84,11 @@ const updateProduct = async (req, res) => {
     const updated = await product.save();
     res.json(updated);
   } catch (error) {
+    console.log("UPDATE HATA mesajı:", error.message);
+    console.log("UPDATE HATA stack:", error.stack);
     res.status(500).json({ message: error.message });
   }
 };
-
 const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
