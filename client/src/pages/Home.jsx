@@ -55,7 +55,7 @@ export default function Home() {
             <span className={`hero-word ${animating ? "fade-out" : "fade-in"}`}>
               {WORDS[wordIndex]}
             </span>{" "}
-            Çeşitlerimizi Keşfedin!
+            Çeşitlerini Keşfedin!
           </h1>
           <Link to="/products" className="storex-hero-btn">
             ŞİMDİ ALIŞVERİŞE BAŞLA
