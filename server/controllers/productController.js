@@ -53,6 +53,8 @@ const getProductById = async (req, res) => {
 // @route   POST /api/products
 const createProduct = async (req, res) => {
   try {
+    console.log("req.file:", req.file);
+    console.log("req.body:", req.body);
     const { name, description, price, category, brand, stock } = req.body;
     const image = req.file ? req.file.path : req.body.image;
     const product = await Product.create({
@@ -66,6 +68,7 @@ const createProduct = async (req, res) => {
     });
     res.status(201).json(product);
   } catch (error) {
+    console.log("HATA:", error);
     res.status(500).json({ message: error.message });
   }
 };
