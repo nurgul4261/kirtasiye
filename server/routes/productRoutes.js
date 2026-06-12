@@ -20,7 +20,6 @@ router.post(
   (req, res, next) => {
     upload.single("image")(req, res, (err) => {
       if (err) {
-        console.log("MULTER HATASI:", err);
         return res.status(500).json({ message: err.message });
       }
       next();
