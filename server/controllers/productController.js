@@ -62,7 +62,8 @@ const createProduct = async (req, res) => {
     });
     res.status(201).json(product);
   } catch (error) {
-    console.log("HATA:", error);
+    console.log("HATA mesajı:", error.message);
+    console.log("HATA stack:", error.stack);
     res.status(500).json({ message: error.message });
   }
 };
