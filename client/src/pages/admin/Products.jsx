@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import AdminLayout from "./AdminLayout";
 import api from "../../services/api";
 import { toast } from "react-toastify";
+import imageCompression from "browser-image-compression";
 
 const emptyForm = {
   name: "",
@@ -22,6 +23,7 @@ export default function AdminProducts() {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [compressing, setCompressing] = useState(false);
 
   const fetchProducts = async () => {
     try {
@@ -63,11 +65,24 @@ export default function AdminProducts() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    setCompressing(true);
+    try {
+      const compressed = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1024,
+        useWebWorker: true,
+      });
+      setImageFile(compressed);
+      setImagePreview(URL.createObjectURL(compressed));
+    } catch (err) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    } finally {
+      setCompressing(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -264,10 +279,14 @@ export default function AdminProducts() {
                 />
               </div>
 
-              {/* Görsel Yükleme */}
               <div className="form-group">
                 <label>Ürün Görseli</label>
-                {imagePreview && (
+                {compressing && (
+                  <p style={{ fontSize: 13, color: "var(--primary)" }}>
+                    Görsel optimize ediliyor...
+                  </p>
+                )}
+                {imagePreview && !compressing && (
                   <img
                     src={imagePreview}
                     alt="Önizleme"
@@ -299,13 +318,15 @@ export default function AdminProducts() {
                 <button
                   type="submit"
                   className="btn-primary"
-                  disabled={uploading}
+                  disabled={uploading || compressing}
                 >
-                  {uploading
-                    ? "Yükleniyor..."
-                    : editProduct
-                      ? "Güncelle"
-                      : "Ekle"}
+                  {compressing
+                    ? "Optimize ediliyor..."
+                    : uploading
+                      ? "Yükleniyor..."
+                      : editProduct
+                        ? "Güncelle"
+                        : "Ekle"}
                 </button>
               </div>
             </form>
