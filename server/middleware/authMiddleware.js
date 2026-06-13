@@ -22,12 +22,15 @@ const protect = async (req, res, next) => {
 };
 
 const admin = (req, res, next) => {
-  // Hem isAdmin true ise hem de role 'admin' ise geçişine izin ver
+  console.log("req.user =", req.user);
+
   if (req.user && (req.user.isAdmin || req.user.role === "admin")) {
     next();
   } else {
-    res.status(403).json({ message: "Admin yetkisi gerekli" });
+    res.status(403).json({
+      message: "Admin yetkisi gerekli",
+      user: req.user,
+    });
   }
 };
-
 module.exports = { protect, admin };
