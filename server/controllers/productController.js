@@ -46,9 +46,14 @@ const getProductById = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
+  console.log("CREATE PRODUCT ÇALIŞTI");
+  console.log("BODY:", req.body);
+  console.log("FILE:", req.file);
+
   try {
     const { name, description, price, category, brand, stock } = req.body;
     const image = req.file ? req.file.path : req.body.image;
+
     const product = await Product.create({
       name,
       description,
@@ -58,8 +63,12 @@ const createProduct = async (req, res) => {
       stock,
       image,
     });
+
+    console.log("ÜRÜN OLUŞTURULDU:", product);
+
     res.status(201).json(product);
   } catch (error) {
+    console.error("CREATE PRODUCT HATASI:", error);
     res.status(500).json({ message: error.message });
   }
 };
