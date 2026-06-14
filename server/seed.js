@@ -12,40 +12,51 @@ const categories = [
     description: "Not defterleri, ajandalar ve planlayıcılar",
   },
   {
-    name: "Kalem",
-    slug: "kalem",
-    description: "Boyalar, eskiz kalemleri ve yazı araçları",
-  },
-  {
     name: "Kutu Oyunları",
     slug: "kutu-oyunlari",
     description: "Strateji, akıl ve zeka oyunları",
   },
   {
-    name: "Hobi",
-    slug: "hobi",
-    description: "Yağlı boya, akrilik, epoksi hazır kitler",
+    name: "Çim Adam",
+    slug: "cim-adam",
+    description: "Çim adam ve toprak oyuncak setleri",
+  },
+  {
+    name: "Taş Tozu Boyama",
+    slug: "tas-tozu-boyama",
+    description: "Taş tozu boyama kitleri ve setleri",
+  },
+  {
+    name: "Çocuk Tuval Boyama",
+    slug: "cocuk-tuval-boyama",
+    description: "Çocuklar için tuval boyama kitleri",
+  },
+  {
+    name: "Sayılarla Tuval Boyama",
+    slug: "sayilarla-tuval-boyama",
+    description: "Sayılarla tuval boyama setleri",
+  },
+  {
+    name: "Çocuk Ahşap Boyama",
+    slug: "cocuk-ahsap-boyama",
+    description: "Çocuklar için ahşap boyama kitleri",
   },
   {
     name: "Hediyelik",
     slug: "hediyelik",
     description: "Yağlı boya kutular, tepsiler, bambu ürünler",
   },
-  {
-    name: "Kağıt",
-    slug: "kagit",
-    description:
-      "Eskiz kağıtları, renkli kartonlar, origami ve dokulu kağıtlar",
-  },
 ];
 
 const getProducts = (cats) => {
   const defter = cats.find((c) => c.slug === "defter")._id;
-  const kalem = cats.find((c) => c.slug === "kalem")._id;
   const kutu = cats.find((c) => c.slug === "kutu-oyunlari")._id;
-  const hobi = cats.find((c) => c.slug === "hobi")._id;
+  const cimAdam = cats.find((c) => c.slug === "cim-adam")._id;
+  const tasToz = cats.find((c) => c.slug === "tas-tozu-boyama")._id;
+  const cocukTuv = cats.find((c) => c.slug === "cocuk-tuval-boyama")._id;
+  const sayiTuv = cats.find((c) => c.slug === "sayilarla-tuval-boyama")._id;
+  const cocukAhs = cats.find((c) => c.slug === "cocuk-ahsap-boyama")._id;
   const hediyelik = cats.find((c) => c.slug === "hediyelik")._id;
-  const kagit = cats.find((c) => c.slug === "kagit")._id; // Yeni kategori bağlantısı
 
   return [
     // ── DEFTER ──
@@ -104,69 +115,11 @@ const getProducts = (cats) => {
       rating: 4.5,
       numReviews: 9,
     },
-
-    // ── KALEM ──
-    {
-      name: "Profesyonel Eskiz Kalem Seti (12'li)",
-      description:
-        "2H'den 8B'ye 12 farklı sertlikte eskiz kalemi. Sanatçılar ve tasarımcılar için ideal.",
-      stock: 10,
-      brand: "Faber",
-      category: kalem,
-      image: "",
-      rating: 4.8,
-      numReviews: 18,
-    },
-    {
-      name: "Suluboya Boya Kalemi Seti (24'lü)",
-      description:
-        "Su bazlı, canlı renkli 24 adet suluboya kalemi. Boyama kitapları ve illüstrasyon için.",
-      stock: 2,
-      brand: "Staedtler",
-      category: kalem,
-      image: "",
-      rating: 4.6,
-      numReviews: 14,
-    },
-    {
-      name: "Kuru Boya Seti (36'lı)",
-      description:
-        "36 renk profesyonel kuru boya. Ahşap kutuda, yumuşak ve solmaz pigmentli.",
-      stock: 8,
-      brand: "Koh-i-noor",
-      category: kalem,
-      image: "",
-      rating: 4.7,
-      numReviews: 11,
-    },
-    {
-      name: "Keçeli Kalem Seti (20'li)",
-      description:
-        "20 canlı renk, çift uçlu (ince ve kalın). Planlayıcı ve bullet journal için mükemmel.",
-      stock: 2,
-      brand: "Stabilo",
-      category: kalem,
-      image: "",
-      rating: 4.5,
-      numReviews: 22,
-    },
-    {
-      name: "Pastel Boya Seti (12'li)",
-      description:
-        "Yumuşak pastel boyalar. Zemin boya ve karıştırma teknikleri için ideal.",
-      stock: 12,
-      brand: "Mungyo",
-      category: kalem,
-      image: "",
-      rating: 4.4,
-      numReviews: 7,
-    },
-
     // ── KUTU OYUNLARI ──
     {
       name: "Catan - Strateji Kutu Oyunu",
       description:
-        "Dünyaca ünlü kaynak yönetimi ve strateji oyunu. 3-4 oyuncu, 10+ yaş. Ortalama süre: 60-120 dk.",
+        "Dünyaca ünlü kaynak yönetimi ve strateji oyunu. 3-4 oyuncu, 10+ yaş.",
       stock: 2,
       brand: "Mayfair Games",
       category: kutu,
@@ -188,7 +141,7 @@ const getProducts = (cats) => {
     {
       name: "Azul - Taş Döşeme Oyunu",
       description:
-        "Mozaik taş döşeme temalı strateji oyunu. 2-4 oyuncu, 8+ yaş. Soyut strateji.",
+        "Mozaik taş döşeme temalı strateji oyunu. 2-4 oyuncu, 8+ yaş.",
       stock: 2,
       brand: "Plan B Games",
       category: kutu,
@@ -210,7 +163,7 @@ const getProducts = (cats) => {
     {
       name: "Pandemic - İşbirliği Oyunu",
       description:
-        "Dünyayı salgın hastalıklardan kurtarın! 2-4 oyuncu, 8+ yaş. Kooperatif strateji.",
+        "Dünyayı salgın hastalıklardan kurtarın! 2-4 oyuncu, 8+ yaş.",
       stock: 2,
       brand: "Z-Man Games",
       category: kutu,
@@ -219,39 +172,201 @@ const getProducts = (cats) => {
       numReviews: 16,
     },
 
-    // ── HOBİ ──
+    // ── ÇİM ADAM ──
     {
-      name: "Yağlı Boya Başlangıç Kiti",
+      name: "Çim Adam Saksı Seti",
       description:
-        "24 renk yağlı boya, 3 fırça, palet, tuval ve tiner dahil. Başlangıç için eksiksiz set.",
-      stock: 2,
+        "Çocukların sevdiği çim adam yetiştirme seti. Saksı, toprak ve çim tohumu dahil. Saçları büyüyor!",
+      stock: 15,
       brand: "Kovan Hobi",
-      category: hobi,
-      image: "",
-      rating: 4.7,
-      numReviews: 13,
-    },
-    {
-      name: "Akrilik Boya Profesyonel Kit",
-      description:
-        "36 renk akrilik boya, 5 fırça, 2 tuval, palet. Hızlı kurur, su ile temizlenir.",
-      stock: 10,
-      brand: "Kovan Hobi",
-      category: hobi,
+      category: cimAdam,
       image: "",
       rating: 4.8,
-      numReviews: 17,
+      numReviews: 22,
     },
     {
-      name: "Epoksi Reçine Başlangıç Seti",
+      name: "Çim Adam Aile Seti (4'lü)",
       description:
-        "500gr A+B epoksi reçine, pigment boyalar, silikon kalıplar ve karıştırma araçları.",
-      stock: 2,
+        "Anne, baba ve 2 çocuktan oluşan çim adam ailesi. Her biri farklı yüz ifadeli, eğlenceli yetiştirme seti.",
+      stock: 10,
       brand: "Kovan Hobi",
-      category: hobi,
+      category: cimAdam,
+      image: "",
+      rating: 4.9,
+      numReviews: 14,
+    },
+    {
+      name: "Mini Çim Adam Magnet Set",
+      description:
+        "Buzdolabı magneti olarak kullanılabilen mini çim adam. Mutfağınıza neşe katın!",
+      stock: 20,
+      brand: "Kovan Hobi",
+      category: cimAdam,
+      image: "",
+      rating: 4.6,
+      numReviews: 9,
+    },
+
+    // ── TAŞ TOZU BOYAMA ──
+    {
+      name: "Taş Tozu Boyama Seti - Çiçek",
+      description:
+        "Hazır taş tozu kalıplı çiçek deseni, 6 renk boya ve fırça dahil. Başlangıç seviyesi.",
+      stock: 12,
+      brand: "Kovan Hobi",
+      category: tasToz,
+      image: "",
+      rating: 4.7,
+      numReviews: 18,
+    },
+    {
+      name: "Taş Tozu Boyama Seti - Hayvanlar",
+      description:
+        "Sevimli hayvan figürlü taş tozu boyama seti. 8 renk akrilik boya, fırça ve tamamlanmış ürün standı.",
+      stock: 8,
+      brand: "Kovan Hobi",
+      category: tasToz,
+      image: "",
+      rating: 4.8,
+      numReviews: 11,
+    },
+    {
+      name: "Taş Tozu Boyama - Mandala",
+      description:
+        "Mandala desenli taş tozu boyama seti. Meditasyon ve rahatlama için ideal. 10 renk boya dahil.",
+      stock: 6,
+      brand: "Kovan Hobi",
+      category: tasToz,
+      image: "",
+      rating: 4.9,
+      numReviews: 7,
+    },
+
+    // ── ÇOCUK TUVAL BOYAMA ──
+    {
+      name: "Çocuk Tuval Boyama Seti - Unicorn",
+      description:
+        "Unicorn temalı 20x20cm tuval, 6 renk akrilik boya ve fırça dahil. 5+ yaş için.",
+      stock: 15,
+      brand: "Kovan Hobi",
+      category: cocukTuv,
+      image: "",
+      rating: 4.8,
+      numReviews: 26,
+    },
+    {
+      name: "Çocuk Tuval Boyama Seti - Orman",
+      description:
+        "Orman temalı sayılarla boya. Tuval üzerinde numaralı alanlar, 8 renk boya dahil. 6+ yaş.",
+      stock: 10,
+      brand: "Kovan Hobi",
+      category: cocukTuv,
+      image: "",
+      rating: 4.7,
+      numReviews: 19,
+    },
+    {
+      name: "Çocuk Tuval Boyama - Deniz Altı",
+      description:
+        "Balık ve deniz temalı eğlenceli boyama tuvali. 10 renk parmak boyası dahil. 3+ yaş.",
+      stock: 12,
+      brand: "Kovan Hobi",
+      category: cocukTuv,
+      image: "",
+      rating: 4.9,
+      numReviews: 31,
+    },
+
+    // ── SAYILARLA TUVAL BOYAMA ──
+    {
+      name: "Sayılarla Boyama - Gün Batımı (40x50)",
+      description:
+        "Gün batımı manzaralı 40x50cm sayılarla boyama seti. Çerçeveli, 24 renk akrilik boya dahil.",
+      stock: 8,
+      brand: "Kovan Hobi",
+      category: sayiTuv,
+      image: "",
+      rating: 4.9,
+      numReviews: 34,
+    },
+    {
+      name: "Sayılarla Boyama - Çiçek Bahçesi",
+      description:
+        "Renkli çiçek bahçesi temalı 30x40cm set. Başlangıç seviyesi, 18 renk boya dahil.",
+      stock: 12,
+      brand: "Kovan Hobi",
+      category: sayiTuv,
+      image: "",
+      rating: 4.8,
+      numReviews: 22,
+    },
+    {
+      name: "Sayılarla Boyama - Van Gogh Yıldızlı Gece",
+      description:
+        "Ünlü eseri sayılarla boyayın. 40x50cm, 24 renk boya ve detay fırçası dahil.",
+      stock: 6,
+      brand: "Kovan Hobi",
+      category: sayiTuv,
+      image: "",
+      rating: 5.0,
+      numReviews: 15,
+    },
+    {
+      name: "Sayılarla Boyama - Kedi & Çiçek",
+      description:
+        "Sevimli kedi ve çiçek temalı 30x30cm set. Dekoratif çerçevesiyle hediye olarak ideal.",
+      stock: 10,
+      brand: "Kovan Hobi",
+      category: sayiTuv,
+      image: "",
+      rating: 4.7,
+      numReviews: 28,
+    },
+
+    // ── ÇOCUK AHŞAP BOYAMA ──
+    {
+      name: "Çocuk Ahşap Boyama - Hayvan Seti",
+      description:
+        "6 parça ahşap hayvan figürü, 8 renk boya ve fırça dahil. 4+ yaş için güvenli boyalar.",
+      stock: 15,
+      brand: "Kovan Hobi",
+      category: cocukAhs,
+      image: "",
+      rating: 4.8,
+      numReviews: 19,
+    },
+    {
+      name: "Ahşap Boyama - Peri Evi Kiti",
+      description:
+        "2 katlı ahşap peri evi boyama seti. Akrilik boya, fırça ve dekoratif aksesuarlar dahil. 6+ yaş.",
+      stock: 8,
+      brand: "Kovan Hobi",
+      category: cocukAhs,
       image: "",
       rating: 4.9,
       numReviews: 24,
+    },
+    {
+      name: "Ahşap Boyama - Araç Garajı Seti",
+      description:
+        "Garaj ve 4 araçtan oluşan ahşap boyama seti. Erkek çocuklar için ideal. 5+ yaş.",
+      stock: 10,
+      brand: "Kovan Hobi",
+      category: cocukAhs,
+      image: "",
+      rating: 4.7,
+      numReviews: 16,
+    },
+    {
+      name: "Mini Ahşap Boyama Seti (10'lu)",
+      description:
+        "10 farklı mini ahşap figür (kalp, yıldız, ev vb.), 12 renk boya dahil. Parti hediyesi olarak ideal.",
+      stock: 20,
+      brand: "Kovan Hobi",
+      category: cocukAhs,
+      image: "",
+      rating: 4.6,
+      numReviews: 11,
     },
 
     // ── HEDİYELİK ──
@@ -269,7 +384,7 @@ const getProducts = (cats) => {
     {
       name: "Bambu Servis Tepsisi",
       description:
-        "Doğal bambu, el yapımı oval servis tepsisi. 40x28 cm, saplı model. Kahvaltı ve sunum için.",
+        "Doğal bambu, el yapımı oval servis tepsisi. 40x28 cm, saplı model.",
       stock: 6,
       brand: "Kovan Atölye",
       category: hediyelik,
@@ -287,52 +402,6 @@ const getProducts = (cats) => {
       image: "",
       rating: 5.0,
       numReviews: 4,
-    },
-
-    // ── KAĞIT ÇEŞİTLERİ ──
-    {
-      name: "A4 Premium Kraft Çizim Bloknotu",
-      description:
-        "Karakalem ve eskiz çalışmaları için ideal, 50 yaprak 120gr kaliteli kraft kağıdı.",
-      stock: 12,
-      brand: "Kovan",
-      category: kagit,
-      image: "",
-      rating: 4.6,
-      numReviews: 15,
-    },
-    {
-      name: "Renkli Fon Kartonu Seti (20 Renk)",
-      description:
-        "Okul projeleri, origami ve el sanatları projeleri için ideal 20 farklı canlı renkte A4 karton seti.",
-      stock: 2, // Son 2 ürün uyarısı için
-      brand: "Kovan Hobi",
-      category: kagit,
-      image: "",
-      rating: 4.8,
-      numReviews: 22,
-    },
-    {
-      name: "Özel Dokulu Origami Kağıtları",
-      description:
-        "Geleneksel motifli ve çift taraflı renkli, katlaması kolay 15x15 cm boyutlarında 80 yaprak origami seti.",
-      stock: 2,
-      brand: "Kovan Hobi",
-      category: kagit,
-      image: "",
-      rating: 4.9,
-      numReviews: 11,
-    },
-    {
-      name: "%100 Pamuk Suluboya Kağıdı (A5)",
-      description:
-        "Profesyonel suluboya çalışmaları için emici ve dayanıklı, 300gr soğuk dokulu 20 yaprak blok.",
-      stock: 8,
-      brand: "Canson",
-      category: kagit,
-      image: "",
-      rating: 4.9,
-      numReviews: 31,
     },
   ];
 };
@@ -354,6 +423,9 @@ const seedDB = async () => {
     console.log(`${createdProducts.length} ürün eklendi`);
 
     console.log("\n✅ Seed tamamlandı!");
+    console.log(
+      `📂 ${createdCats.length} kategori | 🛍️  ${createdProducts.length} ürün`,
+    );
     process.exit(0);
   } catch (error) {
     console.error("Seed hatası:", error);
