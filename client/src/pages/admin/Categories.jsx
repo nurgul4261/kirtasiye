@@ -22,8 +22,8 @@ export default function AdminCategories() {
   const fetchCategories = async () => {
     try {
       const [treeRes, flatRes] = await Promise.all([
-        api.get("/categories"), // ağaç yapısı
-        api.get("/categories/flat"), // düz liste (dropdown için)
+        api.get("/categories"),
+        api.get("/categories/flat"),
       ]);
       setCategories(treeRes.data);
       setFlatCats(flatRes.data);
@@ -41,7 +41,6 @@ export default function AdminCategories() {
     setForm(emptyForm);
     setShowModal(true);
   };
-
   const openEdit = (c) => {
     setEditCat(c);
     setForm({
@@ -53,7 +52,6 @@ export default function AdminCategories() {
     });
     setShowModal(true);
   };
-
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -61,13 +59,9 @@ export default function AdminCategories() {
     e.preventDefault();
     try {
       const payload = { ...form, parent: form.parent || null };
-      if (editCat) {
-        await api.put(`/categories/${editCat._id}`, payload);
-        toast.success("Kategori güncellendi");
-      } else {
-        await api.post("/categories", payload);
-        toast.success("Kategori eklendi");
-      }
+      if (editCat) await api.put(`/categories/${editCat._id}`, payload);
+      else await api.post("/categories", payload);
+      toast.success(editCat ? "Kategori güncellendi" : "Kategori eklendi");
       setShowModal(false);
       fetchCategories();
     } catch (err) {
@@ -89,6 +83,62 @@ export default function AdminCategories() {
     } catch {
       toast.error("Silme hatası");
     }
+  };
+
+  // Tablo satırlarını düz diziye çevir (fragment key sorunundan kaçınmak için)
+  const buildRows = () => {
+    const rows = [];
+    categories.forEach((cat) => {
+      rows.push(
+        <tr key={cat._id} style={{ background: "#f8f8f8" }}>
+          <td style={{ fontWeight: 700 }}>📁 {cat.name}</td>
+          <td style={{ color: "#aaa", fontSize: 13 }}>—</td>
+          <td style={{ color: "var(--text-light)", fontSize: 13 }}>
+            {cat.slug}
+          </td>
+          <td>{cat.description || "-"}</td>
+          <td>
+            <div className="admin-actions">
+              <button className="btn-primary" onClick={() => openEdit(cat)}>
+                Düzenle
+              </button>
+              <button
+                className="btn-danger"
+                onClick={() => handleDelete(cat._id)}
+              >
+                Sil
+              </button>
+            </div>
+          </td>
+        </tr>,
+      );
+      cat.children?.forEach((sub) => {
+        rows.push(
+          <tr key={sub._id}>
+            <td style={{ paddingLeft: 28, color: "#555" }}>↳ {sub.name}</td>
+            <td style={{ fontSize: 13, color: "#888" }}>{cat.name}</td>
+            <td style={{ color: "var(--text-light)", fontSize: 13 }}>
+              {sub.slug}
+            </td>
+            <td>{sub.description || "-"}</td>
+            <td>
+              <div className="admin-actions">
+                <button className="btn-primary" onClick={() => openEdit(sub)}>
+                  Düzenle
+                </button>
+                <button
+                  className="btn-danger"
+                  onClick={() => handleDelete(sub._id)}
+                >
+                  Sil
+                </button>
+              </div>
+            </td>
+          </tr>,
+        );
+      });
+    });
+    return rows;
   };
 
   return (
@@ -113,67 +163,7 @@ export default function AdminCategories() {
               <th>İşlem</th>
             </tr>
           </thead>
-          <tbody>
-            {categories.map((cat) => (
-              <>
-                {/* Ana kategori */}
-                <tr key={cat._id} style={{ background: "#f8f8f8" }}>
-                  <td style={{ fontWeight: 700 }}>📁 {cat.name}</td>
-                  <td style={{ color: "#aaa", fontSize: 13 }}>—</td>
-                  <td style={{ color: "var(--text-light)", fontSize: 13 }}>
-                    {cat.slug}
-                  </td>
-                  <td>{cat.description || "-"}</td>
-                  <td>
-                    <div className="admin-actions">
-                      <button
-                        className="btn-primary"
-                        onClick={() => openEdit(cat)}
-                      >
-                        Düzenle
-                      </button>
-                      <button
-                        className="btn-danger"
-                        onClick={() => handleDelete(cat._id)}
-                      >
-                        Sil
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-
-                {/* Alt kategoriler */}
-                {cat.children?.map((sub) => (
-                  <tr key={sub._id}>
-                    <td style={{ paddingLeft: 28, color: "#555" }}>
-                      ↳ {sub.name}
-                    </td>
-                    <td style={{ fontSize: 13, color: "#888" }}>{cat.name}</td>
-                    <td style={{ color: "var(--text-light)", fontSize: 13 }}>
-                      {sub.slug}
-                    </td>
-                    <td>{sub.description || "-"}</td>
-                    <td>
-                      <div className="admin-actions">
-                        <button
-                          className="btn-primary"
-                          onClick={() => openEdit(sub)}
-                        >
-                          Düzenle
-                        </button>
-                        <button
-                          className="btn-danger"
-                          onClick={() => handleDelete(sub._id)}
-                        >
-                          Sil
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </>
-            ))}
-          </tbody>
+          <tbody>{buildRows()}</tbody>
         </table>
       )}
 
