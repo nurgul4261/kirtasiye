@@ -4,7 +4,27 @@ import api from "../services/api";
 import ProductCard from "../components/ui/ProductCard";
 import "./Home.css";
 
-const WORDS = ["Defter", "Kutu Oyunu", "Hobi Kiti", "Hediyelik"];
+const WORDS = [
+  "Defter",
+  "Kutu Oyunu",
+  "Hobi Kiti",
+  "Hediyelik",
+  "Çim Adam",
+  "Ahşap Boyama",
+];
+
+const icons = {
+  defter: "📓",
+  kalem: "✏️",
+  "kutu-oyunlari": "🧩",
+  hobi: "🎨",
+  "cim-adam": "🌱",
+  "tas-tozu-boyama": "🪨",
+  "cocuk-tuval-boyama": "🖼️",
+  "sayilarla-tuval-boyama": "🎨",
+  "cocuk-ahsap-boyama": "🪵",
+  hediyelik: "🎁",
+};
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -12,6 +32,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [wordIndex, setWordIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
+  const [openCat, setOpenCat] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,7 +50,7 @@ export default function Home() {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
           api.get("/products?pageSize=4"),
-          api.get("/categories"),
+          api.get("/categories"), // ağaç yapısı geliyor
         ]);
         setFeaturedProducts(productsRes.data.products);
         setCategories(categoriesRes.data);
@@ -44,11 +65,8 @@ export default function Home() {
 
   return (
     <div className="home-wrapper">
-      {/* 1. BÖLÜM: 20201207170713.jpg Arka Planlı ve Gri Katmanlı Hero Alanı */}
+      {/* 1. BÖLÜM: Hero */}
       <section className="storex-hero">
-        {/* Resmin üstündeki yazıların rahat okunması için gri sis katmanı */}
-        {/*<div className="storex-hero-overlay"></div>*/}
-
         <div className="storex-hero-content">
           <h1>
             Özenle Seçilen <br />
@@ -63,35 +81,74 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. BÖLÜM: Kategori Izgarası (3+3 Dengeli Düzen) */}
+      {/* 2. BÖLÜM: Kategori Izgarası */}
       {categories.length > 0 && (
         <section className="storex-section">
           <div className="storex-container">
             <div className="storex-categories-grid">
-              {categories.map((cat) => {
-                const icons = {
-                  defter: "📓",
-                  "kutu-oyunlari": "🧩",
-                  hobi: "🎨",
-                  hediyelik: "🎁",
-                };
-                const icon = icons[cat.slug] || "📦";
-
-                return (
-                  <Link
-                    key={cat._id}
-                    to={`/products?category=${cat._id}`}
-                    className="storex-category-card"
-                  >
-                    <div className="storex-cat-content">
-                      <span className="storex-cat-icon">{icon}</span>
-                      <div className="storex-cat-overlay">
-                        <span className="storex-cat-name">{cat.name}</span>
+              {categories.map((cat) => (
+                <div key={cat._id} className="storex-cat-wrapper">
+                  {/* Alt kategorisi varsa tıklayınca açılır, yoksa direkt link */}
+                  {cat.children?.length > 0 ? (
+                    <div
+                      className={`storex-category-card has-children${openCat === cat._id ? " open" : ""}`}
+                      onClick={() =>
+                        setOpenCat(openCat === cat._id ? null : cat._id)
+                      }
+                    >
+                      <div className="storex-cat-content">
+                        <span className="storex-cat-icon">
+                          {icons[cat.slug] || "📦"}
+                        </span>
+                        <div className="storex-cat-overlay">
+                          <span className="storex-cat-name">{cat.name}</span>
+                          <span className="storex-cat-arrow">
+                            {openCat === cat._id ? "▲" : "▼"}
+                          </span>
+                        </div>
                       </div>
+
+                      {/* Alt kategoriler */}
+                      {openCat === cat._id && (
+                        <div
+                          className="storex-sub-cats"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Link
+                            to={`/products?category=${cat._id}`}
+                            className="storex-sub-cat"
+                          >
+                            🔹 Tüm {cat.name}
+                          </Link>
+                          {cat.children.map((sub) => (
+                            <Link
+                              key={sub._id}
+                              to={`/products?category=${sub._id}`}
+                              className="storex-sub-cat"
+                            >
+                              {icons[sub.slug] || "▸"} {sub.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  </Link>
-                );
-              })}
+                  ) : (
+                    <Link
+                      to={`/products?category=${cat._id}`}
+                      className="storex-category-card"
+                    >
+                      <div className="storex-cat-content">
+                        <span className="storex-cat-icon">
+                          {icons[cat.slug] || "📦"}
+                        </span>
+                        <div className="storex-cat-overlay">
+                          <span className="storex-cat-name">{cat.name}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+              ))}
             </div>
 
             <div className="storex-center-btn-wrapper">
@@ -109,7 +166,6 @@ export default function Home() {
           <div className="storex-section-header">
             <h2 className="storex-section-title">GÜNÜN FIRSATLARI</h2>
           </div>
-
           {loading ? (
             <div className="storex-loading">Yükleniyor...</div>
           ) : (

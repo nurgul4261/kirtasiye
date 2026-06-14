@@ -80,6 +80,66 @@
   color: #ffd54f;
 }
 
+/* Alt kategori desteği — mevcut Home.css'e ekle */
+
+.storex-cat-wrapper {
+  position: relative;
+}
+
+.storex-category-card.has-children {
+  cursor: pointer;
+}
+
+.storex-cat-arrow {
+  font-size: 10px;
+  margin-left: 6px;
+  opacity: 0.7;
+}
+
+.storex-sub-cats {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  overflow: hidden;
+  animation: fadeDown 0.2s ease;
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.storex-sub-cat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 16px;
+  font-size: 13px;
+  color: #444;
+  text-decoration: none;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s;
+}
+.storex-sub-cat:last-child {
+  border-bottom: none;
+}
+.storex-sub-cat:hover {
+  background: #f5f5f5;
+  color: #111;
+}
+
 .hero-word {
   display: inline-block;
   min-width: 220px;
