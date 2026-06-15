@@ -36,7 +36,8 @@ export default function AdminProducts() {
 
   useEffect(() => {
     fetchProducts();
-    api.get("/categories").then(({ data }) => setCategories(data));
+    // Düz liste — alt kategoriler de görünür
+    api.get("/categories/flat").then(({ data }) => setCategories(data));
   }, []);
 
   const openCreate = () => {
@@ -46,7 +47,6 @@ export default function AdminProducts() {
     setImagePreview("");
     setShowModal(true);
   };
-
   const openEdit = (p) => {
     setEditProduct(p);
     setForm({
@@ -77,7 +77,7 @@ export default function AdminProducts() {
       });
       setImageFile(compressed);
       setImagePreview(URL.createObjectURL(compressed));
-    } catch (err) {
+    } catch {
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     } finally {
@@ -98,17 +98,16 @@ export default function AdminProducts() {
       formData.append("category", form.category);
       if (imageFile) formData.append("image", imageFile);
 
-      if (editProduct) {
+      if (editProduct)
         await api.put(`/products/${editProduct._id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        toast.success("Ürün güncellendi");
-      } else {
+      else
         await api.post("/products", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        toast.success("Ürün eklendi");
-      }
+
+      toast.success(editProduct ? "Ürün güncellendi" : "Ürün eklendi");
       setShowModal(false);
       fetchProducts();
     } catch (err) {
@@ -124,9 +123,41 @@ export default function AdminProducts() {
       await api.delete(`/products/${id}`);
       toast.success("Ürün silindi");
       fetchProducts();
-    } catch (err) {
+    } catch {
       toast.error("Silme hatası");
     }
+  };
+
+  // Kategori dropdown'ı için gruplu gösterim
+  const renderCategoryOptions = () => {
+    const parents = categories.filter((c) => !c.parent);
+    const children = categories.filter((c) => c.parent);
+
+    return parents.map((parent) => {
+      const subs = children.filter((c) => {
+        const parentId = c.parent?._id || c.parent;
+        return parentId === parent._id;
+      });
+
+      if (subs.length === 0) {
+        return (
+          <option key={parent._id} value={parent._id}>
+            {parent.name}
+          </option>
+        );
+      }
+
+      return (
+        <optgroup key={parent._id} label={`📁 ${parent.name}`}>
+          <option value={parent._id}>— Tüm {parent.name}</option>
+          {subs.map((sub) => (
+            <option key={sub._id} value={sub._id}>
+              ↳ {sub.name}
+            </option>
+          ))}
+        </optgroup>
+      );
+    });
   };
 
   return (
@@ -232,11 +263,7 @@ export default function AdminProducts() {
                   required
                 >
                   <option value="">Seçin</option>
-                  {categories.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.name}
-                    </option>
-                  ))}
+                  {renderCategoryOptions()}
                 </select>
               </div>
               <div
@@ -278,7 +305,6 @@ export default function AdminProducts() {
                   onChange={handleChange}
                 />
               </div>
-
               <div className="form-group">
                 <label>Ürün Görseli</label>
                 {compressing && (
@@ -306,7 +332,6 @@ export default function AdminProducts() {
                   onChange={handleImageChange}
                 />
               </div>
-
               <div className="modal-actions">
                 <button
                   type="button"
