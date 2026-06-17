@@ -9,7 +9,7 @@ import "./ProductDetail.css";
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
   const { user } = useAuth();
   const isAdmin = user?.isAdmin || user?.role === "admin";
 
@@ -26,6 +26,19 @@ export default function ProductDetail() {
   }, [id]);
 
   const handleAddToCart = () => {
+    const hasStockInfo = product.stock !== undefined;
+
+    if (hasStockInfo) {
+      const inCart = cartItems.find((i) => i._id === product._id);
+      const currentQty = inCart?.quantity || 0;
+      const totalQty = currentQty + quantity;
+
+      if (totalQty > product.stock) {
+        toast.warn("Sepete ekleyebileceğiniz maksimum adede ulaştınız");
+        return;
+      }
+    }
+
     addToCart(product, quantity);
     toast.success(`${product.name} sepete eklendi`);
   };
@@ -33,13 +46,24 @@ export default function ProductDetail() {
   if (loading) return <div className="loading">Yükleniyor...</div>;
   if (!product) return null;
 
-  // Admin: "X adet" | Normal kullanıcı: "Stokta var" veya "Tükendi"
-  const inStock = product.stock === undefined ? true : product.stock > 0;
+  const hasStockInfo = product.stock !== undefined;
+  const inStock = !hasStockInfo || product.stock > 0;
+  const inCartQty = cartItems.find((i) => i._id === product._id)?.quantity || 0;
+  const maxQty = hasStockInfo ? product.stock - inCartQty : 99;
+
   const stockDisplay = isAdmin
     ? `${product.stock} adet`
     : inStock
       ? "Stokta var"
       : "Tükendi";
+
+  const handleIncrease = () => {
+    if (hasStockInfo && quantity >= maxQty) {
+      toast.warn("Sepete ekleyebileceğiniz maksimum adede ulaştınız");
+      return;
+    }
+    setQuantity((q) => q + 1);
+  };
 
   return (
     <div className="container detail-page">
@@ -66,24 +90,14 @@ export default function ProductDetail() {
             </strong>
           </p>
 
-          {inStock && (
+          {inStock && maxQty > 0 && (
             <div className="detail-actions">
               <div className="qty-control">
                 <button onClick={() => setQuantity((q) => Math.max(1, q - 1))}>
                   −
                 </button>
                 <span>{quantity}</span>
-                <button
-                  onClick={() =>
-                    setQuantity((q) =>
-                      isAdmin && product.stock
-                        ? Math.min(product.stock, q + 1)
-                        : q + 1,
-                    )
-                  }
-                >
-                  +
-                </button>
+                <button onClick={handleIncrease}>+</button>
               </div>
               <button
                 className="btn-primary add-to-cart-btn"
@@ -92,6 +106,19 @@ export default function ProductDetail() {
                 🛒 Sepete Ekle
               </button>
             </div>
+          )}
+
+          {inStock && hasStockInfo && maxQty <= 0 && (
+            <p
+              style={{
+                color: "var(--danger)",
+                fontWeight: 600,
+                fontSize: 14,
+                marginTop: 12,
+              }}
+            >
+              Bu üründen sepete ekleyebileceğiniz maksimum adede ulaştınız.
+            </p>
           )}
         </div>
       </div>

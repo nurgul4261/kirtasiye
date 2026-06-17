@@ -25,9 +25,10 @@ const createOrder = async (req, res) => {
           .status(404)
           .json({ message: `Ürün bulunamadı: ${item.name}` });
       }
+      // ✅ Stok sayısı mesajdan kaldırıldı
       if (product.stock < item.quantity) {
         return res.status(400).json({
-          message: `${product.name} için yeterli stok yok. Güncel stok: ${product.stock}`,
+          message: `"${product.name}" için yeterli stok bulunmamaktadır.`,
         });
       }
       calculatedItemsPrice += product.price * item.quantity;
