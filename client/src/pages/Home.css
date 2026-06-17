@@ -1,10 +1,10 @@
 /* ==========================================================================
-   GENEL RENK DEĞİŞKENLERİ VE TASARIM DİLİ
-   (Login sayfasıyla tam uyumlu, modern ve güçlü)
+   GENEL DEĞİŞKENLER
    ========================================================================== */
 :root {
   --primary: #1a2744;
-  --primary-light: #eef1f8;
+  --primary-light: #eeecfb;
+  --lavender: #6b4fa8;
   --text: #1a2744;
   --text-light: #6b7a99;
   --radius-custom: 16px;
@@ -12,13 +12,12 @@
 
 .home-wrapper {
   color: var(--text);
-  background-color: #faf9fb; /* Temiz, fresh ve elit bir arka plan */
+  background-color: #faf9fb;
 }
 
 /* ==========================================================================
-   HERO ALANI
+   HERO
    ========================================================================== */
-
 .storex-hero {
   position: relative;
   min-height: 650px;
@@ -26,24 +25,15 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-
   background-image: url("/hero.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
   overflow: hidden;
 }
 
-.storex-hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.32),
-    rgba(0, 0, 0, 0.17)
-  );
-  z-index: 1;
+.storex-hero::before {
+  content: none;
 }
 
 .storex-hero-content {
@@ -61,50 +51,163 @@
   color: #fff;
   letter-spacing: -1px;
   margin-bottom: 24px;
-
-  text-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.45),
-    0 8px 24px rgba(0, 0, 0, 0.25);
-}
-
-.storex-hero-content p {
-  font-size: 18px;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 36px;
-
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 .storex-hero-content h1 span {
-  color: #ffd54f;
+  color: #d4b8ff;
 }
 
-/* Alt kategori desteği — mevcut Home.css'e ekle */
+.storex-hero-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #1a2744, #6b4fa8);
+  color: white;
+  padding: 16px 42px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+.storex-hero-btn:hover {
+  background: linear-gradient(135deg, #111b30, #9b60c8);
+  transform: translateY(-2px);
+}
+
+.hero-word {
+  display: inline-block;
+  min-width: 220px;
+}
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.4s ease;
+}
+.fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.4s ease;
+}
+
+/* ==========================================================================
+   KATEGORİ BÖLÜMÜ
+   ========================================================================== */
+.storex-section {
+  padding: 80px 0;
+}
+
+.storex-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* === Seçenek A: Minimal Kart (lila teması) === */
+.storex-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 16px;
+  margin-bottom: 40px;
+}
 
 .storex-cat-wrapper {
   position: relative;
+  z-index: 1;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+}
+
+.storex-category-card {
+  background: #fff;
+  border: 1.5px solid #e4e0f0;
+  border-radius: 16px;
+  padding: 28px 16px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  text-decoration: none;
+  flex: 1;
+  min-height: 140px;
+}
+
+.storex-category-card:hover {
+  border-color: #6b4fa8;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(107, 79, 168, 0.12);
 }
 
 .storex-category-card.has-children {
   cursor: pointer;
 }
 
-.storex-cat-arrow {
-  font-size: 10px;
-  margin-left: 6px;
-  opacity: 0.7;
+.storex-cat-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
 }
 
+.storex-cat-icon {
+  font-size: 32px;
+  width: 60px;
+  height: 60px;
+  background: #f0ecfb;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.storex-category-card:hover .storex-cat-icon {
+  transform: scale(1.08);
+  background: #e4d9f7;
+}
+
+.storex-cat-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.storex-cat-name {
+  font-family: "Syne", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  text-align: center;
+}
+
+.storex-cat-arrow {
+  font-size: 10px;
+  color: #9b87c4;
+  margin-left: 4px;
+}
+
+/* Alt kategoriler dropdown */
 .storex-sub-cats {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   left: 0;
   right: 0;
   background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1.5px solid #e4e0f0;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(107, 79, 168, 0.12);
   z-index: 100;
   overflow: hidden;
   animation: fadeDown 0.2s ease;
@@ -129,237 +232,18 @@
   font-size: 13px;
   color: #444;
   text-decoration: none;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0ecfb;
   transition: background 0.15s;
 }
 .storex-sub-cat:last-child {
   border-bottom: none;
 }
 .storex-sub-cat:hover {
-  background: #f5f5f5;
-  color: #111;
+  background: #f3effc;
+  color: #6b4fa8;
 }
 
-.hero-word {
-  display: inline-block;
-  min-width: 220px;
-}
-
-.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 0.4s ease;
-}
-
-.fade-out {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: all 0.4s ease;
-}
-
-.storex-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("/hero.jpg");
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-}
-
-/* Gri/Koyu sis katmanı */
-.storex-hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.65),
-    rgba(0, 0, 0, 0.35)
-  );
-  z-index: 1;
-}
-
-/* İçerik overlay'in üstünde */
-.storex-hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 800px;
-  padding: 0 20px;
-}
-
-.storex-hero-content h1 {
-  font-family: "Syne", sans-serif;
-  font-size: 58px;
-  font-weight: 800;
-  line-height: 1.15;
-  color: #fff;
-  letter-spacing: -1px;
-  margin-bottom: 24px;
-  text-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.45),
-    0 8px 24px rgba(0, 0, 0, 0.25);
-}
-
-.storex-hero-content p {
-  font-size: 18px;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 36px;
-}
-
-.storex-hero-content h1 span {
-  color: #ffd54f;
-}
-
-/* Buton */
-.storex-hero-btn {
-  display: inline-block;
-  background: var(--primary);
-  color: white;
-  padding: 16px 42px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.25s ease;
-}
-
-.storex-hero-btn:hover {
-  background: #3e2e44;
-  transform: translateY(-2px);
-}
-
-.hero-word {
-  display: inline-block;
-  min-width: 220px;
-}
-
-.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 0.4s ease;
-}
-
-.fade-out {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: all 0.4s ease;
-}
-
-/* ==========================================================================
-   2. BÖLÜM: KATEGORİ IZGARASI (GRID)
-   ========================================================================== */
-.storex-section {
-  padding: 80px 0;
-}
-
-.storex-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.storex-categories-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-/* Kategori Kartları: Login Card Esintili */
-.storex-category-card {
-  border: none;
-  border-radius: var(--radius-custom);
-  padding: 32px 24px;
-  text-decoration: none;
-
-  transition: all 0.25s ease-in-out;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  backdrop-filter: blur(10px);
-}
-
-.storex-category-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
-}
-
-.storex-category-card:nth-child(1) {
-  background: #eef7ff;
-}
-
-.storex-category-card:nth-child(2) {
-  background: #e9fff8;
-}
-
-.storex-category-card:nth-child(3) {
-  background: #fff8de;
-}
-
-.storex-category-card:nth-child(4) {
-  background: #fff1e4;
-}
-
-.storex-category-card:nth-child(5) {
-  background: #ffeef5;
-}
-
-.storex-category-card:nth-child(6) {
-  background: #f3edff;
-}
-
-.storex-category-card:nth-child(1) .storex-cat-icon {
-  color: #4e8cff;
-}
-
-.storex-category-card:nth-child(2) .storex-cat-icon {
-  color: #27c7a7;
-}
-
-.storex-category-card:nth-child(3) .storex-cat-icon {
-  color: #f4b400;
-}
-
-.storex-category-card:nth-child(4) .storex-cat-icon {
-  color: #ff8a3d;
-}
-
-.storex-category-card:nth-child(5) .storex-cat-icon {
-  color: #ff5f9e;
-}
-
-.storex-category-card:nth-child(6) .storex-cat-icon {
-  color: #8b5cf6;
-}
-
-.storex-cat-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-
-.storex-cat-icon {
-  font-size: 36px;
-  transition: transform 0.2s ease;
-}
-
-.storex-category-card:hover .storex-cat-icon {
-  transform: scale(1.1);
-}
-
-.storex-cat-name {
-  font-family: "Syne", sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.3px;
-}
-
-/* Tüm Kategorileri Gör Butonu (Link/Toggle Buton Karakterinde) */
+/* Tüm Kategorileri Gör */
 .storex-center-btn-wrapper {
   text-align: center;
   margin-top: 20px;
@@ -368,23 +252,24 @@
 .storex-all-cats-btn {
   background: none;
   border: none;
-  color: var(--primary);
+  color: #6b4fa8;
   font-weight: 700;
   font-size: 15px;
-  text-decoration: underline; /* .toggle-btn gibi altı çizili modern link */
+  text-decoration: underline;
   cursor: pointer;
   transition: color 0.2s ease;
+  text-decoration-color: rgba(107, 79, 168, 0.4);
 }
-
 .storex-all-cats-btn:hover {
-  color: #3e2e44;
+  color: #1a2744;
+  text-decoration-color: rgba(26, 39, 68, 0.4);
 }
 
 /* ==========================================================================
-   3. BÖLÜM: ÜRÜNLER ALANI (GÜNÜN FIRSATLARI)
+   ÜRÜNLER
    ========================================================================== */
 .storex-bg-light {
-  background-color: #f6f5f7; /* Hafif kırık beyaz geçiş */
+  background-color: #f6f4fb;
 }
 
 .storex-section-header {
@@ -397,7 +282,7 @@
   font-size: 26px;
   font-weight: 800;
   color: var(--text);
-  letter-spacing: -0.5px; /* Login h2 başlığı ile birebir eşleşme */
+  letter-spacing: -0.5px;
   text-transform: uppercase;
 }
 
@@ -415,56 +300,41 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE DÜZENLEMELER (MOBİL UYUM)
+   RESPONSIVE
    ========================================================================== */
 @media (max-width: 992px) {
   .storex-products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .storex-categories-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 576px) {
+  .storex-hero {
+    min-height: 500px;
+  }
   .storex-hero-content h1 {
-    font-size: 32px;
+    font-size: 34px;
+  }
+  .hero-word {
+    min-width: 140px;
   }
   .storex-categories-grid {
-    grid-template-columns: 1fr; /* Mobilde dikey şık kart akışı */
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .storex-category-card {
+    padding: 20px 10px 16px;
+  }
+  .storex-cat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+  .storex-cat-name {
+    font-size: 12px;
   }
   .storex-products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-  }
-  .storex-hero {
-    min-height: 500px;
-  }
-
-  .storex-hero-content h1 {
-    font-size: 34px;
-  }
-
-  .storex-hero-content p {
-    font-size: 15px;
-  }
-
-  .hero-word {
-    min-width: 140px;
-  }
-  .storex-hero {
-    min-height: 500px;
-  }
-
-  .storex-hero-content h1 {
-    font-size: 34px;
-  }
-
-  .storex-hero-content p {
-    font-size: 15px;
-  }
-
-  .hero-word {
-    min-width: 140px;
   }
 }

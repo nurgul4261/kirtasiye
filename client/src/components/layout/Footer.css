@@ -1,5 +1,5 @@
 .footer {
-  background: linear-gradient(135deg, #1a2744, #2d3f6e);
+  background: linear-gradient(135deg, #1a2744, #3d2a6e);
   color: #a8b4cc;
   padding: 48px 0 0 0;
   font-size: 14px;
@@ -16,7 +16,7 @@
 
 .footer-col h4 {
   font-family: "Syne", sans-serif;
-  color: #f5a800;
+  color: #c4a8ff;
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -64,11 +64,10 @@
 
 .footer-col ul li a:hover,
 .footer-link-btn:hover {
-  color: #f5a800;
+  color: #c4a8ff;
   transform: translateX(4px);
 }
 
-/* Yeniden Düzenlenen Alt Kısa Alanı */
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 24px 0;
@@ -76,7 +75,6 @@
   color: #6b7a99;
 }
 
-/* Telif ve İmzanın Yan Yana Durmasını Sağlayan Esnek Yapı */
 .footer-bottom-content {
   display: flex;
   justify-content: space-between;
@@ -86,11 +84,10 @@
 }
 
 .footer-bottom span {
-  color: #f5a800;
+  color: #c4a8ff;
   font-weight: 600;
 }
 
-/* Türkçe Tasarımcı İmzası Stilleri */
 .designer-credit {
   font-size: 13px;
   color: #6b7a99;
@@ -98,17 +95,15 @@
   opacity: 0.85;
   transition: opacity 0.3s ease;
 }
-
 .designer-credit:hover {
-  opacity: 1; /* Üzerine gelindiğinde parlasın */
+  opacity: 1;
 }
-
 .designer-credit span {
-  color: #f5a800;
+  color: #c4a8ff;
   font-weight: 600;
 }
 
-/* Modal Stilleri */
+/* Modal */
 .footer-modal-overlay {
   position: fixed;
   top: 0;
@@ -173,9 +168,8 @@
   transition: color 0.2s;
   line-height: 1;
 }
-
 .close-btn:hover {
-  color: #1a2744;
+  color: var(--lavender, #6b4fa8);
 }
 
 .footer-modal-body {
@@ -186,12 +180,10 @@
   color: #555;
   text-align: left;
 }
-
 .footer-modal-body p {
   margin-bottom: 16px;
 }
 
-/* Medya Sorguları */
 @media (max-width: 768px) {
   .footer-layout {
     grid-template-columns: 1fr;
@@ -205,7 +197,6 @@
   .footer-col h4 {
     margin-bottom: 12px;
   }
-  /* Mobilde imzaların ortalı görünmesi için */
   .footer-bottom-content {
     justify-content: center;
     text-align: center;

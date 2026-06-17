@@ -50,7 +50,7 @@ export default function Home() {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
           api.get("/products?pageSize=4"),
-          api.get("/categories"), // ağaç yapısı geliyor
+          api.get("/categories"),
         ]);
         setFeaturedProducts(productsRes.data.products);
         setCategories(categoriesRes.data);
@@ -87,8 +87,12 @@ export default function Home() {
           <div className="storex-container">
             <div className="storex-categories-grid">
               {categories.map((cat) => (
-                <div key={cat._id} className="storex-cat-wrapper">
-                  {/* Alt kategorisi varsa tıklayınca açılır, yoksa direkt link */}
+                <div
+                  key={cat._id}
+                  className="storex-cat-wrapper"
+                  // ✅ Açık olan wrapper en üste çıkar
+                  style={{ zIndex: openCat === cat._id ? 200 : 1 }}
+                >
                   {cat.children?.length > 0 ? (
                     <div
                       className={`storex-category-card has-children${openCat === cat._id ? " open" : ""}`}
@@ -108,7 +112,6 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Alt kategoriler */}
                       {openCat === cat._id && (
                         <div
                           className="storex-sub-cats"

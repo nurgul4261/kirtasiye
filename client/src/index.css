@@ -3,26 +3,26 @@
 :root {
   --primary: #1a2744;
   --primary-dark: #111b30;
-  --primary-light: #eef1f8;
-  --accent: #f5a800;
-  --accent-light: #fff8e6;
-  --mint: #f5a800;
-  --mint-light: #fff8e6;
-  --lavender: #2d3f6e;
-  --lavender-light: #eef1f8;
+  --primary-light: #eeecfb;
+  --accent: #7c5cbf;
+  --accent-light: #f3effc;
+  --mint: #9b7dd4;
+  --mint-light: #f3effc;
+  --lavender: #6b4fa8;
+  --lavender-light: #eeecfb;
   --text: #1a2744;
   --text-light: #6b7a99;
   --bg: #fafbfd;
   --white: #ffffff;
-  --border: #e4e8f0;
-  --border-dark: #b8c0d4;
+  --border: #e4e0f0;
+  --border-dark: #c0b4d8;
   --danger: #e05050;
   --success: #2ecc8a;
   --radius: 16px;
   --radius-sm: 10px;
   --radius-lg: 24px;
   --shadow: 0 4px 20px rgba(26, 39, 68, 0.12);
-  --shadow-hover: 0 8px 30px rgba(26, 39, 68, 0.18);
+  --shadow-hover: 0 8px 30px rgba(108, 79, 168, 0.18);
   --shadow-card: 0 2px 12px rgba(26, 39, 68, 0.07);
   --primary-rgb: 26, 39, 68;
 }
@@ -74,7 +74,7 @@ button:active {
   color: white;
 }
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--primary-dark), #8060a8);
+  background: linear-gradient(135deg, var(--primary-dark), #9b60c8);
 }
 .btn-secondary {
   background: linear-gradient(135deg, var(--accent), var(--mint));
@@ -92,8 +92,8 @@ button:active {
 }
 .btn-outline:hover {
   background: var(--primary-light);
-  border-color: var(--primary);
-  color: var(--primary);
+  border-color: var(--lavender);
+  color: var(--lavender);
 }
 
 input,
@@ -113,8 +113,8 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(192, 132, 160, 0.15);
+  border-color: var(--lavender);
+  box-shadow: 0 0 0 4px rgba(107, 79, 168, 0.12);
 }
 
 .form-group {
@@ -153,7 +153,7 @@ textarea:focus {
 }
 .badge-primary {
   background: var(--primary-light);
-  color: var(--primary);
+  color: var(--lavender);
 }
 .badge-success {
   background: var(--mint-light);
@@ -197,5 +197,5 @@ textarea:focus {
   border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
+  background: var(--lavender);
 }
