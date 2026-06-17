@@ -18,8 +18,15 @@ const getProducts = async (req, res) => {
       .skip(pageSize * (page - 1))
       .sort({ createdAt: -1 });
 
+    const isAdmin = req.user && (req.user.isAdmin || req.user.role === "admin");
+    const sanitized = products.map((p) => {
+      const obj = p.toObject();
+      if (!isAdmin) delete obj.stock;
+      return obj;
+    });
+
     res.json({
-      products,
+      products: sanitized,
       page,
       pages: Math.ceil(count / pageSize),
       total: count,
@@ -36,7 +43,11 @@ const getProductById = async (req, res) => {
       "name slug",
     );
     if (product) {
-      res.json(product);
+      const isAdmin =
+        req.user && (req.user.isAdmin || req.user.role === "admin");
+      const obj = product.toObject();
+      if (!isAdmin) delete obj.stock;
+      res.json(obj);
     } else {
       res.status(404).json({ message: "Ürün bulunamadı" });
     }

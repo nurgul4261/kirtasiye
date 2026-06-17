@@ -8,11 +8,17 @@ const {
   deleteProduct,
   createProductReview,
 } = require("../controllers/productController");
-const { protect, admin } = require("../middleware/authMiddleware");
+const {
+  protect,
+  admin,
+  optionalProtect,
+} = require("../middleware/authMiddleware");
 const { upload } = require("../config/cloudinary");
 
-router.get("/", getProducts);
-router.get("/:id", getProductById);
+// optionalProtect: token varsa admin kontrolü yapılır, yoksa stock gizlenir
+router.get("/", optionalProtect, getProducts);
+router.get("/:id", optionalProtect, getProductById);
+
 router.post(
   "/",
   protect,

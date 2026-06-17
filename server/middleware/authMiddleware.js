@@ -21,6 +21,21 @@ const protect = async (req, res, next) => {
   }
 };
 
+// Token varsa decode eder, yoksa geçer — kimlik doğrulama zorunlu değil
+const optionalProtect = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer")) {
+    try {
+      const token = authHeader.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select("-password");
+    } catch {
+      // Geçersiz token olsa bile devam et, req.user boş kalır
+    }
+  }
+  next();
+};
+
 const admin = (req, res, next) => {
   console.log("ADMIN MIDDLEWARE ÇALIŞTI");
   console.log("req.user:", req.user);
@@ -33,4 +48,5 @@ const admin = (req, res, next) => {
     res.status(403).json({ message: "Admin yetkisi gerekli" });
   }
 };
-module.exports = { protect, admin };
+
+module.exports = { protect, admin, optionalProtect };
