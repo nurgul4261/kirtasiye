@@ -195,9 +195,9 @@
 }
 
 .free-shipping-track {
-  display: inline-flex;
+  display: flex;
   width: max-content;
-  animation: scroll-marquee 18s linear infinite;
+  animation: scroll-marquee 70s linear infinite;
 }
 
 .free-shipping-track span {
