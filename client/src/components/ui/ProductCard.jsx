@@ -40,10 +40,10 @@ export default function ProductCard({ product }) {
     );
   };
 
-  const handleGiftWrapToggle = (e) => {
-    e.preventDefault();
+  // Checkbox/etiket tıklaması, kartın Link navigasyonuna kabarcıklanmasın
+  // (preventDefault KOYMUYORUZ, yoksa checkbox'ın kendi toggle'ı da iptal olur)
+  const stopCardNavigation = (e) => {
     e.stopPropagation();
-    setGiftWrap((g) => !g);
   };
 
   const isOutOfStock = product.stock !== undefined && product.stock === 0;
@@ -58,12 +58,11 @@ export default function ProductCard({ product }) {
         <p className="product-category">{product.category?.name}</p>
         <h3 className="product-name">{product.name}</h3>
 
-        <label className="gift-wrap-option" onClick={handleGiftWrapToggle}>
+        <label className="gift-wrap-option" onClick={stopCardNavigation}>
           <input
             type="checkbox"
             checked={giftWrap}
-            onChange={() => {}}
-            onClick={handleGiftWrapToggle}
+            onChange={() => setGiftWrap((g) => !g)}
           />
           <span>🎁 Hediye Paketi (+{GIFT_WRAP_PRICE.toFixed(2)} ₺)</span>
         </label>
