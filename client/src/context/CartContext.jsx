@@ -3,6 +3,8 @@ import { toast } from "react-toastify";
 
 const CartContext = createContext();
 
+const GIFT_WRAP_PRICE = 10;
+
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() =>
     JSON.parse(localStorage.getItem("cart") || "[]"),
@@ -12,12 +14,16 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product, quantity = 1) => {
+  const addToCart = (product, quantity = 1, giftWrap = false) => {
     // stock undefined ise (normal kullanıcı) limit uygulanmaz
     const hasStockInfo = product.stock !== undefined;
+    const giftWrapPrice = giftWrap ? GIFT_WRAP_PRICE : 0;
 
     setCartItems((prev) => {
-      const exists = prev.find((item) => item._id === product._id);
+      // Hediye paketli ve paketsiz aynı ürün, ayrı satır olarak tutulur
+      const exists = prev.find(
+        (item) => item._id === product._id && !!item.giftWrap === !!giftWrap,
+      );
 
       if (exists) {
         const newQty = exists.quantity + quantity;
@@ -25,14 +31,16 @@ export const CartProvider = ({ children }) => {
         if (hasStockInfo && newQty > product.stock) {
           toast.warn("Sepete ekleyebileceğiniz maksimum adede ulaştınız");
           return prev.map((item) =>
-            item._id === product._id
+            item._id === product._id && !!item.giftWrap === !!giftWrap
               ? { ...item, quantity: product.stock }
               : item,
           );
         }
 
         return prev.map((item) =>
-          item._id === product._id ? { ...item, quantity: newQty } : item,
+          item._id === product._id && !!item.giftWrap === !!giftWrap
+            ? { ...item, quantity: newQty }
+            : item,
         );
       }
 
@@ -44,23 +52,30 @@ export const CartProvider = ({ children }) => {
 
       if (hasStockInfo && quantity > product.stock) {
         toast.warn("Sepete ekleyebileceğiniz maksimum adede ulaştınız");
-        return [...prev, { ...product, quantity: product.stock }];
+        return [
+          ...prev,
+          { ...product, quantity: product.stock, giftWrap, giftWrapPrice },
+        ];
       }
 
-      return [...prev, { ...product, quantity }];
+      return [...prev, { ...product, quantity, giftWrap, giftWrapPrice }];
     });
   };
 
-  const removeFromCart = (id) => {
-    setCartItems((prev) => prev.filter((item) => item._id !== id));
+  const removeFromCart = (id, giftWrap = false) => {
+    setCartItems((prev) =>
+      prev.filter(
+        (item) => !(item._id === id && !!item.giftWrap === !!giftWrap),
+      ),
+    );
   };
 
-  const updateQuantity = (id, quantity) => {
-    if (quantity <= 0) return removeFromCart(id);
+  const updateQuantity = (id, quantity, giftWrap = false) => {
+    if (quantity <= 0) return removeFromCart(id, giftWrap);
 
     setCartItems((prev) =>
       prev.map((item) => {
-        if (item._id !== id) return item;
+        if (item._id !== id || !!item.giftWrap !== !!giftWrap) return item;
 
         const hasStockInfo = item.stock !== undefined;
 
@@ -78,7 +93,8 @@ export const CartProvider = ({ children }) => {
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) =>
+      sum + (item.price + (item.giftWrapPrice || 0)) * item.quantity,
     0,
   );
 

@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useCart } from "../../context/CartContext";
 import { toast } from "react-toastify";
 import "./ProductCard.css";
 
+const GIFT_WRAP_PRICE = 10;
+
 export default function ProductCard({ product }) {
   const { addToCart, cartItems } = useCart();
+  const [giftWrap, setGiftWrap] = useState(false);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -13,22 +17,33 @@ export default function ProductCard({ product }) {
 
     // Stok bilgisi varsa sepetteki mevcut miktarı kontrol et
     if (hasStockInfo) {
-      const inCart = cartItems.find((i) => i._id === product._id);
-      const currentQty = inCart?.quantity || 0;
+      const inCart = cartItems
+        .filter((i) => i._id === product._id)
+        .reduce((sum, i) => sum + i.quantity, 0);
 
       if (product.stock === 0) {
         toast.error(`${product.name} stokta yok`);
         return;
       }
 
-      if (currentQty >= product.stock) {
+      if (inCart >= product.stock) {
         toast.warn("Sepete ekleyebileceğiniz maksimum adede ulaştınız");
         return;
       }
     }
 
-    addToCart(product, 1);
-    toast.success(`${product.name} sepete eklendi`);
+    addToCart(product, 1, giftWrap);
+    toast.success(
+      giftWrap
+        ? `${product.name} sepete eklendi 🎁 (Hediye paketli)`
+        : `${product.name} sepete eklendi`,
+    );
+  };
+
+  const handleGiftWrapToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setGiftWrap((g) => !g);
   };
 
   const isOutOfStock = product.stock !== undefined && product.stock === 0;
@@ -42,8 +57,21 @@ export default function ProductCard({ product }) {
       <div className="product-info">
         <p className="product-category">{product.category?.name}</p>
         <h3 className="product-name">{product.name}</h3>
+
+        <label className="gift-wrap-option" onClick={handleGiftWrapToggle}>
+          <input
+            type="checkbox"
+            checked={giftWrap}
+            onChange={() => {}}
+            onClick={handleGiftWrapToggle}
+          />
+          <span>🎁 Hediye Paketi (+{GIFT_WRAP_PRICE.toFixed(2)} ₺)</span>
+        </label>
+
         <div className="product-footer">
-          <span className="product-price">{product.price.toFixed(2)} ₺</span>
+          <span className="product-price">
+            {(product.price + (giftWrap ? GIFT_WRAP_PRICE : 0)).toFixed(2)} ₺
+          </span>
           <button
             className="btn-primary add-cart-btn"
             onClick={handleAddToCart}

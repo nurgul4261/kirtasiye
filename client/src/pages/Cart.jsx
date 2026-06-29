@@ -69,37 +69,52 @@ export default function Cart() {
       <h1 className="cart-title">Sepetim ({cartItems.length} ürün)</h1>
       <div className="cart-layout">
         <div className="cart-items">
-          {cartItems.map((item) => (
-            <div key={item._id} className="cart-item card">
-              <img src={item.image || "/placeholder.png"} alt={item.name} />
-              <div className="item-info">
-                <h3>{item.name}</h3>
-                <p>{item.price.toFixed(2)} ₺</p>
-              </div>
-              <div className="item-qty">
-                <button
-                  onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                >
-                  −
-                </button>
-                <span>{item.quantity}</span>
-                <button
-                  onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                >
-                  +
-                </button>
-              </div>
-              <div className="item-total">
-                {(item.price * item.quantity).toFixed(2)} ₺
-              </div>
-              <button
-                className="remove-btn"
-                onClick={() => removeFromCart(item._id)}
+          {cartItems.map((item) => {
+            const unitPrice = item.price + (item.giftWrapPrice || 0);
+            return (
+              <div
+                key={`${item._id}-${item.giftWrap ? "gift" : "normal"}`}
+                className="cart-item card"
               >
-                ✕
-              </button>
-            </div>
-          ))}
+                <img src={item.image || "/placeholder.png"} alt={item.name} />
+                <div className="item-info">
+                  <h3>{item.name}</h3>
+                  <p>{item.price.toFixed(2)} ₺</p>
+                  {item.giftWrap && (
+                    <span className="gift-wrap-badge">
+                      🎁 Hediye Paketi (+{item.giftWrapPrice.toFixed(2)} ₺)
+                    </span>
+                  )}
+                </div>
+                <div className="item-qty">
+                  <button
+                    onClick={() =>
+                      updateQuantity(item._id, item.quantity - 1, item.giftWrap)
+                    }
+                  >
+                    −
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button
+                    onClick={() =>
+                      updateQuantity(item._id, item.quantity + 1, item.giftWrap)
+                    }
+                  >
+                    +
+                  </button>
+                </div>
+                <div className="item-total">
+                  {(unitPrice * item.quantity).toFixed(2)} ₺
+                </div>
+                <button
+                  className="remove-btn"
+                  onClick={() => removeFromCart(item._id, item.giftWrap)}
+                >
+                  ✕
+                </button>
+              </div>
+            );
+          })}
 
           <UpsellSection cartItems={cartItems} addToCart={addToCart} />
         </div>
