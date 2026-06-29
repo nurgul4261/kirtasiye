@@ -14,41 +14,57 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar">
-      <div className="container navbar-inner">
-        {/* Logo görseli yerine metin tabanlı marka ismi eklendi */}
-        <Link to="/" className="navbar-brand">
-          <img src="/logo.png" alt="Kovan Kırtasiye" className="navbar-logo" />
-          <span className="navbar-brand-text">Kovan Kırtasiye</span>
-        </Link>
-        <div className="navbar-links">
-          <Link to="/products">Ürünler</Link>
-          {user?.isAdmin && <Link to="/admin">Admin Panel</Link>}
-        </div>
-        <div className="navbar-actions">
-          <Link to="/cart" className="cart-btn">
-            🛒
-            {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
-          </Link>
-          {user ? (
-            <div className="user-menu">
-              <Link to="/profile" className="profile-link">
-                👤 {user.name}
-              </Link>
-              <button onClick={handleLogout} className="btn-outline logout-btn">
-                Çıkış
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="login-btn" // btn-primary yerine yeni sınıfımız
-            >
-              Giriş Yap
-            </Link>
-          )}
-        </div>
+    <>
+      {/* Kargo Bedava Şeridi */}
+      <div className="free-shipping-bar">
+        🚚 2000 TL ve Üzeri Alışverişlerde Kargo Bedava!
       </div>
-    </nav>
+
+      <nav className="navbar">
+        <div className="container navbar-inner">
+          {/* Logo görseli yerine metin tabanlı marka ismi eklendi */}
+          <Link to="/" className="navbar-brand">
+            <img
+              src="/logo.png"
+              alt="Kovan Kırtasiye"
+              className="navbar-logo"
+            />
+            <span className="navbar-brand-text">Kovan Kırtasiye</span>
+          </Link>
+          <div className="navbar-links">
+            <Link to="/products">Ürünler</Link>
+            {user?.isAdmin && <Link to="/admin">Admin Panel</Link>}
+          </div>
+          <div className="navbar-actions">
+            <Link to="/cart" className="cart-btn">
+              🛒
+              {totalItems > 0 && (
+                <span className="cart-count">{totalItems}</span>
+              )}
+            </Link>
+            {user ? (
+              <div className="user-menu">
+                <Link to="/profile" className="profile-link">
+                  👤 {user.name}
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="btn-outline logout-btn"
+                >
+                  Çıkış
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="login-btn" // btn-primary yerine yeni sınıfımız
+              >
+                Giriş Yap
+              </Link>
+            )}
+          </div>
+        </div>
+      </nav>
+    </>
   );
 }
