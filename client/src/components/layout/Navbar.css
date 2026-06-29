@@ -189,11 +189,32 @@
 .free-shipping-bar {
   background: linear-gradient(90deg, var(--lavender), var(--accent));
   color: var(--white);
-  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 10px 0;
+}
+
+.free-shipping-track {
+  display: inline-flex;
+  width: max-content;
+  animation: scroll-marquee 18s linear infinite;
+}
+
+.free-shipping-track span {
   font-weight: 600;
   font-size: 0.95rem;
-  padding: 10px 16px;
   letter-spacing: 0.3px;
+  padding: 0 40px;
+  flex-shrink: 0;
+}
+
+@keyframes scroll-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @media (max-width: 768px) {
@@ -252,8 +273,8 @@
     white-space: nowrap;
   }
 
-  .free-shipping-bar {
+  .free-shipping-track span {
     font-size: 0.85rem;
-    padding: 8px 12px;
+    padding: 0 24px;
   }
 }

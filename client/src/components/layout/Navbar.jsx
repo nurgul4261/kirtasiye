@@ -17,7 +17,12 @@ export default function Navbar() {
     <>
       {/* Kargo Bedava Şeridi */}
       <div className="free-shipping-bar">
-        🚚 2000 TL ve Üzeri Alışverişlerde Kargo Bedava!
+        <div className="free-shipping-track">
+          <span>🚚 2000 TL ve Üzeri Alışverişlerde Kargo Bedava!</span>
+          <span>🚚 2000 TL ve Üzeri Alışverişlerde Kargo Bedava!</span>
+          <span>🚚 2000 TL ve Üzeri Alışverişlerde Kargo Bedava!</span>
+          <span>🚚 2000 TL ve Üzeri Alışverişlerde Kargo Bedava!</span>
+        </div>
       </div>
 
       <nav className="navbar">
