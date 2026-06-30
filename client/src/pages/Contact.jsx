@@ -18,7 +18,7 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // ✅ DÜZELTİLDİ: loading(true) yerine setLoading(true) yapıldı
+    setLoading(true);
     try {
       await api.post("/contact", form);
       setSent(true);

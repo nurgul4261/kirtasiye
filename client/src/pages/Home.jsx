@@ -4,14 +4,7 @@ import api from "../services/api";
 import ProductCard from "../components/ui/ProductCard";
 import "./Home.css";
 
-const WORDS = [
-  "Defter",
-  "Kutu Oyunu",
-  "Hobi Kiti",
-  "Hediyelik",
-  "Çim Adam",
-  "Ahşap Boyama",
-];
+const WORDS = ["Defter", "Kutu Oyunu", "Hobi Kiti", "Çim Adam"];
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
