@@ -282,10 +282,12 @@ export default function Checkout() {
               <span>-{discountAmount.toFixed(2)} ₺</span>
             </div>
           )}
-          <div className="order-item">
-            <span>Kargo</span>
-            <span>{shippingPrice === 0 ? "Ücretsiz" : "Dahil"}</span>
-          </div>
+          {shippingPrice === 0 && (
+            <div className="order-item">
+              <span>Kargo</span>
+              <span>Ücretsiz</span>
+            </div>
+          )}
           <div className="order-total">
             <span>Toplam</span>
             <span>{finalTotal.toFixed(2)} ₺</span>
