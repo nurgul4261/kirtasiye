@@ -62,7 +62,7 @@ export default function Cart() {
     );
   }
 
-  const shippingPrice = totalPrice > 500 ? 0 : 29.9;
+  const shippingPrice = totalPrice > 2000 ? 0 : 29.9;
 
   return (
     <div className="container cart-page">

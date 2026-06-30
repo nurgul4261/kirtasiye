@@ -47,7 +47,7 @@ export default function Checkout() {
       .catch(() => {});
   }, []);
 
-  const shippingPrice = totalPrice > 500 ? 0 : 29.9;
+  const shippingPrice = totalPrice > 2000 ? 0 : 29.9;
   const discountAmount = couponApplied ? (totalPrice * discount) / 100 : 0;
   const finalTotal = totalPrice - discountAmount + shippingPrice;
 
@@ -284,9 +284,7 @@ export default function Checkout() {
           )}
           <div className="order-item">
             <span>Kargo</span>
-            <span>
-              {shippingPrice === 0 ? "Ücretsiz" : `${shippingPrice} ₺`}
-            </span>
+            <span>{shippingPrice === 0 ? "Ücretsiz" : "Dahil"}</span>
           </div>
           <div className="order-total">
             <span>Toplam</span>
