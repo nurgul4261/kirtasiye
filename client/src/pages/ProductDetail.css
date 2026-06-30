@@ -62,6 +62,7 @@
   line-height: 1.8;
   margin-bottom: 20px;
   font-size: 15px;
+  white-space: pre-line;
 }
 .detail-stock {
   margin-bottom: 28px;
