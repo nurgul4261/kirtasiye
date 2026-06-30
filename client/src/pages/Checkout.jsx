@@ -47,7 +47,7 @@ export default function Checkout() {
       .catch(() => {});
   }, []);
 
-  const shippingPrice = totalPrice > 2000 ? 0 : 29.9;
+  const shippingPrice = 0; // Kargo ücreti kaldırıldı, her zaman ücretsiz
   const discountAmount = couponApplied ? (totalPrice * discount) / 100 : 0;
   const finalTotal = totalPrice - discountAmount + shippingPrice;
 
@@ -280,12 +280,6 @@ export default function Checkout() {
             <div className="order-item discount-row">
               <span>İndirim (%{discount})</span>
               <span>-{discountAmount.toFixed(2)} ₺</span>
-            </div>
-          )}
-          {shippingPrice === 0 && (
-            <div className="order-item">
-              <span>Kargo</span>
-              <span>Ücretsiz</span>
             </div>
           )}
           <div className="order-total">

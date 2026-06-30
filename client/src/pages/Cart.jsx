@@ -62,7 +62,7 @@ export default function Cart() {
     );
   }
 
-  const shippingPrice = totalPrice > 2000 ? 0 : 29.9;
+  const shippingPrice = 0; // Kargo ücreti kaldırıldı, her zaman ücretsiz
 
   return (
     <div className="container cart-page">
@@ -125,17 +125,6 @@ export default function Cart() {
             <span>Ürünler</span>
             <span>{totalPrice.toFixed(2)} ₺</span>
           </div>
-          <div className="summary-row">
-            <span>Kargo</span>
-            <span>
-              {shippingPrice === 0
-                ? "Ücretsiz"
-                : `${shippingPrice.toFixed(2)} ₺`}
-            </span>
-          </div>
-          {shippingPrice === 0 && (
-            <p className="free-shipping">✅ 2000 ₺ üzeri ücretsiz kargo</p>
-          )}
           <div className="summary-total">
             <span>Toplam</span>
             <span>{(totalPrice + shippingPrice).toFixed(2)} ₺</span>
