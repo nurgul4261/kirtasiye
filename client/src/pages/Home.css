@@ -102,10 +102,9 @@
   padding: 0 24px;
 }
 
-/* === Seçenek A: Minimal Kart (lila teması) === */
 .storex-categories-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: 1fr;
   gap: 16px;
   margin-bottom: 40px;
@@ -305,6 +304,9 @@
 @media (max-width: 992px) {
   .storex-products-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .storex-categories-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
