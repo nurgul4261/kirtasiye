@@ -13,19 +13,6 @@ const WORDS = [
   "Ahşap Boyama",
 ];
 
-const icons = {
-  defter: "📓",
-  kalem: "✏️",
-  "kutu-oyunlari": "🧩",
-  hobi: "🎨",
-  "cim-adam": "🌱",
-  "tas-tozu-boyama": "🪨",
-  "cocuk-tuval-boyama": "🖼️",
-  "sayilarla-tuval-boyama": "🎨",
-  "cocuk-ahsap-boyama": "🪵",
-  hediyelik: "🎁",
-};
-
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -86,72 +73,78 @@ export default function Home() {
         <section className="storex-section">
           <div className="storex-container">
             <div className="storex-categories-grid">
-              {categories.map((cat) => (
-                <div
-                  key={cat._id}
-                  className="storex-cat-wrapper"
-                  // ✅ Açık olan wrapper en üste çıkar
-                  style={{ zIndex: openCat === cat._id ? 200 : 1 }}
-                >
-                  {cat.children?.length > 0 ? (
-                    <div
-                      className={`storex-category-card has-children${openCat === cat._id ? " open" : ""}`}
-                      onClick={() =>
-                        setOpenCat(openCat === cat._id ? null : cat._id)
-                      }
-                    >
-                      <div className="storex-cat-content">
-                        <span className="storex-cat-icon">
-                          {icons[cat.slug] || "📦"}
-                        </span>
-                        <div className="storex-cat-overlay">
-                          <span className="storex-cat-name">{cat.name}</span>
-                          <span className="storex-cat-arrow">
-                            {openCat === cat._id ? "▲" : "▼"}
-                          </span>
-                        </div>
-                      </div>
+              {categories.map((cat) => {
+                const bgStyle = cat.image
+                  ? { backgroundImage: `url(${cat.image})` }
+                  : {};
 
-                      {openCat === cat._id && (
-                        <div
-                          className="storex-sub-cats"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Link
-                            to={`/products?category=${cat._id}`}
-                            className="storex-sub-cat"
+                return (
+                  <div
+                    key={cat._id}
+                    className="storex-cat-wrapper"
+                    // ✅ Açık olan wrapper en üste çıkar
+                    style={{ zIndex: openCat === cat._id ? 200 : 1 }}
+                  >
+                    {cat.children?.length > 0 ? (
+                      <div
+                        className={`storex-category-card has-children${
+                          openCat === cat._id ? " open" : ""
+                        }${cat.image ? " has-bg" : ""}`}
+                        style={bgStyle}
+                        onClick={() =>
+                          setOpenCat(openCat === cat._id ? null : cat._id)
+                        }
+                      >
+                        <div className="storex-cat-content">
+                          <div className="storex-cat-overlay">
+                            <span className="storex-cat-name">{cat.name}</span>
+                            <span className="storex-cat-arrow">
+                              {openCat === cat._id ? "▲" : "▼"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {openCat === cat._id && (
+                          <div
+                            className="storex-sub-cats"
+                            onClick={(e) => e.stopPropagation()}
                           >
-                            🔹 Tüm {cat.name}
-                          </Link>
-                          {cat.children.map((sub) => (
                             <Link
-                              key={sub._id}
-                              to={`/products?category=${sub._id}`}
+                              to={`/products?category=${cat._id}`}
                               className="storex-sub-cat"
                             >
-                              {icons[sub.slug] || "▸"} {sub.name}
+                              🔹 Tüm {cat.name}
                             </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <Link
-                      to={`/products?category=${cat._id}`}
-                      className="storex-category-card"
-                    >
-                      <div className="storex-cat-content">
-                        <span className="storex-cat-icon">
-                          {icons[cat.slug] || "📦"}
-                        </span>
-                        <div className="storex-cat-overlay">
-                          <span className="storex-cat-name">{cat.name}</span>
-                        </div>
+                            {cat.children.map((sub) => (
+                              <Link
+                                key={sub._id}
+                                to={`/products?category=${sub._id}`}
+                                className="storex-sub-cat"
+                              >
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    </Link>
-                  )}
-                </div>
-              ))}
+                    ) : (
+                      <Link
+                        to={`/products?category=${cat._id}`}
+                        className={`storex-category-card${
+                          cat.image ? " has-bg" : ""
+                        }`}
+                        style={bgStyle}
+                      >
+                        <div className="storex-cat-content">
+                          <div className="storex-cat-overlay">
+                            <span className="storex-cat-name">{cat.name}</span>
+                          </div>
+                        </div>
+                      </Link>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             <div className="storex-center-btn-wrapper">
