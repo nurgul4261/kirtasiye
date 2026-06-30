@@ -16,11 +16,15 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
     api
       .get(`/products/${id}`)
-      .then(({ data }) => setProduct(data))
+      .then(({ data }) => {
+        setProduct(data);
+        setActiveImage(0);
+      })
       .catch(() => navigate("/products"))
       .finally(() => setLoading(false));
   }, [id]);
@@ -65,6 +69,16 @@ export default function ProductDetail() {
     setQuantity((q) => q + 1);
   };
 
+  // images dizisi varsa onu kullan, yoksa eski tekli image alanına düş
+  const galleryImages =
+    product.images && product.images.length > 0
+      ? product.images
+      : product.image
+        ? [product.image]
+        : ["/placeholder.png"];
+
+  const mainImage = galleryImages[activeImage] || galleryImages[0];
+
   return (
     <div className="container detail-page">
       <button onClick={() => navigate(-1)} className="back-btn">
@@ -72,7 +86,24 @@ export default function ProductDetail() {
       </button>
       <div className="detail-grid">
         <div className="detail-img">
-          <img src={product.image || "/placeholder.png"} alt={product.name} />
+          <img src={mainImage} alt={product.name} />
+
+          {galleryImages.length > 1 && (
+            <div className="detail-thumbs">
+              {galleryImages.map((img, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`detail-thumb${
+                    index === activeImage ? " active" : ""
+                  }`}
+                  onClick={() => setActiveImage(index)}
+                >
+                  <img src={img} alt={`${product.name} ${index + 1}`} />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <div className="detail-info">
           <p className="detail-category">{product.category?.name}</p>

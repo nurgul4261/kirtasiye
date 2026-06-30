@@ -59,11 +59,20 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   console.log("CREATE PRODUCT ÇALIŞTI");
   console.log("BODY:", req.body);
-  console.log("FILE:", req.file);
+  console.log("FILES:", req.files);
 
   try {
     const { name, description, price, category, brand, stock } = req.body;
-    const image = req.file ? req.file.path : req.body.image;
+
+    // Birden fazla dosya yüklendiyse hepsinin yolunu al
+    const images =
+      req.files && req.files.length > 0
+        ? req.files.map((f) => f.path)
+        : req.body.images
+          ? [].concat(req.body.images)
+          : req.body.image
+            ? [req.body.image]
+            : [];
 
     const product = await Product.create({
       name,
@@ -72,7 +81,8 @@ const createProduct = async (req, res) => {
       category,
       brand,
       stock,
-      image,
+      images,
+      image: images[0] || "", // ilk görsel geriye dönük uyumluluk için
     });
 
     console.log("ÜRÜN OLUŞTURULDU:", product);
@@ -89,14 +99,52 @@ const updateProduct = async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Ürün bulunamadı" });
 
-    if (req.file && product.image) {
-      const publicId =
-        "products/" + product.image.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(publicId);
+    const hasNewFiles = req.files && req.files.length > 0;
+    const newImageUrls = hasNewFiles ? req.files.map((f) => f.path) : [];
+
+    // Admin panelinden "korunacak" eski görsellerin listesi gelir.
+    // Hiç gönderilmediyse (eski istemci/form), mevcut görselleri olduğu gibi koru.
+    const keptExistingUrls = req.body.existingImages
+      ? [].concat(req.body.existingImages)
+      : product.images && product.images.length > 0
+        ? product.images
+        : product.image
+          ? [product.image]
+          : [];
+
+    const finalImages = [...keptExistingUrls, ...newImageUrls];
+
+    // Artık listede olmayan eski görselleri Cloudinary'den temizle
+    const oldImages =
+      product.images && product.images.length > 0
+        ? product.images
+        : product.image
+          ? [product.image]
+          : [];
+    const removedImages = oldImages.filter((img) => !finalImages.includes(img));
+
+    for (const img of removedImages) {
+      try {
+        const publicId = "products/" + img.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(publicId);
+      } catch (e) {
+        console.error("Cloudinary silme hatası:", e.message);
+      }
     }
 
-    const image = req.file ? req.file.path : product.image;
-    Object.assign(product, { ...req.body, image });
+    const {
+      images: _ignored,
+      image: _ignored2,
+      existingImages: _ignored3,
+      ...rest
+    } = req.body;
+
+    Object.assign(product, {
+      ...rest,
+      images: finalImages,
+      image: finalImages[0] || "",
+    });
+
     const updated = await product.save();
     res.json(updated);
   } catch (error) {

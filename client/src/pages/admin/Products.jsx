@@ -4,6 +4,8 @@ import api from "../../services/api";
 import { toast } from "react-toastify";
 import imageCompression from "browser-image-compression";
 
+const MAX_IMAGES = 5;
+
 const emptyForm = {
   name: "",
   description: "",
@@ -20,8 +22,8 @@ export default function AdminProducts() {
   const [showModal, setShowModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [form, setForm] = useState(emptyForm);
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState("");
+  // imageItems: [{ file, preview }] — hem yeni seçilenler hem mevcut görseller burada tutulur
+  const [imageItems, setImageItems] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [compressing, setCompressing] = useState(false);
 
@@ -43,10 +45,10 @@ export default function AdminProducts() {
   const openCreate = () => {
     setEditProduct(null);
     setForm(emptyForm);
-    setImageFile(null);
-    setImagePreview("");
+    setImageItems([]);
     setShowModal(true);
   };
+
   const openEdit = (p) => {
     setEditProduct(p);
     setForm({
@@ -57,8 +59,8 @@ export default function AdminProducts() {
       brand: p.brand || "",
       category: p.category?._id || "",
     });
-    setImageFile(null);
-    setImagePreview(p.image || "");
+    const existing = p.images?.length ? p.images : p.image ? [p.image] : [];
+    setImageItems(existing.map((url) => ({ file: null, preview: url })));
     setShowModal(true);
   };
 
@@ -66,27 +68,59 @@ export default function AdminProducts() {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    const remainingSlots = MAX_IMAGES - imageItems.length;
+    if (remainingSlots <= 0) {
+      toast.warn(`En fazla ${MAX_IMAGES} görsel ekleyebilirsiniz`);
+      e.target.value = "";
+      return;
+    }
+
+    const filesToProcess = files.slice(0, remainingSlots);
+    if (files.length > remainingSlots) {
+      toast.warn(`En fazla ${MAX_IMAGES} görsel ekleyebilirsiniz`);
+    }
+
     setCompressing(true);
     try {
-      const compressed = await imageCompression(file, {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1024,
-        useWebWorker: true,
-      });
-      setImageFile(compressed);
-      setImagePreview(URL.createObjectURL(compressed));
-    } catch {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
+      const compressedItems = await Promise.all(
+        filesToProcess.map(async (file) => {
+          try {
+            const compressed = await imageCompression(file, {
+              maxSizeMB: 1,
+              maxWidthOrHeight: 1024,
+              useWebWorker: true,
+            });
+            return {
+              file: compressed,
+              preview: URL.createObjectURL(compressed),
+            };
+          } catch {
+            return { file, preview: URL.createObjectURL(file) };
+          }
+        }),
+      );
+      setImageItems((prev) => [...prev, ...compressedItems]);
     } finally {
       setCompressing(false);
+      e.target.value = "";
     }
+  };
+
+  const removeImage = (index) => {
+    setImageItems((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (imageItems.length === 0) {
+      toast.warn("En az 1 görsel eklemelisiniz");
+      return;
+    }
+
     setUploading(true);
     try {
       const formData = new FormData();
@@ -96,7 +130,18 @@ export default function AdminProducts() {
       formData.append("stock", Number(form.stock));
       formData.append("brand", form.brand);
       formData.append("category", form.category);
-      if (imageFile) formData.append("image", imageFile);
+
+      // Yeni eklenen dosyalar varsa, hepsini "images" alanı altında gönder
+      const newFiles = imageItems.filter((it) => it.file).map((it) => it.file);
+      const keptExistingUrls = imageItems
+        .filter((it) => !it.file)
+        .map((it) => it.preview);
+
+      newFiles.forEach((file) => formData.append("images", file));
+      // Silinmemiş, mevcut (URL) görselleri de bildiriyoruz ki
+      // kullanıcı bazı görselleri kaldırıp yeni dosya eklemediğinde
+      // backend bu kaldırmayı uygulayabilsin
+      keptExistingUrls.forEach((url) => formData.append("existingImages", url));
 
       if (editProduct)
         await api.put(`/products/${editProduct._id}`, formData, {
@@ -190,7 +235,7 @@ export default function AdminProducts() {
                     style={{ display: "flex", alignItems: "center", gap: 10 }}
                   >
                     <img
-                      src={p.image || "/placeholder.png"}
+                      src={p.image || p.images?.[0] || "/placeholder.png"}
                       alt=""
                       style={{
                         width: 40,
@@ -306,31 +351,107 @@ export default function AdminProducts() {
                 />
               </div>
               <div className="form-group">
-                <label>Ürün Görseli</label>
+                <label>
+                  Ürün Görselleri ({imageItems.length}/{MAX_IMAGES})
+                </label>
                 {compressing && (
                   <p style={{ fontSize: 13, color: "var(--primary)" }}>
-                    Görsel optimize ediliyor...
+                    Görseller optimize ediliyor...
                   </p>
                 )}
-                {imagePreview && !compressing && (
-                  <img
-                    src={imagePreview}
-                    alt="Önizleme"
+
+                {imageItems.length > 0 && (
+                  <div
                     style={{
-                      width: "100%",
-                      maxHeight: 200,
-                      objectFit: "contain",
-                      borderRadius: 8,
-                      marginBottom: 8,
-                      border: "1px solid #eee",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 10,
+                      marginBottom: 10,
                     }}
+                  >
+                    {imageItems.map((item, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          position: "relative",
+                          width: 84,
+                          height: 84,
+                        }}
+                      >
+                        <img
+                          src={item.preview}
+                          alt={`Görsel ${index + 1}`}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            borderRadius: 8,
+                            border:
+                              index === 0
+                                ? "2px solid var(--primary)"
+                                : "1px solid #eee",
+                          }}
+                        />
+                        {index === 0 && (
+                          <span
+                            style={{
+                              position: "absolute",
+                              bottom: 2,
+                              left: 2,
+                              background: "var(--primary)",
+                              color: "#fff",
+                              fontSize: 9,
+                              padding: "1px 5px",
+                              borderRadius: 4,
+                            }}
+                          >
+                            Kapak
+                          </span>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          style={{
+                            position: "absolute",
+                            top: -6,
+                            right: -6,
+                            width: 20,
+                            height: 20,
+                            borderRadius: "50%",
+                            background: "var(--danger)",
+                            color: "#fff",
+                            border: "none",
+                            cursor: "pointer",
+                            fontSize: 12,
+                            lineHeight: 1,
+                            boxShadow: "none",
+                            padding: 0,
+                          }}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {imageItems.length < MAX_IMAGES && (
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    multiple
+                    onChange={handleImageChange}
                   />
                 )}
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  onChange={handleImageChange}
-                />
+                <p
+                  style={{
+                    fontSize: 12,
+                    color: "var(--text-light)",
+                    marginTop: 6,
+                  }}
+                >
+                  İlk görsel ürün kartında kapak fotoğrafı olarak kullanılır.
+                </p>
               </div>
               <div className="modal-actions">
                 <button

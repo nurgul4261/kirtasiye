@@ -24,7 +24,7 @@ router.post(
   protect,
   admin,
   (req, res, next) => {
-    upload.single("image")(req, res, (err) => {
+    upload.array("images", 5)(req, res, (err) => {
       if (err) {
         return res.status(500).json({ message: err.message });
       }
@@ -33,7 +33,20 @@ router.post(
   },
   createProduct,
 );
-router.put("/:id", protect, admin, upload.single("image"), updateProduct);
+router.put(
+  "/:id",
+  protect,
+  admin,
+  (req, res, next) => {
+    upload.array("images", 5)(req, res, (err) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      }
+      next();
+    });
+  },
+  updateProduct,
+);
 router.delete("/:id", protect, admin, deleteProduct);
 router.post("/:id/reviews", protect, createProductReview);
 
