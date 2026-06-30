@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import AdminLayout from "./AdminLayout";
 import api from "../../services/api";
 import { toast } from "react-toastify";
+import imageCompression from "browser-image-compression";
 
 const emptyForm = {
   name: "",
   description: "",
-  image: "",
   parent: "",
   order: 0,
 };
@@ -18,6 +18,10 @@ export default function AdminCategories() {
   const [showModal, setShowModal] = useState(false);
   const [editCat, setEditCat] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
+  const [compressing, setCompressing] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const fetchCategories = async () => {
     try {
@@ -39,33 +43,87 @@ export default function AdminCategories() {
   const openCreate = () => {
     setEditCat(null);
     setForm(emptyForm);
+    setImageFile(null);
+    setImagePreview("");
     setShowModal(true);
   };
+
   const openEdit = (c) => {
     setEditCat(c);
     setForm({
       name: c.name,
       description: c.description || "",
-      image: c.image || "",
       parent: c.parent?._id || c.parent || "",
       order: c.order || 0,
     });
+    setImageFile(null);
+    setImagePreview(c.image || "");
     setShowModal(true);
   };
+
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setCompressing(true);
+    try {
+      const compressed = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1024,
+        useWebWorker: true,
+      });
+      setImageFile(compressed);
+      setImagePreview(URL.createObjectURL(compressed));
+    } catch {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    } finally {
+      setCompressing(false);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaving(true);
     try {
-      const payload = { ...form, parent: form.parent || null };
-      if (editCat) await api.put(`/categories/${editCat._id}`, payload);
-      else await api.post("/categories", payload);
+      const formData = new FormData();
+      formData.append("name", form.name);
+      formData.append("description", form.description);
+      formData.append("order", form.order);
+      formData.append("parent", form.parent || "");
+
+      if (imageFile) {
+        formData.append("image", imageFile);
+      } else if (!imagePreview) {
+        // Görsel kaldırıldıysa boş gönder
+        formData.append("image", "");
+      }
+      // imageFile yok ama imagePreview varsa (mevcut görsel korunuyor),
+      // "image" alanını hiç göndermiyoruz; backend mevcut değeri korur.
+
+      if (editCat)
+        await api.put(`/categories/${editCat._id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      else
+        await api.post("/categories", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
       toast.success(editCat ? "Kategori güncellendi" : "Kategori eklendi");
       setShowModal(false);
       fetchCategories();
     } catch (err) {
       toast.error(err.response?.data?.message || "Hata");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -91,7 +149,25 @@ export default function AdminCategories() {
     categories.forEach((cat) => {
       rows.push(
         <tr key={cat._id} style={{ background: "#f8f8f8" }}>
-          <td style={{ fontWeight: 700 }}>📁 {cat.name}</td>
+          <td>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              {cat.image ? (
+                <img
+                  src={cat.image}
+                  alt=""
+                  style={{
+                    width: 36,
+                    height: 36,
+                    objectFit: "cover",
+                    borderRadius: 6,
+                  }}
+                />
+              ) : (
+                <span style={{ fontSize: 18 }}>📁</span>
+              )}
+              <span style={{ fontWeight: 700 }}>{cat.name}</span>
+            </div>
+          </td>
           <td style={{ color: "#aaa", fontSize: 13 }}>—</td>
           <td style={{ color: "var(--text-light)", fontSize: 13 }}>
             {cat.slug}
@@ -115,7 +191,25 @@ export default function AdminCategories() {
       cat.children?.forEach((sub) => {
         rows.push(
           <tr key={sub._id}>
-            <td style={{ paddingLeft: 28, color: "#555" }}>↳ {sub.name}</td>
+            <td style={{ paddingLeft: 28 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                {sub.image ? (
+                  <img
+                    src={sub.image}
+                    alt=""
+                    style={{
+                      width: 30,
+                      height: 30,
+                      objectFit: "cover",
+                      borderRadius: 6,
+                    }}
+                  />
+                ) : (
+                  <span style={{ fontSize: 14, color: "#888" }}>↳</span>
+                )}
+                <span style={{ color: "#555" }}>{sub.name}</span>
+              </div>
+            </td>
             <td style={{ fontSize: 13, color: "#888" }}>{cat.name}</td>
             <td style={{ color: "var(--text-light)", fontSize: 13 }}>
               {sub.slug}
@@ -222,12 +316,63 @@ export default function AdminCategories() {
                 />
               </div>
               <div className="form-group">
-                <label>Görsel URL</label>
+                <label>Kategori Görseli</label>
+                {compressing && (
+                  <p style={{ fontSize: 13, color: "var(--primary)" }}>
+                    Görsel optimize ediliyor...
+                  </p>
+                )}
+                {imagePreview && !compressing && (
+                  <div style={{ position: "relative", marginBottom: 8 }}>
+                    <img
+                      src={imagePreview}
+                      alt="Önizleme"
+                      style={{
+                        width: "100%",
+                        maxHeight: 180,
+                        objectFit: "cover",
+                        borderRadius: 8,
+                        border: "1px solid #eee",
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={removeImage}
+                      style={{
+                        position: "absolute",
+                        top: 8,
+                        right: 8,
+                        width: 24,
+                        height: 24,
+                        borderRadius: "50%",
+                        background: "var(--danger)",
+                        color: "#fff",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: 13,
+                        lineHeight: 1,
+                        boxShadow: "none",
+                        padding: 0,
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
                 <input
-                  name="image"
-                  value={form.image}
-                  onChange={handleChange}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleImageChange}
                 />
+                <p
+                  style={{
+                    fontSize: 12,
+                    color: "var(--text-light)",
+                    marginTop: 6,
+                  }}
+                >
+                  Anasayfadaki kategori kartında arka plan olarak kullanılır.
+                </p>
               </div>
               <div className="modal-actions">
                 <button
@@ -237,8 +382,18 @@ export default function AdminCategories() {
                 >
                   İptal
                 </button>
-                <button type="submit" className="btn-primary">
-                  {editCat ? "Güncelle" : "Ekle"}
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  disabled={saving || compressing}
+                >
+                  {compressing
+                    ? "Optimize ediliyor..."
+                    : saving
+                      ? "Kaydediliyor..."
+                      : editCat
+                        ? "Güncelle"
+                        : "Ekle"}
                 </button>
               </div>
             </form>

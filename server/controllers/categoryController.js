@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const { cloudinary } = require("../config/cloudinary");
 
 // Türkçe slug üretici
 const toSlug = (name) =>
@@ -12,6 +13,15 @@ const toSlug = (name) =>
     .replace(/ç/g, "c")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
+
+// Cloudinary URL'sinden public_id çıkarır (klasör adından bağımsız çalışır)
+// Örn: https://res.cloudinary.com/xxx/image/upload/v123456/products/abc123.jpg
+// -> products/abc123
+const extractPublicId = (url) => {
+  if (!url) return null;
+  const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.[a-zA-Z0-9]+$/);
+  return match ? match[1] : null;
+};
 
 // @GET /api/categories
 // Tüm kategorileri ağaç yapısında döndürür
@@ -52,8 +62,12 @@ const getCategoriesFlat = async (req, res) => {
 // @POST /api/categories
 const createCategory = async (req, res) => {
   try {
-    const { name, description, image, parent, order } = req.body;
+    const { name, description, parent, order } = req.body;
     const slug = toSlug(name);
+
+    // Dosya yüklendiyse onun yolunu kullan, yoksa elle girilen URL'yi kullan
+    const image = req.file ? req.file.path : req.body.image;
+
     const category = await Category.create({
       name,
       slug,
@@ -75,13 +89,31 @@ const updateCategory = async (req, res) => {
     if (!category)
       return res.status(404).json({ message: "Kategori bulunamadı" });
 
+    // Yeni dosya yüklendiyse, eski Cloudinary görselini temizle
+    if (req.file && category.image) {
+      const publicId = extractPublicId(category.image);
+      if (publicId) {
+        try {
+          await cloudinary.uploader.destroy(publicId);
+        } catch (e) {
+          console.error("Cloudinary silme hatası:", e.message);
+        }
+      }
+    }
+
     category.name = req.body.name || category.name;
     category.description =
       req.body.description !== undefined
         ? req.body.description
         : category.description;
-    category.image =
-      req.body.image !== undefined ? req.body.image : category.image;
+
+    // Öncelik: yeni yüklenen dosya > body'den gelen URL > mevcut değer
+    category.image = req.file
+      ? req.file.path
+      : req.body.image !== undefined
+        ? req.body.image
+        : category.image;
+
     category.order =
       req.body.order !== undefined ? req.body.order : category.order;
     category.parent =
