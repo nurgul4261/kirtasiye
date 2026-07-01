@@ -282,8 +282,7 @@ Bizim için ticaret, sadece bir ürünün teslim edilmesinden ibaret değildir. 
         <div className="footer-col brand-col">
           <h3 className="footer-logo">Kovan Kırtasiye</h3>
           <p>
-            Defter, kutu oyunları, hediyelik ve hobi kitleri ile hayatınıza renk
-            katın.
+            Defterler, kutu oyunları ve hobi kitleri ile hayatınıza renk katın.
           </p>
         </div>
 
