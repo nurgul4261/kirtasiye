@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
+import SearchBar from "../ui/SearchBar";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -52,10 +53,14 @@ export default function Navbar() {
             />
             <span className="navbar-brand-text">Kovan Kırtasiye</span>
           </Link>
+
           <div className="navbar-links">
             <Link to="/products">Ürünler</Link>
             {user?.isAdmin && <Link to="/admin">Admin Panel</Link>}
           </div>
+
+          <SearchBar />
+
           <div className="navbar-actions">
             <Link to="/cart" className="cart-btn">
               🛒
