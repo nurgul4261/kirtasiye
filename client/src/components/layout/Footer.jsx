@@ -99,70 +99,85 @@ Yukarıda sayılan haklarınıza ilişkin taleplerinizi; ad, soyad, iletişim bi
     mesafeli: {
       title: "Mesafeli Satış Sözleşmesi",
       text: `1. TARAFLAR
-İşbu Sözleşme aşağıdaki taraflar arasında aşağıda belirtilen hüküm ve şartlar çerçevesinde imzalanmıştır.
+İşbu Sözleşme aşağıdaki taraflar arasında, aşağıda belirtilen hüküm ve şartlar çerçevesinde elektronik ortamda kurulmuştur.
+'ALICI' (Sözleşmede bundan sonra "ALICI" olarak anılacaktır):
+Ad - Soyad / Ünvan	[alici-adi]
+Adres	[alici-adres]
+Telefon	[alici-telefon]
+E-posta	[alici-eposta]
+'SATICI' (Sözleşmede bundan sonra "SATICI" olarak anılacaktır):
+Ticari Ünvanı	Kovan Kırtasiye
+Adres	Mehmet Akif Mahallesi Zehra Sokak No:19D Selçuklu / Konya
+Telefon	0538 554 53 34
+E-posta	kovankirtasiye@gmail.com
+Web Adresi	www.kovankirtasiye.com.tr
 
-‘ALICI’ ; (Sözleşmede bundan sonra "ALICI" olarak anılacaktır)
-Ad - Soyad / Ünvan: [alici-adi]
-Adres: [alici-adres]
-Telefon: [alici-telefon]
-E-posta: [alici-eposta]
-
-‘SATICI’ ; (Sözleşmede bundan sonra "SATICI" olarak anılacaktır)
-Ticari Ünvanı: Kovan Kırtasiye
-Adres: Mehmet Akif Mahallesi Zehra Sokak No:19D Selçuklu / Konya
-Telefon: 0538 554 53 34
-E-posta: kovankirtasiye@gmail.com
-Web Adresi: www.kovankirtasiye.com.tr  
-
-İşbu sözleşmeyi kabul etmekle ALICI, sözleşme konusu siparişi onayladığı takdirde sipariş konusu bedeli ve varsa kargo ücreti, vergi gibi belirtilen ek ücretleri ödeme yükümlülüğü altına gireceğini ve bu konuda peşinen bilgilendirildiğini kabul eder.  
-
+İşbu sözleşmeyi kabul etmekle ALICI, sözleşme konusu siparişi onayladığı takdirde sipariş konusu bedeli ve varsa kargo ücreti, vergi gibi belirtilen ek ücretleri ödeme yükümlülüğü altına gireceğini ve bu konuda peşinen bilgilendirildiğini kabul eder.
 2. TANIMLAR
-KANUN: 6502 sayılı Tüketicinin Korunması Hakkında Kanun’u,
-YÖNETMELİK: Mesafeli Sözleşmeler Yönetmeliği’ni,
+KANUN: 6502 sayılı Tüketicinin Korunması Hakkında Kanun'u,
+YÖNETMELİK: Mesafeli Sözleşmeler Yönetmeliği'ni (RG: 27.11.2014/29188),
+BAKANLIK: Ticaret Bakanlığı'nı,
 SATICI: Ticari veya mesleki faaliyetleri kapsamında tüketiciye mal veya hizmet sunan Kovan Kırtasiye şirketini,
 ALICI: Bir mal veya hizmeti ticari veya mesleki olmayan amaçlarla edinen, kullanan veya yararlanan gerçek ya da tüzel kişiyi,
-SİTE: SATICI’ya ait www.kovankirtasiye.com.tr internet sitesini,
+SİTE: SATICI'ya ait www.kovankirtasiye.com.tr internet sitesini,
+SİPARİŞ VEREN: Bir mal veya hizmeti SATICI'ya ait internet sitesi üzerinden talep eden gerçek ya da tüzel kişiyi,
+TARAFLAR: SATICI ve ALICI'yı,
 SÖZLEŞME: SATICI ve ALICI arasında akdedilen işbu sözleşmeyi,
-MAL/ÜRÜN: Alışverişe konu olan taşınır eşyayı ifade eder.
-
+MAL/ÜRÜN: Alışverişe konu olan taşınır eşyayı ve elektronik ortamda kullanılmak üzere hazırlanan yazılım, ses, görüntü ve benzeri gayri maddi malları ifade eder.
 3. KONU
-İşbu Sözleşme, ALICI’nın, SATICI’ya ait internet sitesi üzerinden elektronik ortamda siparişini verdiği, nitelikleri ve satış fiyatı sitede belirtilen ürünün satışı ve teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri gereğince tarafların hak ve yükümlülüklerini düzenler. Listelenen ve sitede ilan edilen fiyatlar satış fiyatıdır. İlan edilen fiyatlar güncelleme yapılana ve değiştirilene kadar geçerlidir.
+İşbu Sözleşme, ALICI'nın, SATICI'ya ait internet sitesi üzerinden elektronik ortamda siparişini verdiği, nitelikleri ve satış fiyatı sitede belirtilen ürünün/ürünlerin satışı ve teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri gereğince tarafların hak ve yükümlülüklerini düzenler.
+Listelenen ve sitede ilan edilen fiyatlar satış fiyatıdır. İlan edilen fiyatlar ve vaatler güncelleme yapılana ve değiştirilene kadar geçerlidir. Süreli olarak ilan edilen fiyatlar ise belirtilen süre sonuna kadar geçerlidir.
+4. TESLİMAT, SİPARİŞ VEREN VE FATURA BİLGİLERİ
+Ürünün adı, adedi, KDV dahil satış bedeli, ödeme şekli ve teslimat adresi, siparişin tamamlandığı andaki bilgiler uyarınca otomatik olarak sipariş onay ekranına ve ALICI'ya gönderilen sipariş e-postasına yansıtılır. Aşağıdaki bilgiler her sipariş için ayrı ayrı kayıt altına alınır:
+Teslim Edilecek Kişi	[teslim-alan-adi]
+Teslimat Adresi	[teslimat-adresi]
+Sipariş Veren (farklı ise)	[siparis-veren-adi]
+Fatura Adresi	[fatura-adresi]
+Sipariş Tarihi	[siparis-tarihi]
+Teslimat Tarihi	[teslimat-tarihi]
+Teslim Şekli	[kargo-firmasi]
 
-4. SÖZLEŞME KONUSU ÜRÜN, ÖDEME VE TESLİMAT BİLGİLERİ
-Ürünün adı, adedi, KDV dahil satış bedeli, ödeme şekli ve teslimat adresi siparişin sonlandığı andaki bilgiler uyarınca otomatik olarak bu alana yansıtılır.
-
-Ödeme Şekli: ALICI tarafından sipariş esnasında seçilen ödeme yöntemi (Kredi Kartı / Banka Kartı / Havale / EFT) geçerlidir.
-Kargo ve Teslimat: Ürün sevkiyat masrafı olan kargo ücreti aksine bir kampanya ilan edilmediği sürece ALICI tarafından ödenecektir. Kargo teslimat süresi, yasal 30 günlük süreyi aşmamak kaydıyla, internet sitesinde taahhüt edilen süre kadardır.
-
+Ödeme Şekli: ALICI tarafından sipariş esnasında seçilen ödeme yöntemi (Kredi Kartı / Banka Kartı / Havale-EFT) geçerlidir.
+Kargo ve Teslimat: Ürün sevkiyat masrafı olan kargo ücreti, aksine bir kampanya ilan edilmediği sürece ALICI tarafından ödenir. Sözleşme konusu her bir ürün, yasal 30 günlük süreyi aşmamak kaydıyla, internet sitesindeki ön bilgilerde belirtilen süre zarfında ALICI veya ALICI'nın gösterdiği adresteki kişi/kuruluşa teslim edilir. Bu süre içinde ürünün teslim edilememesi halinde ALICI'nın sözleşmeyi feshetme hakkı saklıdır.
 5. GENEL HÜKÜMLER
-5.1. ALICI, www.kovankirtasiye.com.tr internet sitesinde sözleşme konusu ürünün temel nitelikleri, satış fiyatı, ödeme şekli ve teslimata ilişkin ön bilgileri okuyup bilgi sahibi olduğunu ve elektronik ortamda gerekli teyidi verdiğini kabul beyan eder.
-5.2. 18 yaşından küçük kişiler www.kovankirtasiye.com.tr sitesinden alışveriş yapamazlar. SATICI, ALICI'nın yaşını kontrol etmekle yükümlü tutulamaz; ALICI'nın beyanı esas alınır.
-5.3. SATICI, sözleşme konusu ürünü eksiksiz, siparişte belirtilen niteliklere uygun, varsa garanti belgeleri ve kullanım kılavuzları ile yasal mevzuat gereklerine göre sağlam ve ayıpsız olarak teslim etmeyi kabul eder.
-5.4. SATICI, sipariş konusu ürün veya hizmetin yerine getirilmesinin imkânsızlaşması halinde, bu durumu öğrendiği tarihten itibaren 3 gün içinde yazılı olarak veya kalıcı veri saklayıcısı ile tüketiciye bildireceğini ve 14 gün içinde toplam bedeli ALICI’ya iade edeceğini kabul ve taahhüt eder.
-5.5. Kargo teslimatı sırasında yırtılmış, ezilmiş veya hasara uğramış paketleri ALICI kesinlikle teslim almamalı, kargo görevlisine hasar tespit tutanağı tutturmalıdır. Tutanak tutulmadan teslim alınan paketlerde kargo firmasının ya da SATICI'nın sorumluluğu bulunmamaktadır.
-5.6. Kovan Kırtasiye, e-ticaret sitesinde listelenen ürünlerin stok durumlarını sürekli güncellese de, tedarikçi veya yayıncı kuruluşların stoklarında tükenen ürünler sebebiyle gecikmeler yaşanabilir. Bu durumda ALICI e-posta/telefon ile bilgilendirilir and ödediği tutar aynen iade edilir.
-
+5.1. ALICI, SİTE'de sözleşme konusu ürünün temel nitelikleri, satış fiyatı, ödeme şekli ve teslimata ilişkin ön bilgileri okuyup bilgi sahibi olduğunu ve elektronik ortamda gerekli teyidi verdiğini kabul, beyan ve taahhüt eder.
+5.2. 18 yaşından küçük kişiler www.kovankirtasiye.com.tr sitesinden alışveriş yapamaz. SATICI, ALICI'nın yaşını kontrol etmekle yükümlü tutulamaz; ALICI'nın beyanı esas alınır.
+5.3. SATICI, sözleşme konusu ürünü eksiksiz, siparişte belirtilen niteliklere uygun, varsa garanti belgeleri ve kullanım kılavuzları ile birlikte, yasal mevzuat gereklerine göre sağlam ve ayıpsız olarak teslim etmeyi; hizmet kalitesini koruyup yükseltmeyi, işin ifası sırasında gerekli dikkat ve özeni göstermeyi kabul, beyan ve taahhüt eder.
+5.4. SATICI, sözleşmeden doğan ifa yükümlülüğünün süresi dolmadan ALICI'yı bilgilendirmek ve açıkça onayını almak suretiyle eşit kalite ve fiyatta farklı bir ürün tedarik edebilir.
+5.5. SATICI, sipariş konusu ürün veya hizmetin yerine getirilmesinin imkânsızlaşması halinde, bu durumu öğrendiği tarihten itibaren 3 gün içinde yazılı olarak veya kalıcı veri saklayıcısı ile ALICI'ya bildireceğini ve 14 gün içinde toplam bedeli ALICI'ya iade edeceğini kabul, beyan ve taahhüt eder.
+5.6. Kovan Kırtasiye, sitede listelenen ürünlerin stok durumlarını sürekli güncellemekle birlikte, tedarikçi/yayıncı kuruluşların stoklarında yaşanabilecek tükenmeler nedeniyle gecikme veya teslim edememe durumu ortaya çıkabilir. Bu halde ALICI e-posta veya telefon ile bilgilendirilir ve ödediği tutar aynen iade edilir.
+5.7. ALICI, Sözleşme konusu ürünün ALICI veya ALICI'nın gösterdiği adresteki kişi/kuruluşa tesliminden sonra ALICI'ya ait ödeme aracının yetkisiz kişilerce haksız kullanılması sonucunda sözleşme konusu ürün bedelinin ilgili banka veya finans kuruluşu tarafından SATICI'ya ödenmemesi halinde, ürünü 3 gün içinde nakliye gideri SATICI'ya ait olacak şekilde SATICI'ya iade edeceğini kabul, beyan ve taahhüt eder.
+5.8. Kargo teslimatı sırasında yırtılmış, ezilmiş veya hasara uğramış paketler ALICI tarafından kesinlikle teslim alınmamalı, kargo görevlisine hasar tespit tutanağı tutturulmalıdır. Tutanak tutulmadan teslim alınan paketlerde kargo firmasının ya da SATICI'nın sorumluluğu bulunmamaktadır. Teslim alınan mal/hizmetin hasarsız ve sağlam olduğu kabul edilir; teslimden sonra malın özenle korunması borcu ALICI'ya aittir.
+5.9. SATICI, tarafların iradesi dışında gelişen, önceden öngörülemeyen ve tarafların borçlarını yerine getirmesini engelleyici ve/veya geciktirici mücbir sebep hallerinin (doğal afet, salgın hastalık, yangın, grev, mevzuat değişikliği, altyapı/kargo kesintisi vb.) oluşması nedeniyle sözleşme konusu ürünü süresi içinde teslim edemezse, durumu ALICI'ya derhal bildirir. ALICI bu halde; siparişin iptal edilmesini, ürünün varsa emsali ile değiştirilmesini ve/veya teslimat süresinin engelleyici durumun ortadan kalkmasına kadar ertelenmesini talep edebilir. Sipariş iptalinde ödenen tutar, ödeme şekline uygun olarak 14 gün içinde ALICI'ya iade edilir.
+5.10. SATICI'nın, ALICI tarafından siteye üyelik/sipariş sırasında verilen veya sonradan güncellenen adres, e-posta, telefon ve diğer iletişim bilgileri üzerinden mektup, e-posta, SMS, telefon görüşmesi ve benzeri yollarla iletişim, pazarlama, bildirim ve diğer amaçlarla ALICI'ya ulaşma hakkı bulunmaktadır. ALICI, işbu sözleşmeyi kabul etmekle SATICI'nın kendisine yönelik bu iletişim faaliyetlerinde bulunabileceğini kabul eder; ticari elektronik iletiler için ayrıca alınan onay saklı kalmak kaydıyla, ALICI dilediği zaman bu iletişimden çıkma (ret) hakkına sahiptir.
+5.11. ALICI ile sipariş esnasında kullanılan ödeme aracı sahibinin aynı kişi olmaması veya ürünün ALICI'ya tesliminden evvel ödeme aracına ilişkin bir güvenlik açığı tespit edilmesi halinde, SATICI kart/hesap hamiline ilişkin kimlik ve iletişim bilgilerini, bir önceki aya ait hesap ekstresini ya da bankadan alınacak sahiplik yazısını ALICI'dan talep edebilir. Talep edilen bilgi/belgeler temin edilene kadar sipariş dondurulur; taleplerin 24 saat içinde karşılanmaması halinde SATICI siparişi iptal etme hakkına sahiptir.
+5.12. ALICI, siteye üye olurken veya sipariş verirken beyan ettiği kişisel ve diğer bilgilerin doğru ve güncel olduğunu; bu bilgilerin gerçeğe aykırılığından doğacak zararları SATICI'nın ilk bildirimi üzerine derhal, nakden ve defaten tazmin edeceğini kabul, beyan ve taahhüt eder.
+5.13. ALICI, SİTE'yi kullanırken yürürlükteki mevzuat hükümlerine uymayı; kamu düzenini bozucu, genel ahlaka aykırı, başkalarını rahatsız veya taciz edici, hukuka aykırı bir amaç için ya da başkalarının maddi/manevi haklarına tecavüz edecek şekilde SİTE'yi kullanmamayı; spam, virüs, zararlı yazılım vb. yollarla diğer kullanıcıların hizmetten yararlanmasını engelleyici faaliyetlerde bulunmamayı kabul ve taahhüt eder. Aksi halde doğacak tüm hukuki ve cezai sorumluluk ALICI'ya aittir; SATICI'nın bu ihlaller nedeniyle tazminat talep etme hakkı saklıdır.
+5.14. SİTE üzerinden, SATICI'nın kendi kontrolünde olmayan üçüncü kişilere ait web sitelerine veya içeriklere bağlantı (link) verilebilir. Bu bağlantılar yalnızca yönlendirme kolaylığı sağlamak amacıyla konulmuş olup, ilgili sitenin veya işletenin desteklendiği anlamına gelmez; SATICI bu sitelerin içeriğine ilişkin herhangi bir garanti vermez.
 6. CAYMA HAKKI
-6.1. ALICI; hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, mal satışına ilişkin sözleşmelerde ürünün kendisine veya gösterdiği adresteki üçüncü kişiye teslim tarihinden itibaren 14 (on dert) gün içerisinde cayma hakkını kullanabilir.
-6.2. Cayma hakkının kullanılması için bu 14 günlük süre içinde SATICI'ya e-posta (kovankirtasiye@gmail.com) veya yazılı olarak bildirimde bulunulması ve ürünün ambalajının açılmamış, denenmemiş ve kullanılmamış olması şarttır.
-6.3. Cayma hakkının kullanılması halinde, ürünle birlikte gönderilen fatura aslının iadesi zorunludur. (Kurumsal faturalarda iade faturası kesilmesi zorunludur.)
-6.4. SATICI, cayma bildiriminin kendisine ulaşmasından itibaren en geç 14 gün içerisinde toplam bedeli ALICI'ya, ALICI'nın ürünü satın alırken kullandığı ödeme aracına uygun olarak iade eder.
-
+6.1. ALICI; mal satışına ilişkin mesafeli sözleşmelerde, hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, ürünün kendisine veya gösterdiği adresteki üçüncü kişiye teslim tarihinden itibaren 14 (on dört) gün içerisinde SATICI'ya bildirmek şartıyla sözleşmeden cayma hakkını kullanabilir. Hizmet sunumuna ilişkin sözleşmelerde bu süre, sözleşmenin kurulduğu tarihten itibaren başlar; ancak cayma hakkı süresi dolmadan ALICI'nın onayı ile hizmetin ifasına başlanmışsa cayma hakkı kullanılamaz. Cayma hakkının kullanılmasından kaynaklanan masraflar SATICI'ya aittir.
+6.2. Cayma hakkının kullanılması için 14 günlük süre içinde SATICI'ya e-posta (kovankirtasiye@gmail.com), yazılı bildirim veya faks yoluyla bildirimde bulunulması ve ürünün 7. maddede sayılan istisnalar dışında kalması ile ambalajının açılmamış, denenmemiş, bozulmamış ve kullanılmamış olması şarttır. Bu hakkın kullanılması halinde:
+a) 3. kişiye veya ALICI'ya teslim edilen ürünün faturasının aslı (kurumsal faturalarda, kurum tarafından düzenlenmiş iade faturası ile birlikte) iade edilmelidir; iade faturası kesilmeyen kurumsal iadeler tamamlanamaz.
+b) İade formu doldurularak gönderilmelidir.
+c) İade edilecek ürünlerin kutusu, ambalajı ve varsa standart aksesuarları ile birlikte eksiksiz ve hasarsız olarak teslim edilmesi gerekmektedir.
+6.3. SATICI, cayma bildiriminin kendisine ulaşmasından itibaren en geç 14 gün içerisinde toplam bedeli ve ALICI'yı borç altına sokan belgeleri, ALICI'nın ödemede kullandığı araca uygun şekilde iade etmekle; ALICI ise SATICI'nın malı geri çağırdığı tarihten itibaren 10 gün içinde malı iade etmekle yükümlüdür. Kredi kartına yapılan iadelerin ALICI hesabına yansıma süreci tamamen ilgili bankanın işlem sürecine bağlıdır; SATICI bu süreçten kaynaklanan gecikmelerden sorumlu tutulamaz.
+6.4. ALICI'nın kusurundan kaynaklanan bir nedenle malın değerinde bir azalma olursa veya iade imkânsızlaşırsa, ALICI kusuru oranında SATICI'nın zararını tazmin etmekle yükümlüdür. Malın veya ürünün cayma hakkı süresi içinde usulüne uygun kullanılması sebebiyle meydana gelen değişiklik ve bozulmalardan ALICI sorumlu değildir.
+6.5. Cayma hakkının kullanılması nedeniyle, SATICI tarafından düzenlenen bir kampanyanın asgari sepet tutarının altına düşülmesi halinde, kampanya kapsamında faydalanılan indirim miktarı iptal edilir.
 7. CAYMA HAKKI KULLANILAMAYACAK ÜRÜNLER
-Mevzuat gereği; ALICI’nın isteği veya açıkça kişisel ihtiyaçları doğrultusunda hazırlanan (kişiye özel tasarlanan/üretilen) ürünler, ambalajı açılmış olan ve iadesi sağlık/hijyen açısından uygun olmayan ürünler, hızlı bozulan veya son kullanma tarihi geçme ihtimali olan mallar ile ambalajı, bandrolü, mührü açılmış olan kitap, dijital içerik, yazılım programları ve kırtasiye sarf malzemelerinin (toner, kartuş vb.) iadesi mümkün değildir.  
-
+Mevzuat gereği; ALICI'nın isteği veya açıkça kişisel ihtiyaçları doğrultusunda hazırlanan (kişiye özel tasarlanan/üretilen/isim baskılı vb.) ürünler; iç giyim alt parçaları, mayo ve bikini altları, makyaj malzemeleri gibi tek kullanımlık ürünler; çabuk bozulma tehlikesi olan veya son kullanma tarihi geçme ihtimali bulunan mallar; ALICI tarafından ambalajı açıldığı takdirde iadesi sağlık ve hijyen açısından uygun olmayan ürünler; teslim edildikten sonra başka ürünlerle karışan ve doğası gereği ayrıştırılması mümkün olmayan ürünler; abonelik sözleşmesi kapsamında sağlananlar dışında gazete ve dergi gibi süreli yayınlara ilişkin mallar; elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayri maddi mallar ile ambalajı ALICI tarafından açılmış olan ses/görüntü kayıtları, kitap, dijital içerik, yazılım programları, veri kaydedebilme ve veri depolama cihazları ile bilgisayar sarf malzemelerinin (toner, kartuş, şerit vb.) iadesi Yönetmelik gereği mümkün değildir.
+Kozmetik ve kişisel bakım ürünleri, iç giyim ürünleri, mayo, bikini, kitap, kopyalanabilir yazılım ve programlar, DVD, VCD, CD ve kasetler ile kırtasiye sarf malzemelerinin (toner, kartuş, şerit vb.) iade edilebilmesi için ambalajlarının açılmamış, denenmemiş, bozulmamış ve kullanılmamış olması gerekir.
+Ayrıca, cayma hakkı süresi sona ermeden önce, ALICI'nın onayı ile ifasına başlanan hizmetlere ilişkin cayma hakkı Yönetmelik gereği kullanılamaz.
 8. TEMERRÜT HALİ VE HUKUKİ SONUÇLARI
-ALICI, ödeme işlemlerini kredi kartı ile yaptığı durumda temerrüde düştüğü takdirde, kart sahibi banka ile arasındaki kredi kartı sözleşmesi çerçevesinde faiz ödeyeceğini ve bankaya karşı sorumlu olacağını kabul eder. Bu durumda ilgili banka hukuki yollara başvurabilir.  
-
+ALICI, ödeme işlemlerini kredi kartı ile yaptığı durumda temerrüde düştüğü takdirde, kart sahibi banka ile arasındaki kredi kartı sözleşmesi çerçevesinde faiz ödeyeceğini ve bankaya karşı sorumlu olacağını kabul, beyan ve taahhüt eder. Bu durumda ilgili banka hukuki yollara başvurabilir; doğacak masrafları ve vekâlet ücretini ALICI'dan talep edebilir. ALICI'nın borcunu gecikmeli ifa etmesi halinde, bu gecikmeden dolayı SATICI'nın uğradığı zarar ve ziyanı ödeyeceğini kabul, beyan ve taahhüt eder.
 9. YETKİLİ MAHKEME
-İşbu sözleşmeden doğan uyuşmazlıklarda şikayet ve itirazlar, her yıl Ticaret Bakanlığı tarafından ilan edilen parasal sınırlar dâhilinde, ALICI’nın yerleşim yerinin bulunduğu veya tüketici işleminin yapıldığı yerdeki Tüketici Hakem Heyetlerine veya Tüketici Mahkemelerine yapılacaktır.  
-
+İşbu sözleşmeden doğan uyuşmazlıklarda şikâyet ve itirazlar, her yıl Ticaret Bakanlığı tarafından ilan edilen parasal sınırlar dâhilinde, ALICI'nın yerleşim yerinin bulunduğu veya tüketici işleminin yapıldığı yerdeki Tüketici Hakem Heyetlerine veya Tüketici Mahkemelerine yapılacaktır.
 10. YÜRÜRLÜK
-ALICI, Site üzerinden verdiği siparişe ait ödemeyi gerçekleştirdiğinde işbu sözleşmenin tüm şartlarını kabul etmiş sayılır. SATICI, siparişın gerçekleşmesi öncesinde işbu sözleşmenin sitede ALICI tarafından okunup kabul edildiğine dair yazılımsal onayı (check-box) almakla yükümlüdür.  
+ALICI, Site üzerinden verdiği siparişe ait ödemeyi gerçekleştirdiğinde işbu sözleşmenin tüm şartlarını okuyup kabul etmiş sayılır. SATICI, siparişin gerçekleşmesi öncesinde işbu sözleşmenin sitede ALICI tarafından okunup kabul edildiğine dair yazılımsal onayı (check-box / elektronik teyit) almakla yükümlüdür.
 
-SATICI: Kovan Kırtasiye
-ALICI: [alici-adi]
-TARİH: [siparis-tarihi]`,
+SATICI	Kovan Kırtasiye
+ALICI	[alici-adi]
+TARİH	[siparis-tarihi]
+`,
     },
     gizlilik: {
       title: "Gizlilik Sözleşmesi ve Politikası",
@@ -220,38 +235,30 @@ Telefon: 0538 554 53 34
 E-posta: kovankirtasiye@gmail.com`,
     },
     iade: {
-      title: "Garanti, İptal ve İade Politikası",
-      text: `GARANTİ KOŞULLARI
-Kovan Kırtasiye (www.kovankirtasiye.com.tr) üzerinden satışa sunulan tüm ürünler, aksi belirtilmediği takdirde üretici veya distribütör firmaların garantisi altındadır.
-
-Kargo Kontrolü: Garanti koşullarının geçerli olabilmesi için kargo teslimatı esnasında ürünü mutlaka kontrol ediniz. Taşınma esnasında hasar görmüş, yırtılmış veya ezilmiş bir paket gördüğünüzde kargo görevlisine "Hasar Tespit Tutanağı" tutturarak ürünü teslim almayınız. Tutanak tutulmayan hasarlı ürünlerde sorumluluk kargo firmasına veya firmamıza ait değildir.
-
-Kapsam Dışı Durumlar: Ürün üzerinde kullanıcı tarafından yapılan değişiklikler, ürünün deforme olması, eksik/hatalı kullanım sebebiyle zarar görmesi veya ürünün orijinal dizaynının bozulması garanti kapsamı dışındadır.
-
+      title: "İptal ve İade Politikası",
+      text: `Kargo, İptal ve İade Politikası
+KARGO VE TESLİMAT SÜRESİ
+Siparişleriniz, ödeme onayı alındıktan sonra 1-4 iş günü içerisinde kargoya verilir. Kargo şirketinin yoğunluğuna bağlı olarak elinize ulaşma süresi değişiklik gösterebilir. Siparişiniz kargoya verildiğinde, size e-posta/SMS ile bir takip numarası gönderilir; bu numara ile kargonuzun durumunu online olarak takip edebilirsiniz.
+2000 TL ve üzeri alışverişlerinizde kargo ücretsizdir. Bu tutarın altındaki siparişlerde kargo ücreti ödeme sayfasında ayrıca gösterilir.
 İPTAL VE İADE PROSEDÜRÜ
-
 1. İade ve İptal Süresi Kaç Gündür?
 İptal: Sipariş verdiğiniz ürün henüz kargoya verilmediyse, kovankirtasiye@gmail.com adresine mail atarak veya müşteri hizmetlerimizle iletişime geçerek siparişinizi tamamen veya kısmen iptal edebilirsiniz.
 İade: www.kovankirtasiye.com.tr'den satın aldığınız ürünleri, teslim aldığınız tarihten itibaren 14 gün içerisinde herhangi bir gerekçe göstermeksizin iade edebilirsiniz.
-
 2. İade Şartları Nelerdir?
 Satın aldığınız ürünün iade alınabilmesi için; tahrip edilmemiş, kullanılmamış, ambalajı/ambalaj bandı açılmamış ve tekrar satılabilirliğinin bozulmamış olması gerekmektedir. İade edilecek ürünlerin, ürünle birlikte gönderilen orijinal faturası (varsa tüm aksesuarları ve kutusu) ile birlikte teslim edilmesi zorunludur.
 Önemli Not: Mevzuat gereği; ambalajı, bandrolü veya mührü açılmış olan kitaplar, dergiler, kutu oyunları, dijital içerikler ile açıldığında hijyen/sağlık riski oluşturan kırtasiye ve sarf malzemelerinin (kalemler, boyalar, taş/ahşap boyama setleri vb.) iadesi/değişimi, ambalajı açıldıktan sonra mümkün değildir.
-
 3. İade ve Değişimde Kargo Ücretini Kim Öder?
 Kusurlu/Hatalı Ürün: Baskısı hatalı, eksik veya fabrikasyon kusuru olan ürünlerde geliş ve gidiş kargo ücreti Kovan Kırtasiye'ye aittir.
 Yanlış Ürün Gönderimi: Sipariş ettiğinizden farklı bir ürünün tarafımızdan gönderilmesi durumunda geliş ve gidiş kargo ücreti Kovan Kırtasiye'ye aittir.
 Cayma Hakkı / Keyfi İade: Üründen vazgeçilmesi veya yanlış sipariş oluşturulması gibi durumlarda kargo ücreti ALICI'ya (Müşteriye) aittir.
-
 4. Geri Ödeme Süreçleri
 İade amacıyla gönderdiğiniz ürünler firmamıza ulaştıktan sonra, uzman ekibimiz tarafından iade politikasına uygunluğu incelenir. Onaylanan iadelerin geri ödeme süreleri şu şekildedir:
 Kredi Kartları: İade onayı verildikten sonra en geç 4 iş günü içerisinde bankanıza talimat verilir.
 Debit (Banka Kartları): Bankacılık işlem süreçleri nedeniyle tutarın kartınıza yansıması en geç 20 iş günü sürebilir.
 Havale / EFT: Bildireceğiniz IBAN numarasına iade tutarı aynı gün içerisinde transfer edilir.
 Not: Kredi kartı iadelerinde tutarın ekstrenize yansıma süresi tamamen bankanızın iç süreçlerine bağlı olup, firmamızın müdahale yetkisi bulunmamaktadır.
-
 İLETİŞİM VE DESTEK
-İptal, iade, değişim veya garanti süreçleriyle ilgili her türlü sorunuz için bizimle aşağıdaki kanallar üzerinden hafta içi 09:00 - 18:00 saatleri arasında iletişime geçebilirsiniz:
+İptal, iade, değişim süreçleriyle ilgili her türlü sorunuz için bizimle aşağıdaki kanallar üzerinden hafta içi 09:00 - 18:00 saatleri arasında iletişime geçebilirsiniz:
 Firma Adı: Kovan Kırtasiye
 E-posta: kovankirtasiye@gmail.com
 Telefon: 0538 554 53 34
