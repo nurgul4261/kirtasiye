@@ -47,13 +47,13 @@ export default function Contact() {
           <div className="info-card card">
             <h3>Bize Ulaşın</h3>
 
-            <div className="info-item">
+            {/*<div className="info-item">
               <span className="info-icon">📞</span>
               <div>
                 <strong>Telefon</strong>
                 <p>+90 (332) 000 00 00</p>
               </div>
-            </div>
+            </div>*/}
 
             <div className="info-item">
               <span className="info-icon">✉️</span>
