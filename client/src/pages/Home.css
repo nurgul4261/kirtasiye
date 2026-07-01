@@ -349,6 +349,35 @@
   color: var(--text-light);
 }
 
+@media (min-width: 993px) {
+  .storex-categories-grid {
+    gap: 24px;
+  }
+
+  .storex-category-card {
+    min-height: 200px;
+    padding: 40px 24px 32px;
+  }
+
+  .storex-cat-icon {
+    width: 76px;
+    height: 76px;
+    font-size: 40px;
+  }
+
+  .storex-cat-name {
+    font-size: 17px;
+  }
+
+  .storex-category-card.has-bg {
+    min-height: 220px;
+  }
+
+  .storex-category-card.has-bg .storex-cat-name {
+    font-size: 24px;
+  }
+}
+
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */

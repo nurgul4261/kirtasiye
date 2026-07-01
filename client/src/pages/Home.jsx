@@ -79,21 +79,25 @@ export default function Home() {
                     style={{ zIndex: openCat === cat._id ? 200 : 1 }}
                   >
                     {cat.children?.length > 0 ? (
-                      <div
-                        className={`storex-category-card has-children${
-                          openCat === cat._id ? " open" : ""
-                        }${cat.image ? " has-bg" : ""}`}
-                        style={bgStyle}
-                        onClick={() =>
-                          setOpenCat(openCat === cat._id ? null : cat._id)
-                        }
-                      >
-                        <div className="storex-cat-content">
-                          <div className="storex-cat-overlay">
-                            <span className="storex-cat-name">{cat.name}</span>
-                            <span className="storex-cat-arrow">
-                              {openCat === cat._id ? "▲" : "▼"}
-                            </span>
+                      <>
+                        <div
+                          className={`storex-category-card has-children${
+                            openCat === cat._id ? " open" : ""
+                          }${cat.image ? " has-bg" : ""}`}
+                          style={bgStyle}
+                          onClick={() =>
+                            setOpenCat(openCat === cat._id ? null : cat._id)
+                          }
+                        >
+                          <div className="storex-cat-content">
+                            <div className="storex-cat-overlay">
+                              <span className="storex-cat-name">
+                                {cat.name}
+                              </span>
+                              <span className="storex-cat-arrow">
+                                {openCat === cat._id ? "▲" : "▼"}
+                              </span>
+                            </div>
                           </div>
                         </div>
 
@@ -119,7 +123,7 @@ export default function Home() {
                             ))}
                           </div>
                         )}
-                      </div>
+                      </>
                     ) : (
                       <Link
                         to={`/products?category=${cat._id}`}
