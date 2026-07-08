@@ -23,6 +23,9 @@ import AdminCategories from "./pages/admin/Categories";
 import "./App.css";
 import AdminUpsell from "./pages/admin/UpsellPage";
 import AdminCoupons from "./pages/admin/AdminCoupons";
+import PaymentReports from "./pages/admin/PaymentReports";
+import OdemeBasarili from "./pages/OdemeBasarili";
+import OdemeBasarisiz from "./pages/OdemeBasarisiz";
 
 function App() {
   return (
@@ -38,6 +41,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/odeme-basarili" element={<OdemeBasarili />} />
+          <Route path="/odeme-basarisiz" element={<OdemeBasarisiz />} />
           <Route
             path="/profile"
             element={
@@ -107,6 +112,14 @@ function App() {
             element={
               <AdminRoute>
                 <AdminCoupons />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/payment-reports"
+            element={
+              <AdminRoute>
+                <PaymentReports />
               </AdminRoute>
             }
           />

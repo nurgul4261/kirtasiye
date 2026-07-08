@@ -17,6 +17,10 @@ export default function Checkout() {
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
 
+  // ── PayTR ödeme aşaması ──
+  const [step, setStep] = useState("form"); // 'form' | 'payment'
+  const [paytrToken, setPaytrToken] = useState(null);
+
   const [form, setForm] = useState({
     name: user?.name || "",
     phone: "",
@@ -46,6 +50,18 @@ export default function Checkout() {
       })
       .catch(() => {});
   }, []);
+
+  // PayTR iframe boyutlandırma script'ini sadece ödeme adımında yükle
+  useEffect(() => {
+    if (step !== "payment") return;
+    const script = document.createElement("script");
+    script.src = "https://www.paytr.com/js/iframeResizer.min.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [step]);
 
   const shippingPrice = 0; // Kargo ücreti kaldırıldı, her zaman ücretsiz
   const discountAmount = couponApplied ? (totalPrice * discount) / 100 : 0;
@@ -100,7 +116,9 @@ export default function Checkout() {
         quantity: item.quantity,
       }));
       const { notes, ...shippingAddress } = form;
-      await api.post("/orders", {
+
+      // 1) Siparişi oluştur (stok bu adımda düşer)
+      const { data: order } = await api.post("/orders", {
         orderItems,
         shippingAddress,
         itemsPrice: totalPrice,
@@ -110,15 +128,40 @@ export default function Checkout() {
         couponCode: couponApplied ? couponCode.toUpperCase() : null,
         notes,
       });
+
+      // 2) PayTR ödeme token'ını iste
+      const { data: paymentData } = await api.post("/payment/init", {
+        orderId: order._id,
+      });
+
       clearCart();
-      toast.success("Siparişiniz alındı! Teşekkürler 🎉");
-      navigate("/");
+      setPaytrToken(paymentData.token);
+      setStep("payment");
     } catch (err) {
       toast.error(err.response?.data?.message || "Sipariş oluşturulamadı");
     } finally {
       setLoading(false);
     }
   };
+
+  // ── Ödeme adımı: PayTR iframe'i göster ──
+  if (step === "payment" && paytrToken) {
+    return (
+      <div className="container checkout-page">
+        <h1>Ödeme</h1>
+        <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <iframe
+            src={`https://www.paytr.com/odeme/guvenli/${paytrToken}`}
+            id="paytriframe"
+            frameBorder="0"
+            scrolling="no"
+            style={{ width: "100%", minHeight: "600px" }}
+            title="PayTR Ödeme"
+          ></iframe>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container checkout-page">
@@ -217,7 +260,7 @@ export default function Checkout() {
             className="btn-primary submit-btn"
             disabled={loading}
           >
-            {loading ? "İşleniyor..." : "Siparişi Ver"}
+            {loading ? "İşleniyor..." : "Siparişi Ver ve Ödemeye Geç"}
           </button>
         </form>
 

@@ -24,6 +24,11 @@ export default function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
 
+  // ── İade işlemi state'leri ──
+  const [refundAmount, setRefundAmount] = useState("");
+  const [refunding, setRefunding] = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(false);
+
   const fetchOrders = async () => {
     try {
       const { data } = await api.get("/orders");
@@ -46,6 +51,55 @@ export default function AdminOrders() {
         setSelected((prev) => ({ ...prev, status }));
     } catch {
       toast.error("Güncelleme hatası");
+    }
+  };
+
+  // Siparişin PayTR'deki güncel durumunu sorgular (callback gelmediyse yedek kontrol)
+  const handleCheckStatus = async (orderId) => {
+    setCheckingStatus(true);
+    try {
+      const { data } = await api.get(`/payment/status/${orderId}`);
+      if (data.status === "success") {
+        toast.success(
+          `PayTR'de ödendi görünüyor: ${data.payment_amount} ${data.currency}`,
+        );
+        fetchOrders();
+      } else {
+        toast.info(data.err_msg || "PayTR'de ödeme kaydı bulunamadı");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Sorgu başarısız");
+    } finally {
+      setCheckingStatus(false);
+    }
+  };
+
+  // Kısmi veya tam iade işlemini başlatır
+  const handleRefund = async (order) => {
+    const amount = refundAmount
+      ? Number(refundAmount)
+      : order.totalPrice - (order.refundAmount || 0);
+
+    if (!amount || amount <= 0) {
+      return toast.error("Geçerli bir iade tutarı girin");
+    }
+    if (!window.confirm(`${amount.toFixed(2)} ₺ iade edilecek. Emin misiniz?`))
+      return;
+
+    setRefunding(true);
+    try {
+      const { data } = await api.post("/payment/refund", {
+        orderId: order._id,
+        amount,
+      });
+      toast.success("İade işlemi başarılı");
+      setSelected(data.order);
+      setRefundAmount("");
+      fetchOrders();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "İade işlemi başarısız");
+    } finally {
+      setRefunding(false);
     }
   };
 
@@ -84,6 +138,20 @@ export default function AdminOrders() {
                           ?.label
                       }
                     </span>
+                    {order.isPaid && (
+                      <div
+                        style={{ fontSize: 11, color: "#16a34a", marginTop: 4 }}
+                      >
+                        💳 Ödendi
+                      </div>
+                    )}
+                    {order.isRefunded && (
+                      <div
+                        style={{ fontSize: 11, color: "#dc2626", marginTop: 2 }}
+                      >
+                        ↩️ İade Edildi
+                      </div>
+                    )}
                   </td>
                   <td>
                     {new Date(order.createdAt).toLocaleDateString("tr-TR")}
@@ -264,6 +332,19 @@ export default function AdminOrders() {
                     <span>Toplam</span>
                     <span>{selected.totalPrice?.toFixed(2)} ₺</span>
                   </div>
+                  {selected.refundAmount > 0 && (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        padding: "4px 0",
+                        color: "#dc2626",
+                      }}
+                    >
+                      <span>İade Edilen</span>
+                      <span>-{selected.refundAmount.toFixed(2)} ₺</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Not */}
@@ -277,7 +358,7 @@ export default function AdminOrders() {
                 )}
 
                 {/* Durum güncelle */}
-                <div>
+                <div style={{ marginBottom: 16 }}>
                   <strong>Durum Güncelle</strong>
                   <select
                     value={selected.status}
@@ -300,6 +381,78 @@ export default function AdminOrders() {
                     ))}
                   </select>
                 </div>
+
+                {/* ── Ödeme İşlemleri (PayTR) ── */}
+                {selected.isPaid && (
+                  <div
+                    style={{
+                      marginTop: 16,
+                      paddingTop: 16,
+                      borderTop: "1px solid #eee",
+                    }}
+                  >
+                    <strong>Ödeme İşlemleri (PayTR)</strong>
+
+                    <button
+                      onClick={() => handleCheckStatus(selected._id)}
+                      disabled={checkingStatus}
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        marginTop: 10,
+                        padding: "8px 12px",
+                        borderRadius: 8,
+                        border: "1px solid var(--border)",
+                        background: "#f5f5f5",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {checkingStatus
+                        ? "Sorgulanıyor..."
+                        : "🔍 PayTR'de Durumu Sorgula"}
+                    </button>
+
+                    {!selected.isRefunded && (
+                      <div style={{ marginTop: 12 }}>
+                        <label style={{ fontSize: 13, color: "#666" }}>
+                          İade Tutarı (boş bırakılırsa tam iade yapılır)
+                        </label>
+                        <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+                          <input
+                            type="number"
+                            step="0.01"
+                            placeholder={`Maks. ${(selected.totalPrice - (selected.refundAmount || 0)).toFixed(2)} ₺`}
+                            value={refundAmount}
+                            onChange={(e) => setRefundAmount(e.target.value)}
+                            style={{
+                              flex: 1,
+                              padding: "8px 12px",
+                              borderRadius: 8,
+                              border: "1px solid #ddd",
+                            }}
+                          />
+                          <button
+                            onClick={() => handleRefund(selected)}
+                            disabled={refunding}
+                            style={{
+                              padding: "8px 16px",
+                              borderRadius: 8,
+                              border: "none",
+                              background: "#dc2626",
+                              color: "#fff",
+                              fontWeight: 600,
+                              cursor: "pointer",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {refunding ? "İşleniyor..." : "↩️ İade Et"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}

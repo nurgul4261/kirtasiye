@@ -78,6 +78,7 @@ export default function AdminLayout({ children, title }) {
           <NavLink to="/admin/categories">🏷️ Kategoriler</NavLink>
           <NavLink to="/admin/upsell">🎁 Kasa Önü</NavLink>
           <NavLink to="/admin/coupons">🎟 Kuponlar</NavLink>
+          <NavLink to="/admin/payment-reports">💳 Ödeme Raporları</NavLink>
         </nav>
       </aside>
       <main className="admin-main">
