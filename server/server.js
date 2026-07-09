@@ -27,6 +27,7 @@ app.use(
 app.options("*", cors());
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // PayTR bildirimi form-data (x-www-form-urlencoded) olarak gelir
 app.use("/uploads", express.static("uploads"));
 
 // Routes
