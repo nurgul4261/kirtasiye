@@ -307,12 +307,11 @@ export default function Checkout() {
                 </button>
               </div>
             )}
-            {!cartItems.some((i) => i.quantity >= 20) &&
-              {
-                /*<p className="coupon-hint">
+            {!cartItems.some((i) => i.quantity >= 20) && (
+              <p className="coupon-hint">
                 💡 Aynı üründen 20+ adet alımda kupon kullanabilirsiniz
-              </p>*/
-              }}
+              </p>
+            )}
           </div>
 
           <hr />
