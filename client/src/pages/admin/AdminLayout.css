@@ -1,6 +1,7 @@
 .admin-layout {
   display: flex;
   min-height: calc(100vh - 120px);
+  position: relative;
 }
 .admin-sidebar {
   width: 230px;
@@ -48,6 +49,7 @@
   padding: 36px;
   background: var(--bg);
   overflow-x: auto;
+  min-width: 0; /* flex içindeki içeriğin taşmasını önler */
 }
 .admin-title {
   font-family: "Syne", sans-serif;
@@ -181,4 +183,77 @@
   height: 20px;
   border-radius: 50%;
   margin-left: 6px;
+}
+
+/* ── Mobil menü butonu: masaüstünde gizli ── */
+.admin-menu-toggle {
+  display: none;
+}
+
+/* ── Sidebar açıp kapatan arka plan katmanı: masaüstünde yok ── */
+.admin-overlay {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .admin-layout {
+    display: block; /* flex yerine normal akış, sidebar artık overlay olarak konumlanacak */
+  }
+
+  /* Hamburger butonu göster */
+  .admin-menu-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 150;
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--text);
+    color: white;
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* Sidebar varsayılan olarak ekranın solunda gizli (kaydırılmış) */
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 78%;
+    max-width: 280px;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    overflow-y: auto;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Buton veya link ile açıldığında ekrana kayar */
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Sidebar açıkken arkayı karart, dışına tıklayınca kapansın */
+  .admin-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 190;
+  }
+
+  .admin-main {
+    padding: 20px 16px;
+  }
+
+  .admin-title {
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
 }

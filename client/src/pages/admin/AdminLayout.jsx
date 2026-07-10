@@ -5,6 +5,7 @@ import "./AdminLayout.css";
 
 export default function AdminLayout({ children, title }) {
   const [newOrders, setNewOrders] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
   const lastCountRef = useRef(null);
 
   useEffect(() => {
@@ -63,9 +64,23 @@ export default function AdminLayout({ children, title }) {
 
   return (
     <div className="admin-layout">
-      <aside className="admin-sidebar">
+      {/* Mobilde sidebar'ı açıp kapatan hamburger buton */}
+      <button
+        className="admin-menu-toggle"
+        onClick={() => setMenuOpen((o) => !o)}
+        aria-label="Menüyü aç/kapat"
+      >
+        {menuOpen ? "✕" : "☰"} Menü
+      </button>
+
+      {/* Mobilde sidebar açıkken arkayı karartan katman */}
+      {menuOpen && (
+        <div className="admin-overlay" onClick={() => setMenuOpen(false)} />
+      )}
+
+      <aside className={`admin-sidebar ${menuOpen ? "open" : ""}`}>
         <h2>⚙️ Admin Panel</h2>
-        <nav>
+        <nav onClick={() => setMenuOpen(false)}>
           <NavLink to="/admin" end>
             📊 Dashboard
           </NavLink>

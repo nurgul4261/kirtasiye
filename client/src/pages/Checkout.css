@@ -23,6 +23,16 @@
   font-weight: 700;
   margin-bottom: 20px;
 }
+
+/* Form içindeki tüm alanlar kutu modeline dahil edilsin (taşmayı önler) */
+.checkout-form input,
+.checkout-form select,
+.checkout-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
 .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -49,6 +59,11 @@
   font-size: 14px;
   margin-bottom: 10px;
   color: var(--text-light);
+  gap: 8px;
+}
+.order-item span {
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 hr {
   border: none;
@@ -75,12 +90,14 @@ hr {
 
 .coupon-input {
   flex: 1;
+  min-width: 0; /* flex item'ların içerikten dolayı taşmasını önler */
   padding: 8px 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  box-sizing: border-box;
 }
 
 .coupon-btn {
@@ -92,6 +109,8 @@ hr {
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .coupon-btn:hover {
@@ -113,6 +132,7 @@ hr {
   font-size: 14px;
   font-weight: 600;
   color: #16a34a;
+  gap: 8px;
 }
 
 .coupon-remove {
@@ -122,6 +142,7 @@ hr {
   color: #ef4444;
   font-size: 16px;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .coupon-hint {
@@ -134,8 +155,41 @@ hr {
   color: #16a34a;
   font-weight: 600;
 }
+
+/* ── PayTR iframe kartı taşmasın ── */
+.checkout-page iframe {
+  max-width: 100%;
+  display: block;
+}
+
 @media (max-width: 768px) {
+  .checkout-page {
+    padding: 20px 16px;
+  }
+  .checkout-page h1 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
   .checkout-layout {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .checkout-form,
+  .order-summary {
+    padding: 18px;
+  }
+  /* Mobilde İl/İlçe/Posta Kodu tek sütuna düşsün, taşma olmasın */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .coupon-input-row {
+    flex-wrap: wrap;
+  }
+  .coupon-input {
+    width: 100%;
+  }
+  .coupon-btn {
+    width: 100%;
   }
 }
