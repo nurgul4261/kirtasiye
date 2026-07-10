@@ -153,11 +153,11 @@ export default function Home() {
         </section>
       )}
 
-      {/* 3. BÖLÜM: Günün Fırsatları */}
+      {/* 3. BÖLÜM: Öne Çıkanlar */}
       <section className="storex-section storex-bg-light">
         <div className="storex-container">
           <div className="storex-section-header">
-            <h2 className="storex-section-title">GÜNÜN FIRSATLARI</h2>
+            <h2 className="storex-section-title">ÖNE ÇIKANLAR</h2>
           </div>
           {loading ? (
             <div className="storex-loading">Yükleniyor...</div>
