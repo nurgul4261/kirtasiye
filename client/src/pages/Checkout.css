@@ -1,5 +1,7 @@
 .checkout-page {
   padding: 36px 24px;
+  overflow-x: hidden; /* beklenmedik bir taşma olsa bile yatay kaydırmayı engeller */
+  max-width: 100%;
 }
 .checkout-page h1 {
   font-family: "Syne", sans-serif;
@@ -13,6 +15,11 @@
   grid-template-columns: 1fr 320px;
   gap: 24px;
   align-items: start;
+}
+/* Grid öğeleri varsayılan olarak içeriğinden dar olamaz; bu da uzun bir
+   metin geldiğinde tüm sayfayı yatay taşırır. min-width:0 bunu engeller. */
+.checkout-layout > * {
+  min-width: 0;
 }
 .checkout-form {
   padding: 28px;
@@ -63,7 +70,15 @@
 }
 .order-item span {
   min-width: 0;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.order-item span:first-child {
+  flex: 1;
+}
+.order-item span:last-child {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 hr {
   border: none;
