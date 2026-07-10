@@ -89,7 +89,7 @@ const createOrder = async (req, res) => {
         .join("");
 
       await resend.emails.send({
-        from: "Kovan Kırtasiye <onboarding@resend.dev>",
+        from: "Kovan Kırtasiye <bilgi@kovankirtasiye.com.tr>",
         to: process.env.EMAIL_USER,
         subject: `🛒 Yeni Sipariş! #${order._id.toString().slice(-6).toUpperCase()}`,
         html: `
@@ -216,7 +216,7 @@ const sendStatusEmailToCustomer = async (order, status) => {
     .join("");
 
   await resend.emails.send({
-    from: "Kovan Kırtasiye <onboarding@resend.dev>",
+    from: "Kovan Kırtasiye <bilgi@kovankirtasiye.com.tr>",
     to: order.user.email,
     subject: `${content.subject} — Sipariş #${order._id.toString().slice(-6).toUpperCase()}`,
     html: `

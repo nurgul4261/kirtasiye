@@ -114,7 +114,7 @@ const paytrCallback = async (req, res) => {
             .join("");
 
           await resend.emails.send({
-            from: "Kovan Kırtasiye <onboarding@resend.dev>",
+            from: "Kovan Kırtasiye <bilgi@kovankirtasiye.com.tr>",
             to: process.env.EMAIL_USER,
             subject: `✅ Ödeme Alındı! Sipariş #${order._id.toString().slice(-6).toUpperCase()}`,
             html: `
