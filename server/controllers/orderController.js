@@ -174,16 +174,105 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+// Durum değişince müşteriye gönderilecek mail içerikleri
+const STATUS_EMAIL_CONTENT = {
+  onaylandi: {
+    subject: "✅ Siparişiniz Onaylandı",
+    title: "Siparişiniz Onaylandı!",
+    color: "#2563eb",
+    message:
+      "Siparişiniz onaylandı ve hazırlanmaya başlandı. Kargoya verildiğinde tekrar bilgilendirileceksiniz.",
+  },
+  kargoda: {
+    subject: "🚚 Siparişiniz Kargoya Verildi",
+    title: "Siparişiniz Yola Çıktı!",
+    color: "#f59e0b",
+    message:
+      "Siparişiniz kargoya teslim edildi ve size doğru yola çıktı. En kısa sürede elinize ulaşacak.",
+  },
+  teslim_edildi: {
+    subject: "📦 Siparişiniz Teslim Edildi",
+    title: "Siparişiniz Teslim Edildi!",
+    color: "#16a34a",
+    message:
+      "Siparişiniz teslim edildi. Bizi tercih ettiğiniz için teşekkür ederiz! Ürünlerimizle ilgili görüşlerinizi bizimle paylaşmaktan çekinmeyin.",
+  },
+};
+
+// Müşteriye durum güncelleme maili gönderir (varsa)
+const sendStatusEmailToCustomer = async (order, status) => {
+  const content = STATUS_EMAIL_CONTENT[status];
+  if (!content || !order.user?.email) return;
+
+  const itemsHtml = order.orderItems
+    .map(
+      (item) =>
+        `<tr>
+      <td style="padding:8px;border-bottom:1px solid #eee">${item.name}</td>
+      <td style="padding:8px;border-bottom:1px solid #eee;text-align:center">${item.quantity}</td>
+      <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(item.price * item.quantity).toFixed(2)} ₺</td>
+    </tr>`,
+    )
+    .join("");
+
+  await resend.emails.send({
+    from: "Kovan Kırtasiye <onboarding@resend.dev>",
+    to: order.user.email,
+    subject: `${content.subject} — Sipariş #${order._id.toString().slice(-6).toUpperCase()}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;border:1px solid #eee;border-radius:8px">
+        <h2 style="color:${content.color}">${content.title}</h2>
+        <p><strong>Sipariş No:</strong> #${order._id.toString().slice(-6).toUpperCase()}</p>
+        <p style="color:#444;line-height:1.6">${content.message}</p>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0">
+          <thead>
+            <tr style="background:#f5f5f5">
+              <th style="padding:8px;text-align:left">Ürün</th>
+              <th style="padding:8px;text-align:center">Adet</th>
+              <th style="padding:8px;text-align:right">Tutar</th>
+            </tr>
+          </thead>
+          <tbody>${itemsHtml}</tbody>
+        </table>
+        <p style="font-size:16px;font-weight:bold;color:#1a2744">Toplam: ${order.totalPrice.toFixed(2)} ₺</p>
+        <a href="https://www.kovankirtasiye.com.tr/profile"
+           style="display:inline-block;margin-top:16px;padding:12px 24px;background:#1a2744;color:white;text-decoration:none;border-radius:8px;font-weight:600">
+          Siparişimi Görüntüle
+        </a>
+      </div>
+    `,
+  });
+};
+
 const updateOrderStatus = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate(
+      "user",
+      "name email",
+    );
     if (order) {
-      order.status = req.body.status;
-      if (req.body.status === "teslim_edildi") {
+      const newStatus = req.body.status;
+      const statusChanged = order.status !== newStatus;
+
+      order.status = newStatus;
+      if (newStatus === "teslim_edildi") {
         order.isDelivered = true;
         order.deliveredAt = Date.now();
       }
       const updated = await order.save();
+
+      // Durum gerçekten değiştiyse müşteriye mail gönder
+      if (statusChanged) {
+        try {
+          await sendStatusEmailToCustomer(order, newStatus);
+        } catch (emailErr) {
+          console.error(
+            "Müşteriye durum bildirimi maili gönderilemedi:",
+            emailErr.message,
+          );
+        }
+      }
+
       res.json(updated);
     } else {
       res.status(404).json({ message: "Sipariş bulunamadı" });
