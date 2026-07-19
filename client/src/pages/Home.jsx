@@ -157,7 +157,7 @@ export default function Home() {
       <section className="storex-section storex-bg-light">
         <div className="storex-container">
           <div className="storex-section-header">
-            <h2 className="storex-section-title">ÖNE ÇIKANLAR</h2>
+            <h2 className="storex-section-title">EN YENİLER</h2>
           </div>
           {loading ? (
             <div className="storex-loading">Yükleniyor...</div>
