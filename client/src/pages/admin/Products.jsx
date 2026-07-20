@@ -29,7 +29,10 @@ export default function AdminProducts() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await api.get("/products?pageSize=100");
+      // Backend "pageSize" ile limit uyguluyor ve sayfalama yapmıyoruz,
+      // bu yüzden admin panelinde TÜM ürünlerin görünmesi için
+      // ürün sayısından kesinlikle büyük bir değer gönderiyoruz.
+      const { data } = await api.get("/products?pageSize=100000");
       setProducts(data.products);
     } finally {
       setLoading(false);
