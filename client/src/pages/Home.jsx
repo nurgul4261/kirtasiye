@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 import ProductCard from "../components/ui/ProductCard";
@@ -13,6 +13,13 @@ export default function Home() {
   const [wordIndex, setWordIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [openCat, setOpenCat] = useState(null);
+
+  // En Yeniler carousel state
+  const trackRef = useRef(null);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [transitionOn, setTransitionOn] = useState(true);
+  const [itemStep, setItemStep] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,7 +36,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
-          api.get("/products?pageSize=4"),
+          api.get("/products?pageSize=9"),
           api.get("/categories"),
         ]);
         setFeaturedProducts(productsRes.data.products);
@@ -42,6 +49,50 @@ export default function Home() {
     };
     fetchData();
   }, []);
+
+  // Kart genişliği + gap ölçümü (responsive uyum için)
+  useEffect(() => {
+    const measure = () => {
+      if (trackRef.current && trackRef.current.children[0]) {
+        const firstItem = trackRef.current.children[0];
+        const style = window.getComputedStyle(trackRef.current);
+        const gap = parseFloat(style.columnGap || style.gap) || 0;
+        setItemStep(firstItem.getBoundingClientRect().width + gap);
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [featuredProducts]);
+
+  // Her 2 saniyede bir sıradaki ürüne adım adım geç
+  useEffect(() => {
+    if (featuredProducts.length === 0 || isPaused) return;
+    const timer = setInterval(() => {
+      setSlideIndex((i) => i + 1);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, [featuredProducts.length, isPaused]);
+
+  // Kopyalanmış listenin sonuna gelince, görünmeden başa sar (sonsuz döngü hissi)
+  useEffect(() => {
+    if (featuredProducts.length > 0 && slideIndex === featuredProducts.length) {
+      const t = setTimeout(() => {
+        setTransitionOn(false);
+        setSlideIndex(0);
+      }, 600);
+      return () => clearTimeout(t);
+    }
+  }, [slideIndex, featuredProducts.length]);
+
+  useEffect(() => {
+    if (!transitionOn) {
+      const raf1 = requestAnimationFrame(() => {
+        requestAnimationFrame(() => setTransitionOn(true));
+      });
+      return () => cancelAnimationFrame(raf1);
+    }
+  }, [transitionOn]);
 
   return (
     <div className="home-wrapper">
@@ -153,7 +204,7 @@ export default function Home() {
         </section>
       )}
 
-      {/* 3. BÖLÜM: Öne Çıkanlar */}
+      {/* 3. BÖLÜM: En Yeniler */}
       <section className="storex-section storex-bg-light">
         <div className="storex-container">
           <div className="storex-section-header">
@@ -162,10 +213,25 @@ export default function Home() {
           {loading ? (
             <div className="storex-loading">Yükleniyor...</div>
           ) : (
-            <div className="storex-products-grid">
-              {featuredProducts.map((p) => (
-                <ProductCard key={p._id} product={p} />
-              ))}
+            <div
+              className="storex-carousel"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
+              <div
+                className="storex-carousel-track"
+                ref={trackRef}
+                style={{
+                  transform: `translateX(-${slideIndex * itemStep}px)`,
+                  transition: transitionOn ? "transform 0.6s ease" : "none",
+                }}
+              >
+                {[...featuredProducts, ...featuredProducts].map((p, i) => (
+                  <div className="storex-carousel-item" key={`${p._id}-${i}`}>
+                    <ProductCard product={p} />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

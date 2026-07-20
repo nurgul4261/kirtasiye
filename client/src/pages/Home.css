@@ -336,17 +336,45 @@
   text-transform: uppercase;
 }
 
-.storex-products-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-
 .storex-loading {
   text-align: center;
   padding: 40px;
   font-size: 16px;
   color: var(--text-light);
+}
+
+/* ==========================================================================
+   EN YENİLER - KAYAN CAROUSEL
+   ========================================================================== */
+.storex-carousel {
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 40px,
+    #000 calc(100% - 40px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 40px,
+    #000 calc(100% - 40px),
+    transparent 100%
+  );
+}
+
+.storex-carousel-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  will-change: transform;
+}
+
+.storex-carousel-item {
+  flex: 0 0 260px;
+  width: 260px;
 }
 
 @media (min-width: 993px) {
@@ -382,9 +410,6 @@
    RESPONSIVE
    ========================================================================== */
 @media (max-width: 992px) {
-  .storex-products-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .storex-categories-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -415,8 +440,11 @@
   .storex-cat-name {
     font-size: 12px;
   }
-  .storex-products-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .storex-carousel-item {
+    flex: 0 0 160px;
+    width: 160px;
+  }
+  .storex-carousel-track {
     gap: 12px;
   }
 }

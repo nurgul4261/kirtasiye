@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
+import ScrollToTopButton from "./components/ui/ScrollToTopButton";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
@@ -126,6 +127,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <ScrollToTopButton />
       <ToastContainer position="top-right" autoClose={3000} />
     </BrowserRouter>
   );
