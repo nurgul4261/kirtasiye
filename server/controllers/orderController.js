@@ -4,12 +4,15 @@ const { Resend } = require("resend");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Kargo ücreti ve ücretsiz kargo eşiği sunucu tarafında sabitlenir — client'tan gelen değere güvenilmez
+const SHIPPING_PRICE = 100;
+const FREE_SHIPPING_THRESHOLD = 2000;
+
 // @desc    Sipariş oluştur
 // @route   POST /api/orders
 const createOrder = async (req, res) => {
   try {
-    const { orderItems, shippingAddress, shippingPrice, notes, couponCode } =
-      req.body;
+    const { orderItems, shippingAddress, notes, couponCode } = req.body;
 
     if (!orderItems || orderItems.length === 0) {
       return res.status(400).json({ message: "Sepet boş" });
@@ -35,6 +38,9 @@ const createOrder = async (req, res) => {
       totalQuantity += item.quantity;
     }
 
+    const shippingPrice =
+      calculatedItemsPrice >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_PRICE;
+
     const VALID_COUPON = "KIRTASIYE20";
     let discountAmount = 0;
     let appliedCoupon = "";
@@ -55,7 +61,7 @@ const createOrder = async (req, res) => {
     }
 
     const finalItemsPrice = calculatedItemsPrice - discountAmount;
-    const finalTotalPrice = finalItemsPrice + Number(shippingPrice || 0);
+    const finalTotalPrice = finalItemsPrice + shippingPrice;
 
     for (const item of orderItems) {
       await Product.findByIdAndUpdate(item.product, {

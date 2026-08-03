@@ -63,7 +63,8 @@ export default function Checkout() {
     };
   }, [step]);
 
-  const shippingPrice = 0; // Kargo ücreti kaldırıldı, her zaman ücretsiz
+  const FREE_SHIPPING_THRESHOLD = 2000;
+  const shippingPrice = totalPrice >= FREE_SHIPPING_THRESHOLD ? 0 : 100; // 2000 TL üzeri ücretsiz kargo
   const discountAmount = couponApplied ? (totalPrice * discount) / 100 : 0;
   const finalTotal = totalPrice - discountAmount + shippingPrice;
 
@@ -118,11 +119,12 @@ export default function Checkout() {
       const { notes, ...shippingAddress } = form;
 
       // 1) Siparişi oluştur (stok bu adımda düşer)
+      // Not: shippingPrice artık backend'de sabit belirleniyor, burada
+      // gönderilse de sunucu tarafında dikkate alınmıyor (güvenlik).
       const { data: order } = await api.post("/orders", {
         orderItems,
         shippingAddress,
         itemsPrice: totalPrice,
-        shippingPrice,
         discountAmount,
         totalPrice: finalTotal,
         couponCode: couponApplied ? couponCode.toUpperCase() : null,
@@ -307,11 +309,6 @@ export default function Checkout() {
                 </button>
               </div>
             )}
-            {/* {!cartItems.some((i) => i.quantity >= 20) && (
-              <p className="coupon-hint">
-                💡 Aynı üründen 20+ adet alımda kupon kullanabilirsiniz
-              </p>
-            )} */}
           </div>
 
           <hr />
@@ -324,6 +321,23 @@ export default function Checkout() {
               <span>İndirim (%{discount})</span>
               <span>-{discountAmount.toFixed(2)} ₺</span>
             </div>
+          )}
+          <div className="order-item">
+            <span>Kargo</span>
+            <span>
+              {shippingPrice === 0
+                ? "Ücretsiz"
+                : `${shippingPrice.toFixed(2)} ₺`}
+            </span>
+          </div>
+          {shippingPrice > 0 && (
+            <p
+              className="free-shipping-hint"
+              style={{ fontSize: 13, color: "#666" }}
+            >
+              💡 {(FREE_SHIPPING_THRESHOLD - totalPrice).toFixed(2)} ₺ daha
+              alışveriş yapın, kargo ücretsiz olsun!
+            </p>
           )}
           <div className="order-total">
             <span>Toplam</span>

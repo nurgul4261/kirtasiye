@@ -62,7 +62,8 @@ export default function Cart() {
     );
   }
 
-  const shippingPrice = 0; // Kargo ücreti kaldırıldı, her zaman ücretsiz
+  const FREE_SHIPPING_THRESHOLD = 2000;
+  const shippingPrice = totalPrice >= FREE_SHIPPING_THRESHOLD ? 0 : 100; // 2000 TL üzeri ücretsiz kargo
 
   return (
     <div className="container cart-page">
@@ -125,6 +126,23 @@ export default function Cart() {
             <span>Ürünler</span>
             <span>{totalPrice.toFixed(2)} ₺</span>
           </div>
+          <div className="summary-row">
+            <span>Kargo</span>
+            <span>
+              {shippingPrice === 0
+                ? "Ücretsiz"
+                : `${shippingPrice.toFixed(2)} ₺`}
+            </span>
+          </div>
+          {shippingPrice > 0 && (
+            <p
+              className="free-shipping-hint"
+              style={{ fontSize: 13, color: "#666" }}
+            >
+              💡 {(FREE_SHIPPING_THRESHOLD - totalPrice).toFixed(2)} ₺ daha
+              alışveriş yapın, kargo ücretsiz olsun!
+            </p>
+          )}
           <div className="summary-total">
             <span>Toplam</span>
             <span>{(totalPrice + shippingPrice).toFixed(2)} ₺</span>
