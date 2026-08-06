@@ -78,6 +78,19 @@ export default function ProductDetail() {
         : ["/placeholder.png"];
 
   const mainImage = galleryImages[activeImage] || galleryImages[0];
+  const hasMultipleImages = galleryImages.length > 1;
+
+  const handlePrevImage = () => {
+    setActiveImage((prev) =>
+      prev === 0 ? galleryImages.length - 1 : prev - 1,
+    );
+  };
+
+  const handleNextImage = () => {
+    setActiveImage((prev) =>
+      prev === galleryImages.length - 1 ? 0 : prev + 1,
+    );
+  };
 
   return (
     <div className="container detail-page">
@@ -86,9 +99,32 @@ export default function ProductDetail() {
       </button>
       <div className="detail-grid">
         <div className="detail-img">
-          <img src={mainImage} alt={product.name} />
+          <div className="detail-img-main">
+            <img src={mainImage} alt={product.name} />
 
-          {galleryImages.length > 1 && (
+            {hasMultipleImages && (
+              <>
+                <button
+                  type="button"
+                  className="detail-img-nav prev"
+                  onClick={handlePrevImage}
+                  aria-label="Önceki fotoğraf"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className="detail-img-nav next"
+                  onClick={handleNextImage}
+                  aria-label="Sonraki fotoğraf"
+                >
+                  ›
+                </button>
+              </>
+            )}
+          </div>
+
+          {hasMultipleImages && (
             <div className="detail-thumbs">
               {galleryImages.map((img, index) => (
                 <button

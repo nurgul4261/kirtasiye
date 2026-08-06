@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
+import ScrollToTop from "./components/ui/ScrollToTop";
 import ScrollToTopButton from "./components/ui/ScrollToTopButton";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
@@ -31,6 +32,7 @@ import OdemeBasarisiz from "./pages/OdemeBasarisiz";
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Navbar />
       <main className="main-content">
         <Routes>
