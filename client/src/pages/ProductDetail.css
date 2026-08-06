@@ -39,9 +39,9 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #fff;
+  background: transparent;
   border: 2px solid var(--border-dark);
-  box-shadow: var(--shadow);
+  box-shadow: none;
   color: var(--primary);
   font-size: 22px;
   line-height: 1;
@@ -54,9 +54,9 @@
   transition: background 0.15s ease;
 }
 .detail-img-nav:hover {
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.25);
   transform: translateY(-50%);
-  box-shadow: var(--shadow);
+  box-shadow: none;
 }
 .detail-img-nav.prev {
   left: 14px;
