@@ -3,6 +3,7 @@ import AdminLayout from "./AdminLayout";
 import api from "../../services/api";
 import { toast } from "react-toastify";
 import imageCompression from "browser-image-compression";
+import Barcode from "react-barcode";
 
 const MAX_IMAGES = 5;
 
@@ -225,6 +226,7 @@ export default function AdminProducts() {
             <tr>
               <th>Ürün</th>
               <th>Kategori</th>
+              <th>Barkod</th>
               <th>Fiyat</th>
               <th>Stok</th>
               <th>İşlem</th>
@@ -251,6 +253,9 @@ export default function AdminProducts() {
                   </div>
                 </td>
                 <td>{p.category?.name || "-"}</td>
+                <td style={{ fontSize: 12, color: "var(--text-light)" }}>
+                  {p.barcode || "-"}
+                </td>
                 <td>{p.price.toFixed(2)} ₺</td>
                 <td>
                   <span
@@ -353,6 +358,36 @@ export default function AdminProducts() {
                   onChange={handleChange}
                 />
               </div>
+
+              <div className="form-group">
+                <label>Barkod</label>
+                {editProduct?.barcode ? (
+                  <>
+                    <input value={editProduct.barcode} disabled />
+                    <div
+                      style={{
+                        marginTop: 10,
+                        padding: 10,
+                        background: "#fff",
+                        display: "inline-block",
+                        borderRadius: 6,
+                      }}
+                    >
+                      <Barcode
+                        value={editProduct.barcode}
+                        height={50}
+                        fontSize={13}
+                        width={1.6}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <p style={{ fontSize: 12, color: "var(--text-light)" }}>
+                    Ürün kaydedildiğinde barkod otomatik oluşturulacak.
+                  </p>
+                )}
+              </div>
+
               <div className="form-group">
                 <label>
                   Ürün Görselleri ({imageItems.length}/{MAX_IMAGES})
