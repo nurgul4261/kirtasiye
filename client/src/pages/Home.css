@@ -1,22 +1,27 @@
 /* ==========================================================================
    GENEL DEĞİŞKENLER
+   Tipografi ağırlıklı, kağıt tonlu minimal kırtasiye paleti
    ========================================================================== */
 :root {
-  --primary: #1a2744;
-  --primary-light: #eeecfb;
-  --lavender: #6b4fa8;
-  --text: #1a2744;
-  --text-light: #6b7a99;
-  --radius-custom: 16px;
+  --primary: #2b2a28; /* mürekkep siyahı */
+  --primary-light: #f2ede4; /* açık kağıt tonu */
+  --paper: #faf7f2; /* kağıt beyazı, saf beyaz değil */
+  --lavender: #6b4fa8; /* ikincil aksan */
+  --accent-warm: #d97757; /* kalem/mühür tonu - vurgu rengi */
+  --border: #e8e3da; /* kağıt gri çizgisi */
+  --text: #2b2a28;
+  --text-light: #857f74;
+  --radius-custom: 12px;
 }
 
 .home-wrapper {
   color: var(--text);
-  background-color: #faf9fb;
+  background-color: var(--paper);
 }
 
 /* ==========================================================================
    HERO
+   Tipografi öne çıkar, fotoğraf destekleyici katman olarak kalır
    ========================================================================== */
 .storex-hero {
   position: relative;
@@ -33,7 +38,15 @@
 }
 
 .storex-hero::before {
-  content: none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(43, 42, 40, 0.25) 0%,
+    rgba(43, 42, 40, 0.6) 100%
+  );
+  z-index: 1;
 }
 
 .storex-hero-content {
@@ -55,21 +68,22 @@
 }
 
 .storex-hero-content h1 span {
-  color: #d4b8ff;
+  color: var(--accent-warm);
 }
 
 .storex-hero-btn {
   display: inline-block;
-  background: linear-gradient(135deg, #1a2744, #6b4fa8);
-  color: white;
+  background: var(--primary);
+  color: #fff;
   padding: 16px 42px;
   border-radius: 10px;
   text-decoration: none;
   font-weight: 700;
+  min-height: 44px;
   transition: all 0.25s ease;
 }
 .storex-hero-btn:hover {
-  background: linear-gradient(135deg, #111b30, #9b60c8);
+  background: var(--accent-warm);
   transform: translateY(-2px);
 }
 
@@ -90,6 +104,7 @@
 
 /* ==========================================================================
    KATEGORİ BÖLÜMÜ
+   Line-icon + bol beyaz alan, ağır görsel yerine sadelik
    ========================================================================== */
 .storex-section {
   padding: 80px 0;
@@ -119,9 +134,9 @@
 }
 
 .storex-category-card {
-  background: #fff;
-  border: 1.5px solid #e4e0f0;
-  border-radius: 16px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-custom);
   padding: 28px 16px 22px;
   display: flex;
   flex-direction: column;
@@ -129,6 +144,7 @@
   justify-content: center;
   gap: 12px;
   cursor: pointer;
+  box-shadow: 0 1px 2px rgba(43, 42, 40, 0.04);
   transition:
     border-color 0.2s ease,
     transform 0.2s ease,
@@ -139,9 +155,9 @@
 }
 
 .storex-category-card:hover {
-  border-color: #6b4fa8;
+  border-color: var(--accent-warm);
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(107, 79, 168, 0.12);
+  box-shadow: 0 8px 20px rgba(43, 42, 40, 0.08);
 }
 
 .storex-category-card.has-children {
@@ -157,22 +173,24 @@
 }
 
 .storex-cat-icon {
-  font-size: 32px;
-  width: 60px;
-  height: 60px;
-  background: #f0ecfb;
+  font-size: 28px;
+  width: 56px;
+  height: 56px;
+  background: transparent;
+  border: 1px solid var(--border);
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--primary);
   transition:
     transform 0.2s ease,
-    background 0.2s ease;
+    border-color 0.2s ease;
 }
 
 .storex-category-card:hover .storex-cat-icon {
-  transform: scale(1.08);
-  background: #e4d9f7;
+  transform: scale(1.06);
+  border-color: var(--accent-warm);
 }
 
 .storex-cat-overlay {
@@ -193,7 +211,7 @@
 
 .storex-cat-arrow {
   font-size: 10px;
-  color: #9b87c4;
+  color: var(--text-light);
   margin-left: 4px;
 }
 
@@ -214,8 +232,8 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(26, 39, 68, 0) 35%,
-    rgba(26, 39, 68, 0.75) 100%
+    rgba(43, 42, 40, 0) 35%,
+    rgba(43, 42, 40, 0.75) 100%
   );
   transition: background 0.2s ease;
 }
@@ -223,8 +241,8 @@
 .storex-category-card.has-bg:hover::before {
   background: linear-gradient(
     180deg,
-    rgba(26, 39, 68, 0.1) 30%,
-    rgba(26, 39, 68, 0.85) 100%
+    rgba(43, 42, 40, 0.1) 30%,
+    rgba(43, 42, 40, 0.85) 100%
   );
 }
 
@@ -243,21 +261,22 @@
 }
 
 .storex-category-card.has-bg .storex-cat-arrow {
-  color: #f0ecfb;
+  color: var(--primary-light);
 }
 
 .storex-category-card.has-bg:hover {
   border-color: transparent;
 }
+
 .storex-sub-cats {
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
   right: 0;
-  background: #fff;
-  border: 1.5px solid #e4e0f0;
+  background: var(--paper);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(107, 79, 168, 0.12);
+  box-shadow: 0 8px 24px rgba(43, 42, 40, 0.1);
   z-index: 100;
   overflow: hidden;
   animation: fadeDown 0.2s ease;
@@ -278,19 +297,20 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 11px 16px;
+  padding: 12px 16px;
+  min-height: 44px;
   font-size: 13px;
-  color: #444;
+  color: var(--text);
   text-decoration: none;
-  border-bottom: 1px solid #f0ecfb;
+  border-bottom: 1px solid var(--border);
   transition: background 0.15s;
 }
 .storex-sub-cat:last-child {
   border-bottom: none;
 }
 .storex-sub-cat:hover {
-  background: #f3effc;
-  color: #6b4fa8;
+  background: var(--primary-light);
+  color: var(--accent-warm);
 }
 
 /* Tüm Kategorileri Gör */
@@ -302,24 +322,26 @@
 .storex-all-cats-btn {
   background: none;
   border: none;
-  color: #6b4fa8;
+  color: var(--lavender);
   font-weight: 700;
   font-size: 15px;
   text-decoration: underline;
   cursor: pointer;
+  padding: 12px 16px;
+  min-height: 44px;
   transition: color 0.2s ease;
   text-decoration-color: rgba(107, 79, 168, 0.4);
 }
 .storex-all-cats-btn:hover {
-  color: #1a2744;
-  text-decoration-color: rgba(26, 39, 68, 0.4);
+  color: var(--accent-warm);
+  text-decoration-color: rgba(217, 119, 87, 0.4);
 }
 
 /* ==========================================================================
    ÜRÜNLER
    ========================================================================== */
 .storex-bg-light {
-  background-color: #f6f4fb;
+  background-color: var(--primary-light);
 }
 
 .storex-section-header {
@@ -329,11 +351,11 @@
 
 .storex-section-title {
   font-family: "Syne", sans-serif;
-  font-size: 26px;
-  font-weight: 800;
+  font-size: 28px;
+  font-weight: 700;
   color: var(--text);
-  letter-spacing: -0.5px;
-  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-transform: none;
 }
 
 .storex-loading {
@@ -388,9 +410,9 @@
   }
 
   .storex-cat-icon {
-    width: 76px;
-    height: 76px;
-    font-size: 40px;
+    width: 68px;
+    height: 68px;
+    font-size: 32px;
   }
 
   .storex-cat-name {
@@ -431,11 +453,12 @@
   }
   .storex-category-card {
     padding: 20px 10px 16px;
+    min-height: 44px;
   }
   .storex-cat-icon {
-    width: 48px;
-    height: 48px;
-    font-size: 24px;
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
   }
   .storex-cat-name {
     font-size: 12px;

@@ -3,27 +3,27 @@
 }
 
 .contact-header {
-  background: var(--text);
-  color: white;
-  padding: 40px 0; /* Devasa yüksekliği azaltmak için padding küçültüldü */
-  border-bottom: 2px solid var(--border-dark);
+  background: var(--primary, #2b2a28);
+  color: #faf7f2;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border, #e8e3da);
   margin-bottom: 32px;
 }
 .contact-header h1 {
   font-family: "Syne", sans-serif;
-  font-size: 32px; /* 42px'den 32px'e düşürüldü */
+  font-size: 32px;
   font-weight: 800;
   margin-bottom: 8px;
   letter-spacing: -0.5px;
 }
 .contact-header p {
-  font-size: 14px; /* 16px'den 14px'e düşürüldü */
-  color: #aaa;
+  font-size: 14px;
+  color: #c9c2b4;
 }
 
 .contact-layout {
   display: grid;
-  grid-template-columns: 320px 1fr; /* Sol panel biraz daraltıldı */
+  grid-template-columns: 320px 1fr;
   gap: 24px;
   align-items: start;
 }
@@ -32,15 +32,19 @@
 .info-card {
   padding: 24px;
   margin-bottom: 16px;
+  background: var(--paper, #faf7f2);
+  border: 1px solid var(--border, #e8e3da);
+  border-radius: var(--radius-custom, 12px);
 }
 .info-card h3,
 .social-card h3 {
   font-family: "Syne", sans-serif;
-  font-size: 16px; /* 18px'den düşürüldü */
+  font-size: 16px;
   font-weight: 800;
+  color: var(--text, #2b2a28);
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border, #e8e3da);
 }
 .info-item {
   display: flex;
@@ -52,25 +56,29 @@
   font-size: 18px;
   flex-shrink: 0;
   margin-top: 2px;
+  color: var(--accent-warm, #d97757);
 }
 .info-item strong {
   display: block;
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-light);
-  text-transform: uppercase;
+  color: var(--text-light, #857f74);
+  text-transform: none;
   letter-spacing: 0.5px;
   margin-bottom: 2px;
 }
 .info-item p {
   font-size: 13.5px;
   line-height: 1.5;
-  color: var(--text);
+  color: var(--text, #2b2a28);
 }
 
 /* Sosyal medya kartı ve buton düzenlemeleri */
 .social-card {
   padding: 24px;
+  background: var(--paper, #faf7f2);
+  border: 1px solid var(--border, #e8e3da);
+  border-radius: var(--radius-custom, 12px);
 }
 .social-links {
   display: flex;
@@ -80,30 +88,33 @@
 .social-link {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* İçerikleri sola yasla */
+  justify-content: flex-start;
   gap: 12px;
-  padding: 10px 16px; /* Padding dengelendi */
-  border: 2px solid var(--border-dark);
-  border-radius: var(--radius);
+  padding: 12px 16px;
+  min-height: 44px;
+  box-sizing: border-box;
+  border: 1px solid var(--border, #e8e3da);
+  border-radius: var(--radius-custom, 12px);
   text-decoration: none;
-  color: var(--text);
+  color: var(--text, #2b2a28);
   font-weight: 600;
   font-size: 13.5px;
-  box-shadow: var(--shadow);
-  transition: all 0.15s ease-in-out;
+  box-shadow: none;
+  transition: all 0.2s ease;
 }
 
-/* CRITICAL: Devasa büyümeyi engelleyen SVG boyut sınırlaması */
+/* Devasa büyümeyi engelleyen SVG boyut sınırlaması */
 .social-icon {
-  width: 18px; /* İkon genişliği sabitlendi */
-  height: 18px; /* İkon yüksekliği sabitlendi */
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
-  fill: currentColor; /* Yazı rengiyle uyumlu çalışması için */
+  fill: currentColor;
 }
 
 .social-link:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(43, 42, 40, 0.08);
+  border-color: var(--accent-warm, #d97757);
 }
 
 /* Hover durumlarında ikon renginin de beyaz kalması için seçiciler güncellendi */
@@ -126,11 +137,15 @@
 /* Form */
 .contact-form-card {
   padding: 28px;
+  background: var(--paper, #faf7f2);
+  border: 1px solid var(--border, #e8e3da);
+  border-radius: var(--radius-custom, 12px);
 }
 .contact-form-card h3 {
   font-family: "Syne", sans-serif;
   font-size: 18px;
   font-weight: 800;
+  color: var(--text, #2b2a28);
   margin-bottom: 20px;
 }
 .form-row {
@@ -143,30 +158,51 @@
 .contact-form-card input,
 .contact-form-card textarea {
   width: 100%;
-  padding: 10px 14px;
+  padding: 12px 14px;
+  min-height: 44px;
+  box-sizing: border-box;
   font-size: 14px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
+  border: 1px solid var(--border, #e8e3da);
+  border-radius: var(--radius-custom, 12px);
+  background: var(--paper, #faf7f2);
+  color: var(--text, #2b2a28);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s ease;
+}
+.contact-form-card textarea {
+  min-height: 100px;
 }
 .contact-form-card input:focus,
 .contact-form-card textarea:focus {
-  border-color: var(--primary);
+  border-color: var(--accent-warm, #d97757);
 }
 
 .submit-btn {
   width: 100%;
   padding: 12px;
+  min-height: 44px;
   font-size: 14px;
   margin-top: 8px;
   cursor: pointer;
+  border-radius: var(--radius-custom, 12px);
+  background: var(--primary, #2b2a28);
+  color: #faf7f2;
+  border: none;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+.submit-btn:hover {
+  background: var(--accent-warm, #d97757);
+  transform: translateY(-2px);
 }
 
 /* Başarı mesajı */
 .success-card {
   padding: 40px 24px;
   text-align: center;
+  background: var(--paper, #faf7f2);
+  border: 1px solid var(--border, #e8e3da);
+  border-radius: var(--radius-custom, 12px);
 }
 .success-icon {
   font-size: 48px;
@@ -176,16 +212,29 @@
   font-family: "Syne", sans-serif;
   font-size: 22px;
   font-weight: 800;
+  color: var(--text, #2b2a28);
   margin-bottom: 12px;
 }
 .success-card p {
-  color: var(--text-light);
+  color: var(--text-light, #857f74);
   line-height: 1.6;
   margin-bottom: 24px;
   font-size: 14px;
 }
 .success-card button {
-  padding: 10px 28px;
+  padding: 12px 28px;
+  min-height: 44px;
+  border-radius: var(--radius-custom, 12px);
+  background: var(--primary, #2b2a28);
+  color: #faf7f2;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.success-card button:hover {
+  background: var(--accent-warm, #d97757);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

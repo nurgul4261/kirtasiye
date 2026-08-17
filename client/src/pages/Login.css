@@ -9,11 +9,16 @@
   width: 100%;
   max-width: 420px;
   padding: 40px;
+  background: var(--paper, #faf7f2);
+  border: 1px solid var(--border, #e8e3da);
+  border-radius: var(--radius-custom, 12px);
+  box-shadow: 0 4px 16px rgba(43, 42, 40, 0.06);
 }
 .login-card h2 {
   font-family: "Syne", sans-serif;
   font-size: 28px;
   font-weight: 800;
+  color: var(--text, #2b2a28);
   margin-bottom: 28px;
   text-align: center;
   letter-spacing: -0.5px;
@@ -21,6 +26,7 @@
 .login-btn {
   width: 100%;
   padding: 13px;
+  min-height: 44px;
   font-size: 15px;
   margin-top: 8px;
   display: flex;
@@ -28,17 +34,28 @@
   justify-content: center;
   box-sizing: border-box;
   line-height: 1;
+  border-radius: var(--radius-custom, 12px);
+  background: var(--primary, #2b2a28);
+  color: #faf7f2;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.login-btn:hover {
+  background: var(--accent-warm, #d97757);
+  transform: translateY(-2px);
 }
 .toggle-text {
   text-align: center;
   margin-top: 20px;
   font-size: 14px;
-  color: var(--text-light);
+  color: var(--text-light, #857f74);
 }
 .toggle-btn {
   background: none;
   border: none;
-  color: var(--primary);
+  color: var(--accent-warm, #d97757);
   font-weight: 600;
   cursor: pointer;
   margin-left: 6px;
@@ -46,8 +63,11 @@
   box-shadow: none;
   font-size: 14px;
   text-decoration: underline;
+  text-decoration-color: rgba(217, 119, 87, 0.4);
+  transition: color 0.2s ease;
 }
 .toggle-btn:hover {
+  color: var(--primary, #2b2a28);
   transform: none;
   box-shadow: none;
 }
