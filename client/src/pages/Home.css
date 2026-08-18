@@ -471,3 +471,63 @@
     gap: 12px;
   }
 }
+
+/* ==========================================================================
+   CAROUSEL OK BUTONLARI
+   Büyük, çerçevesiz — sadece yumuşak gölgeyle ayrışıyor.
+   Bu bloğu home.css'teki "EN YENİLER - KAYAN CAROUSEL" bölümünün
+   altına ekle.
+   ========================================================================== */
+
+.storex-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.storex-carousel-wrapper .storex-carousel {
+  flex: 1;
+  min-width: 0;
+}
+
+.storex-carousel-arrow {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none; /* çerçevesiz */
+  background: var(--paper, #faf7f2);
+  color: var(--primary, #2b2a28);
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(43, 42, 40, 0.12);
+  transition: all 0.2s ease;
+}
+
+.storex-carousel-arrow:hover {
+  background: var(--accent-warm, #d97757);
+  color: #faf7f2;
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(217, 119, 87, 0.3);
+}
+
+.storex-carousel-arrow:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 576px) {
+  .storex-carousel-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+  }
+  .storex-carousel-wrapper {
+    gap: 6px;
+  }
+}

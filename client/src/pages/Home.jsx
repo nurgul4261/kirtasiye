@@ -94,6 +94,34 @@ export default function Home() {
     }
   }, [transitionOn]);
 
+  // ── Ok butonları ──
+  // İleri: mevcut otomatik akışla birebir aynı adımı manuel tetikler.
+  function goNext() {
+    if (featuredProducts.length === 0) return;
+    setSlideIndex((i) => i + 1);
+  }
+
+  // Geri: index 0'dayken, liste [...featured, ...featured] şeklinde
+  // tekrarlandığı için "featuredProducts.length" pozisyonu görsel olarak
+  // 0. pozisyonla birebir aynı görünür (ikinci setin başlangıcı). Bu yüzden
+  // önce animasyonsuz oraya atlıyoruz, sonra bir adım geri animasyonla gidiyoruz.
+  function goPrev() {
+    if (featuredProducts.length === 0) return;
+
+    if (slideIndex === 0) {
+      setTransitionOn(false);
+      setSlideIndex(featuredProducts.length);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTransitionOn(true);
+          setSlideIndex(featuredProducts.length - 1);
+        });
+      });
+    } else {
+      setSlideIndex((i) => i - 1);
+    }
+  }
+
   return (
     <div className="home-wrapper">
       {/* 1. BÖLÜM: Hero */}
@@ -214,24 +242,44 @@ export default function Home() {
             <div className="storex-loading">Yükleniyor...</div>
           ) : (
             <div
-              className="storex-carousel"
+              className="storex-carousel-wrapper"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              <div
-                className="storex-carousel-track"
-                ref={trackRef}
-                style={{
-                  transform: `translateX(-${slideIndex * itemStep}px)`,
-                  transition: transitionOn ? "transform 0.6s ease" : "none",
-                }}
+              <button
+                type="button"
+                className="storex-carousel-arrow prev"
+                aria-label="Önceki ürünler"
+                onClick={goPrev}
               >
-                {[...featuredProducts, ...featuredProducts].map((p, i) => (
-                  <div className="storex-carousel-item" key={`${p._id}-${i}`}>
-                    <ProductCard product={p} />
-                  </div>
-                ))}
+                ‹
+              </button>
+
+              <div className="storex-carousel">
+                <div
+                  className="storex-carousel-track"
+                  ref={trackRef}
+                  style={{
+                    transform: `translateX(-${slideIndex * itemStep}px)`,
+                    transition: transitionOn ? "transform 0.6s ease" : "none",
+                  }}
+                >
+                  {[...featuredProducts, ...featuredProducts].map((p, i) => (
+                    <div className="storex-carousel-item" key={`${p._id}-${i}`}>
+                      <ProductCard product={p} />
+                    </div>
+                  ))}
+                </div>
               </div>
+
+              <button
+                type="button"
+                className="storex-carousel-arrow next"
+                aria-label="Sonraki ürünler"
+                onClick={goNext}
+              >
+                ›
+              </button>
             </div>
           )}
         </div>
