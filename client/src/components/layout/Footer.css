@@ -1,9 +1,72 @@
 .footer {
   background: var(--primary, #2b2a28);
   color: #c9c2b4;
-  padding: 48px 0 0 0;
+  padding: 0;
   font-size: 14px;
   margin-top: 64px;
+}
+
+/* Güven Rozetleri Şeridi — açık zemin, footer'dan ayrışıyor */
+.footer-trust {
+  background: var(--paper, #f6f5f3);
+  border-bottom: 1px solid var(--border, #e8e3da);
+  padding: 32px 0;
+  margin-bottom: 40px;
+}
+
+.footer-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.trust-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(217, 119, 87, 0.1);
+  color: var(--accent-warm, #d97757);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.trust-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.trust-item h5 {
+  font-family: "Syne", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text, #2b2a28);
+  margin: 0 0 4px 0;
+}
+
+.trust-item p {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-light, #857f74);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .footer-trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .footer-trust-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
 
 .footer-layout {

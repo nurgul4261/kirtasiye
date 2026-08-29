@@ -522,12 +522,69 @@
 }
 
 @media (max-width: 576px) {
-  .storex-carousel-arrow {
-    width: 40px;
-    height: 40px;
+  .storex-hero {
+    min-height: 500px;
+  }
+  .storex-hero-content h1 {
+    font-size: 34px;
+  }
+  .hero-word {
+    min-width: 140px;
+  }
+
+  /* Grid yerine flex: her kartın yüksekliği kendi içeriğine göre belirlenir */
+  .storex-categories-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .storex-cat-wrapper {
+    position: static;
+  }
+
+  .storex-category-card {
+    padding: 16px 14px;
+    min-height: 44px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .storex-category-card .storex-cat-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .storex-category-card.open {
+    border-color: var(--accent-warm);
+    background: var(--primary-light);
+  }
+
+  .storex-cat-icon {
+    width: 44px;
+    height: 44px;
     font-size: 22px;
   }
-  .storex-carousel-wrapper {
-    gap: 6px;
+  .storex-cat-name {
+    font-size: 14px;
+  }
+
+  /* Alt kategoriler: normal akışta, kartın hemen altında */
+  .storex-sub-cats {
+    position: static;
+    box-shadow: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-custom);
+    margin-top: 8px;
+  }
+  .storex-sub-cat {
+    padding: 14px 16px;
+  }
+
+  .storex-carousel-item {
+    flex: 0 0 160px;
+    width: 160px;
+  }
+  .storex-carousel-track {
+    gap: 12px;
   }
 }

@@ -215,10 +215,10 @@ Firmamız, mağazamızı ziyaret eden kullanıcılar ve kullanıcıların web si
 Çerezler, ana bellekten veya e-postanızdan veri ya da kişisel bilgi almak için tasarlanmamıştır. Tarayıcıların pek çoğu çerezleri kabul edecek şekilde tasarlanmıştır; ancak kullanıcılar dilerse çerezlerin gelmemesini veya çerez gönderildiğinde uyarı verilmesini sağlayacak biçimde tarayıcı ayarlarını değiştirebilirler. Çerezleri tamamen reddetmek, web sitemizin some alanlarının veya kişiselleştirilmiş özelliklerinin düzgün çalışmasını engelleyebilir.
 
 6. ÜÇÜNCÜ TARAF WEB SİTELERİ VE LİNKLER
-Web sitemiz dahilinde, kullanıcı kolaylığı sağlamak adına üçüncü kişilerin sahip olduğu başka web sitelerine bağlantılar (linkler) verilebilir. Firmamız, bu linkler vasıtasıyla erişilen sitelerin gizlilik uygulamaları, çerez politikaları veya içeriklerine yönelik herhangi bir sorumluluk taşımamaktadır. İlgili sitelerin kendi gizlilik sözleşmelerinin incelenmesi tavsiye edilir.  
+Web sitemiz dahilinde, kullanıcı kolaylığı sağlamak adına üçüncü kişilerin sahip olduğu başka web sitelerine bağlantılar (linkler) verilebilir. Firmamız, bu linkler vasıtasıyla erişilen sitelerin gizlilik uygulamaları, çerez politikaları veya içeriklerine yönelik herhangi bir sorumluluk taşımamaktadır. İlgili sitelerin kendi gizlilik sözleşmelerinin incelenmesi tavsiye edilir.
 
 7. E-POSTA GÜVENLİĞİ
-Firmamızın Müşteri Hizmetleri’ne, herhangi bir siparişinizle ilgili olarak göndereceğiniz e-postalarda, asla kredi kartı numaranızı veya şifrelerinizi yazmayınız. E-postalarda yer alan bilgiler üçüncü şahıslar tarafından görüntülenebilir. Firmamız, e-postalarınız üzerinden aktarılan bilgilerin güvenliğini hiçbir koşulda garanti edemez.  
+Firmamızın Müşteri Hizmetleri’ne, herhangi bir siparişinizle ilgili olarak göndereceğiniz e-postalarda, asla kredi kartı numaranızı veya şifrelerinizi yazmayınız. E-postalarda yer alan bilgiler üçüncü şahıslar tarafından görüntülenebilir. Firmamız, e-postalarınız üzerinden aktarılan bilgilerin güvenliğini hiçbir koşulda garanti edemez.
 
 8. 18 YAŞ ALTI KULLANICILAR
 www.kovankirtasiye.com.tr internet sitesi 18 yaş altındaki çocukların tek başına alışveriş yapması için uygun değildir. Firmamız, bilerek ve isteyerek 18 yaş altındaki çocuklardan kişisel bilgi talep etmez. Eğer bir ebeveyn, çocuğunun kendi rızası olmadan siteye kişisel bilgi girdiğini fark ederse, bu durumun bildirimi halinde söz konusu bilgiler sistemimizden derhal silinir.
@@ -284,6 +284,88 @@ Bizim için ticaret, sadece bir ürünün teslim edilmesinden ibaret değildir. 
 
   return (
     <footer className="footer">
+      {/* Güven Rozetleri */}
+      <div className="footer-trust">
+        <div className="container footer-trust-grid">
+          <div className="trust-item">
+            <span className="trust-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <rect x="5" y="11" width="14" height="9" rx="2" />
+                <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+              </svg>
+            </span>
+            <div>
+              <h5>%100 Güvenli Ödeme</h5>
+              <p>
+                256 bit SSL sertifikası ile bilgileriniz şifrelenerek korunur.
+              </p>
+            </div>
+          </div>
+
+          <div className="trust-item">
+            <span className="trust-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <rect x="2" y="6" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+            </span>
+            <div>
+              <h5>Kredi Kartı ile Ödeme</h5>
+              <p>Anlaşmalı bankaların kartlarıyla güvenle alışveriş yapın.</p>
+            </div>
+          </div>
+
+          <div className="trust-item">
+            <span className="trust-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <rect x="1" y="7" width="14" height="10" rx="1" />
+                <path d="M15 10h4l3 3v4h-7" />
+                <circle cx="6" cy="19" r="1.6" />
+                <circle cx="17" cy="19" r="1.6" />
+              </svg>
+            </span>
+            <div>
+              <h5>Ücretsiz Kargo</h5>
+              <p>2000 TL ve üzeri siparişlerde kargo ücreti yoktur.</p>
+            </div>
+          </div>
+
+          <div className="trust-item">
+            <span className="trust-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <rect x="3" y="9" width="18" height="12" rx="1" />
+                <path d="M3 9l1.6-3.2A2 2 0 0 1 6.4 4.6h11.2a2 2 0 0 1 1.8 1.2L21 9" />
+                <path d="M12 9v12" />
+              </svg>
+            </span>
+            <div>
+              <h5>Ürün İade Hakkı</h5>
+              <p>14 gün içinde koşulsuz iade ve değişim imkânı.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container footer-layout">
         {/* Sütun 1: Logo / Tanım */}
         <div className="footer-col brand-col">

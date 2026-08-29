@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TopTrustBar from "./components/layout/TopTrustBar";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import ScrollToTop from "./components/ui/ScrollToTop";
@@ -33,6 +34,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <TopTrustBar />
       <Navbar />
       <main className="main-content">
         <Routes>
