@@ -1,296 +1,122 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import api from "../services/api";
-import { toast } from "react-toastify";
 import "./Cart.css";
 
 export default function Cart() {
-  const { cartItems, totalPrice, removeFromCart, updateQuantity, clearCart } =
-    useCart();
-
+  const { cartItems, removeFromCart, updateQuantity, totalPrice } = useCart();
   const navigate = useNavigate();
 
-  const [upsells, setUpsells] = useState([]);
-  const [upsellLoading, setUpsellLoading] = useState(false);
-
-  // --------------------------------------------------
-  // Sepetteki ürünlere göre upsell ürünlerini getir
-  // --------------------------------------------------
-  useEffect(() => {
-    const ids = cartItems.map((item) => item._id).filter(Boolean);
-
-    if (ids.length === 0) {
-      setUpsells([]);
-      return;
-    }
-
-    setUpsellLoading(true);
-
-    api
-      .post("/upsell/cart", {
-        product_ids: ids,
-      })
-      .then((response) => {
-        const products = Array.isArray(response.data) ? response.data : [];
-
-        setUpsells(products);
-      })
-      .catch(() => {
-        // Upsell çalışmasa bile sepet çalışmaya devam etsin
-        setUpsells([]);
-      })
-      .finally(() => {
-        setUpsellLoading(false);
-      });
-  }, [cartItems]);
-
-  // --------------------------------------------------
-  // Miktar değiştirme
-  // --------------------------------------------------
-  const handleQuantityChange = (id, quantity) => {
-    const newQuantity = Number(quantity);
-
-    if (!Number.isFinite(newQuantity) || newQuantity < 1) {
-      return;
-    }
-
-    updateQuantity(id, newQuantity);
-  };
-
-  // --------------------------------------------------
-  // Checkout
-  // --------------------------------------------------
-  const handleCheckout = () => {
-    if (cartItems.length === 0) {
-      toast.warn("Sepetiniz boş");
-      return;
-    }
-
-    navigate("/checkout");
-  };
-
-  // --------------------------------------------------
-  // Sepet boş
-  // --------------------------------------------------
   if (cartItems.length === 0) {
     return (
-      <div className="container cart-page">
-        <div className="empty-cart">
-          <h2>Sepetiniz boş</h2>
-
-          <p>Sepetinizde henüz ürün bulunmuyor.</p>
-
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={() => navigate("/products")}
-          >
-            Alışverişe Başla
-          </button>
-        </div>
+      <div className="empty" style={{ padding: "80px 0" }}>
+        <p style={{ fontSize: 48, marginBottom: 16 }}>🛒</p>
+        <h2>Sepetiniz boş</h2>
+        <Link
+          to="/products"
+          className="btn-primary"
+          style={{
+            display: "inline-block",
+            marginTop: 20,
+            textDecoration: "none",
+          }}
+        >
+          Alışverişe Başla
+        </Link>
       </div>
     );
   }
 
-  const safeTotalPrice = Number(totalPrice) || 0;
-
-  const shippingPrice = safeTotalPrice >= 2000 ? 0 : 100;
-
-  const grandTotal = safeTotalPrice + shippingPrice;
+  const FREE_SHIPPING_THRESHOLD = 2000;
+  const shippingPrice = totalPrice >= FREE_SHIPPING_THRESHOLD ? 0 : 100; // 2000 TL üzeri ücretsiz kargo
 
   return (
     <div className="container cart-page">
-      <h1>Sepetim</h1>
-
+      <h1 className="cart-title">Sepetim ({cartItems.length} ürün)</h1>
       <div className="cart-layout">
-        {/* ------------------------------------------ */}
-        {/* SEPET */}
-        {/* ------------------------------------------ */}
-        <div className="cart-items card">
+        <div className="cart-items">
           {cartItems.map((item) => {
-            const itemPrice = Number(item.price) || 0;
-            const itemQuantity = Number(item.quantity) || 1;
-            const itemTotal = itemPrice * itemQuantity;
-
+            const unitPrice = item.price + (item.giftWrapPrice || 0);
             return (
-              <div key={item._id} className="cart-item">
-                <div className="cart-item-image">
-                  <img src={item.image} alt={item.name} />
-                </div>
-
-                <div className="cart-item-info">
+              <div
+                key={`${item._id}-${item.giftWrap ? "gift" : "normal"}`}
+                className="cart-item card"
+              >
+                <img src={item.image || "/placeholder.png"} alt={item.name} />
+                <div className="item-info">
                   <h3>{item.name}</h3>
-
-                  <p className="cart-item-price">{itemPrice.toFixed(2)} ₺</p>
+                  <p>{item.price.toFixed(2)} ₺</p>
+                  {item.giftWrap && (
+                    <span className="gift-wrap-badge">
+                      🎁 Hediye Paketi (+{item.giftWrapPrice.toFixed(2)} ₺)
+                    </span>
+                  )}
                 </div>
-
-                <div className="cart-item-quantity">
+                <div className="item-qty">
                   <button
-                    type="button"
                     onClick={() =>
-                      handleQuantityChange(item._id, itemQuantity - 1)
+                      updateQuantity(item._id, item.quantity - 1, item.giftWrap)
                     }
-                    disabled={itemQuantity <= 1}
-                    aria-label="Ürün miktarını azalt"
                   >
                     −
                   </button>
-
-                  <input
-                    type="number"
-                    min="1"
-                    value={itemQuantity}
-                    onChange={(e) =>
-                      handleQuantityChange(item._id, e.target.value)
-                    }
-                    aria-label={`${item.name} miktarı`}
-                  />
-
+                  <span>{item.quantity}</span>
                   <button
-                    type="button"
                     onClick={() =>
-                      handleQuantityChange(item._id, itemQuantity + 1)
+                      updateQuantity(item._id, item.quantity + 1, item.giftWrap)
                     }
-                    aria-label="Ürün miktarını artır"
                   >
                     +
                   </button>
                 </div>
-
-                <div className="cart-item-total">
-                  <strong>{itemTotal.toFixed(2)} ₺</strong>
+                <div className="item-total">
+                  {(unitPrice * item.quantity).toFixed(2)} ₺
                 </div>
-
                 <button
-                  type="button"
-                  className="cart-remove"
-                  onClick={() => removeFromCart(item._id)}
-                  aria-label={`${item.name} ürününü sepetten kaldır`}
+                  className="remove-btn"
+                  onClick={() => removeFromCart(item._id, item.giftWrap)}
                 >
                   ✕
                 </button>
               </div>
             );
           })}
-
-          <div className="cart-actions">
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={() => navigate("/products")}
-            >
-              Alışverişe Devam Et
-            </button>
-
-            <button
-              type="button"
-              className="btn-danger"
-              onClick={() => {
-                const confirmed = window.confirm(
-                  "Sepeti tamamen temizlemek istediğinize emin misiniz?",
-                );
-
-                if (confirmed) {
-                  clearCart();
-                }
-              }}
-            >
-              Sepeti Temizle
-            </button>
-          </div>
         </div>
 
-        {/* ------------------------------------------ */}
-        {/* SİPARİŞ ÖZETİ */}
-        {/* ------------------------------------------ */}
         <div className="cart-summary card">
-          <h2>Sipariş Özeti</h2>
-
+          <h3>Sipariş Özeti</h3>
           <div className="summary-row">
-            <span>Ara Toplam</span>
-
-            <strong>{safeTotalPrice.toFixed(2)} ₺</strong>
+            <span>Ürünler</span>
+            <span>{totalPrice.toFixed(2)} ₺</span>
           </div>
-
           <div className="summary-row">
             <span>Kargo</span>
-
             <span>
               {shippingPrice === 0
                 ? "Ücretsiz"
                 : `${shippingPrice.toFixed(2)} ₺`}
             </span>
           </div>
-
-          <hr />
-
-          <div className="summary-row summary-total">
-            <span>Toplam</span>
-
-            <strong>{grandTotal.toFixed(2)} ₺</strong>
-          </div>
-
-          {safeTotalPrice < 2000 && (
-            <p className="free-shipping-hint">
-              💡 {(2000 - safeTotalPrice).toFixed(2)} ₺ daha alışveriş yapın,
-              kargo ücretsiz olsun!
+          {shippingPrice > 0 && (
+            <p
+              className="free-shipping-hint"
+              style={{ fontSize: 13, color: "#666" }}
+            >
+              💡 {(FREE_SHIPPING_THRESHOLD - totalPrice).toFixed(2)} ₺ daha
+              alışveriş yapın, kargo ücretsiz olsun!
             </p>
           )}
-
+          <div className="summary-total">
+            <span>Toplam</span>
+            <span>{(totalPrice + shippingPrice).toFixed(2)} ₺</span>
+          </div>
           <button
-            type="button"
             className="btn-primary checkout-btn"
-            onClick={handleCheckout}
+            onClick={() => navigate("/checkout")}
           >
-            Siparişi Tamamla
+            Siparişi Tamamla →
           </button>
         </div>
       </div>
-
-      {/* ------------------------------------------ */}
-      {/* UPSELL */}
-      {/* ------------------------------------------ */}
-      {!upsellLoading && upsells.length > 0 && (
-        <section className="upsell-section">
-          <h2>Bunları da almak ister misiniz?</h2>
-
-          <div className="upsell-grid">
-            {upsells.map((product, index) => {
-              const productId = product?._id;
-
-              if (!productId) {
-                return null;
-              }
-
-              return (
-                <div
-                  key={productId || `upsell-${index}`}
-                  className="upsell-card"
-                >
-                  <img src={product.image} alt={product.name} />
-
-                  <div className="upsell-info">
-                    <h3>{product.name}</h3>
-
-                    <p className="upsell-price">
-                      {(Number(product.price) || 0).toFixed(2)} ₺
-                    </p>
-
-                    <button
-                      type="button"
-                      className="btn-primary"
-                      onClick={() => navigate(`/product/${productId}`)}
-                    >
-                      Ürünü İncele
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
     </div>
   );
 }
