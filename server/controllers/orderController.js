@@ -12,10 +12,51 @@ const FREE_SHIPPING_THRESHOLD = 2000;
 // @route   POST /api/orders
 const createOrder = async (req, res) => {
   try {
-    const { orderItems, shippingAddress, notes, couponCode } = req.body;
+    const { orderItems, shippingAddress, notes, couponCode, invoiceInfo } =
+      req.body;
 
     if (!orderItems || orderItems.length === 0) {
       return res.status(400).json({ message: "Sepet boş" });
+    }
+
+    // ── Fatura bilgileri (opsiyonel) doğrulama ──
+    const tcKimlikNo = String(invoiceInfo?.tcKimlikNo || "").trim();
+    const vergiNo = String(invoiceInfo?.vergiNo || "").trim();
+    const vergiDairesi = String(invoiceInfo?.vergiDairesi || "").trim();
+
+    if (tcKimlikNo && !/^[1-9]\d{10}$/.test(tcKimlikNo)) {
+      return res
+        .status(400)
+        .json({ message: "TC kimlik numarası 11 haneli olmalıdır" });
+    }
+    if (vergiNo && !/^\d{10}$/.test(vergiNo)) {
+      return res
+        .status(400)
+        .json({ message: "Vergi numarası 10 haneli olmalıdır" });
+    }
+
+    // ── Fatura adresi ──
+    // Aynıysa teslimat adresinin kopyası saklanır, farklıysa gönderilen adres kullanılır
+    const sameAsShipping = invoiceInfo?.sameAsShipping !== false;
+    const rawAddr = sameAsShipping
+      ? shippingAddress
+      : invoiceInfo?.address || {};
+    const invoiceAddress = {
+      street: String(rawAddr?.street || "").trim(),
+      city: String(rawAddr?.city || "").trim(),
+      district: String(rawAddr?.district || "").trim(),
+      zipCode: String(rawAddr?.zipCode || "").trim(),
+    };
+
+    if (
+      !sameAsShipping &&
+      (!invoiceAddress.street ||
+        !invoiceAddress.city ||
+        !invoiceAddress.district)
+    ) {
+      return res.status(400).json({
+        message: "Fatura adresi için adres, il ve ilçe zorunludur",
+      });
     }
 
     let calculatedItemsPrice = 0;
@@ -73,6 +114,13 @@ const createOrder = async (req, res) => {
       user: req.user._id,
       orderItems,
       shippingAddress,
+      invoiceInfo: {
+        tcKimlikNo,
+        vergiNo,
+        vergiDairesi,
+        sameAsShipping,
+        address: invoiceAddress,
+      },
       itemsPrice: calculatedItemsPrice,
       shippingPrice,
       totalPrice: finalTotalPrice,
@@ -82,6 +130,7 @@ const createOrder = async (req, res) => {
     });
 
     // ── Admin email bildirimi ──
+    // Not: TC kimlik no gizlilik gereği e-postaya eklenmez, admin panelinden görülür.
     try {
       const itemsHtml = orderItems
         .map(
@@ -94,6 +143,17 @@ const createOrder = async (req, res) => {
         )
         .join("");
 
+      const invoiceAddressHtml = sameAsShipping
+        ? `<p><strong>Fatura Adresi:</strong> Teslimat adresi ile aynı</p>`
+        : `<p><strong>Fatura Adresi:</strong> ${invoiceAddress.street}, ${invoiceAddress.district} / ${invoiceAddress.city}</p>`;
+
+      const invoiceHtml =
+        vergiNo || vergiDairesi
+          ? `<p><strong>Fatura:</strong> Vergi No: ${vergiNo || "-"} / Vergi Dairesi: ${vergiDairesi || "-"}</p>`
+          : tcKimlikNo
+            ? `<p><strong>Fatura:</strong> Bireysel (TC bilgisi admin panelinde)</p>`
+            : "";
+
       await resend.emails.send({
         from: "Kovan Kırtasiye <bilgi@kovankirtasiye.com.tr>",
         to: process.env.EMAIL_USER,
@@ -105,6 +165,8 @@ const createOrder = async (req, res) => {
             <p><strong>Müşteri:</strong> ${shippingAddress.name}</p>
             <p><strong>Telefon:</strong> ${shippingAddress.phone}</p>
             <p><strong>Adres:</strong> ${shippingAddress.street}, ${shippingAddress.district} / ${shippingAddress.city}</p>
+            ${invoiceHtml}
+            ${invoiceAddressHtml}
             ${notes ? `<p><strong>Not:</strong> ${notes}</p>` : ""}
             <table style="width:100%;border-collapse:collapse;margin:16px 0">
               <thead>

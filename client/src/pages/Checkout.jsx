@@ -20,6 +20,15 @@ export default function Checkout() {
   const [step, setStep] = useState("form");
   const [paytrToken, setPaytrToken] = useState(null);
 
+  // Fatura adresi: varsayılan olarak teslimat adresi ile aynı
+  const [sameAddress, setSameAddress] = useState(true);
+  const [invoiceAddress, setInvoiceAddress] = useState({
+    street: "",
+    city: "",
+    district: "",
+    zipCode: "",
+  });
+
   const [form, setForm] = useState({
     name: user?.name || "",
     phone: "",
@@ -28,6 +37,10 @@ export default function Checkout() {
     district: "",
     zipCode: "",
     notes: "",
+    // Fatura bilgileri (opsiyonel)
+    tcKimlikNo: "",
+    vergiNo: "",
+    vergiDairesi: "",
   });
 
   // Statik Türkiye il/ilçe listesi
@@ -35,6 +48,11 @@ export default function Checkout() {
 
   // Seçilen ile ait ilçeler
   const cities = form.city ? turkiyeIller[form.city] || [] : [];
+
+  // Fatura adresi için seçilen ile ait ilçeler
+  const invoiceCities = invoiceAddress.city
+    ? turkiyeIller[invoiceAddress.city] || []
+    : [];
 
   // --------------------------------------------------
   // Kullanıcı profil bilgilerini getir
@@ -63,6 +81,9 @@ export default function Checkout() {
           zipCode: data.address?.zipCode || "",
           city: validCity,
           district: validDistrict,
+          tcKimlikNo: data.tcKimlikNo || "",
+          vergiNo: data.vergiNo || "",
+          vergiDairesi: data.vergiDairesi || "",
         }));
       })
       .catch(() => {});
@@ -110,6 +131,15 @@ export default function Checkout() {
     }));
   };
 
+  // Sadece rakam kabul eden, uzunluk sınırlı alanlar (TC / vergi no)
+  const handleDigits = (name, maxLen) => (e) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, maxLen);
+    setForm((f) => ({
+      ...f,
+      [name]: value,
+    }));
+  };
+
   // --------------------------------------------------
   // İl seçimi
   // --------------------------------------------------
@@ -133,6 +163,19 @@ export default function Checkout() {
       ...f,
       district: districtName,
     }));
+  };
+
+  // --------------------------------------------------
+  // Fatura adresi değişiklikleri
+  // --------------------------------------------------
+  const handleInvoiceChange = (e) => {
+    const { name, value } = e.target;
+    setInvoiceAddress((a) => ({ ...a, [name]: value }));
+  };
+
+  const handleInvoiceStateChange = (e) => {
+    const cityName = e.target.value;
+    setInvoiceAddress((a) => ({ ...a, city: cityName, district: "" }));
   };
 
   // --------------------------------------------------
@@ -191,6 +234,24 @@ export default function Checkout() {
       return toast.error("Lütfen il ve ilçe seçiniz");
     }
 
+    // Opsiyonel alanlar: boşsa geç, doluysa hane sayısını kontrol et
+    if (form.tcKimlikNo && form.tcKimlikNo.length !== 11) {
+      return toast.error("TC kimlik numarası 11 haneli olmalıdır");
+    }
+    if (form.vergiNo && form.vergiNo.length !== 10) {
+      return toast.error("Vergi numarası 10 haneli olmalıdır");
+    }
+
+    // Fatura adresi farklıysa zorunlu alanları kontrol et
+    if (
+      !sameAddress &&
+      (!invoiceAddress.street.trim() ||
+        !invoiceAddress.city ||
+        !invoiceAddress.district)
+    ) {
+      return toast.error("Lütfen fatura adresini eksiksiz doldurunuz");
+    }
+
     setLoading(true);
 
     try {
@@ -202,13 +263,21 @@ export default function Checkout() {
         quantity: item.quantity,
       }));
 
-      // notes shippingAddress içine gönderilmez
-      const { notes, ...shippingAddress } = form;
+      // notes ve fatura bilgileri shippingAddress içine gönderilmez
+      const { notes, tcKimlikNo, vergiNo, vergiDairesi, ...shippingAddress } =
+        form;
 
       // 1. Siparişi oluştur
       const { data: order } = await api.post("/orders", {
         orderItems,
         shippingAddress,
+        invoiceInfo: {
+          tcKimlikNo,
+          vergiNo,
+          vergiDairesi,
+          sameAsShipping: sameAddress,
+          address: sameAddress ? undefined : invoiceAddress,
+        },
         itemsPrice: totalPrice,
         discountAmount,
         totalPrice: finalTotal,
@@ -367,6 +436,139 @@ export default function Checkout() {
               />
             </div>
           </div>
+
+          {/* FATURA BİLGİLERİ (OPSİYONEL) */}
+          <p className="settings-hint" style={{ margin: "8px 0" }}>
+            Fatura bilgileri (opsiyonel)
+          </p>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>TC Kimlik No</label>
+
+              <input
+                name="tcKimlikNo"
+                value={form.tcKimlikNo}
+                onChange={handleDigits("tcKimlikNo", 11)}
+                inputMode="numeric"
+                maxLength={11}
+                placeholder="11 haneli"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Vergi No</label>
+
+              <input
+                name="vergiNo"
+                value={form.vergiNo}
+                onChange={handleDigits("vergiNo", 10)}
+                inputMode="numeric"
+                maxLength={10}
+                placeholder="10 haneli"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Vergi Dairesi</label>
+
+              <input
+                name="vergiDairesi"
+                value={form.vergiDairesi}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          {/* FATURA ADRESİ */}
+          <label
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              margin: "8px 0",
+              cursor: "pointer",
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={sameAddress}
+              onChange={(e) => setSameAddress(e.target.checked)}
+              style={{ width: "auto" }}
+            />
+            Fatura adresim teslimat adresi ile aynı
+          </label>
+
+          {!sameAddress && (
+            <>
+              <div className="form-group">
+                <label>Fatura Adresi</label>
+
+                <textarea
+                  name="street"
+                  value={invoiceAddress.street}
+                  onChange={handleInvoiceChange}
+                  required
+                  rows={2}
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>İl</label>
+
+                  <select
+                    name="city"
+                    value={invoiceAddress.city}
+                    onChange={handleInvoiceStateChange}
+                    required
+                  >
+                    <option value="">İl seçiniz</option>
+
+                    {states.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>İlçe</label>
+
+                  <select
+                    name="district"
+                    value={invoiceAddress.district}
+                    onChange={handleInvoiceChange}
+                    required
+                    disabled={!invoiceAddress.city}
+                  >
+                    <option value="">
+                      {!invoiceAddress.city
+                        ? "Önce il seçiniz"
+                        : "İlçe seçiniz"}
+                    </option>
+
+                    {invoiceCities.map((district) => (
+                      <option key={district} value={district}>
+                        {district}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Posta Kodu</label>
+
+                  <input
+                    name="zipCode"
+                    value={invoiceAddress.zipCode}
+                    onChange={handleInvoiceChange}
+                  />
+                </div>
+              </div>
+            </>
+          )}
 
           {/* SİPARİŞ NOTU */}
           <div className="form-group">

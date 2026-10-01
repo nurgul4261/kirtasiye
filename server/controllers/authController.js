@@ -9,16 +9,36 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
+// Mongoose doğrulama hatalarını 400 olarak döndürmek için yardımcı
+const handleError = (res, error) => {
+  if (error.name === "ValidationError") {
+    const msg = Object.values(error.errors)
+      .map((e) => e.message)
+      .join(", ");
+    return res.status(400).json({ message: msg });
+  }
+  return res.status(500).json({ message: error.message });
+};
+
 // @desc    Kullanıcı kaydı
 // @route   POST /api/auth/register
 const register = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, tcKimlikNo, vergiNo, vergiDairesi } =
+      req.body;
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: "Bu email zaten kayıtlı" });
     }
-    const user = await User.create({ name, email, password, phone });
+    const user = await User.create({
+      name,
+      email,
+      password,
+      phone,
+      tcKimlikNo,
+      vergiNo,
+      vergiDairesi,
+    });
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -27,7 +47,7 @@ const register = async (req, res) => {
       token: generateToken(user._id),
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    handleError(res, error);
   }
 };
 
@@ -57,7 +77,9 @@ const login = async (req, res) => {
 // @route   GET /api/auth/profile
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select("-password");
+    const user = await User.findById(req.user._id).select(
+      "-password -resetToken -resetTokenExpiry",
+    );
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -74,6 +96,13 @@ const updateProfile = async (req, res) => {
       user.email = req.body.email || user.email;
       user.phone = req.body.phone || user.phone;
       user.address = req.body.address || user.address;
+
+      // Opsiyonel fatura alanları: undefined değilse güncelle (boş string ile silinebilsin)
+      const { tcKimlikNo, vergiNo, vergiDairesi } = req.body;
+      if (tcKimlikNo !== undefined) user.tcKimlikNo = tcKimlikNo;
+      if (vergiNo !== undefined) user.vergiNo = vergiNo;
+      if (vergiDairesi !== undefined) user.vergiDairesi = vergiDairesi;
+
       if (req.body.password) {
         user.password = req.body.password;
       }
@@ -89,7 +118,7 @@ const updateProfile = async (req, res) => {
       res.status(404).json({ message: "Kullanıcı bulunamadı" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    handleError(res, error);
   }
 };
 

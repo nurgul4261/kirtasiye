@@ -24,6 +24,22 @@ const orderSchema = new mongoose.Schema(
       district: { type: String, required: true },
       zipCode: { type: String },
     },
+    // ── Fatura bilgileri (opsiyonel) ──
+    // Sipariş anındaki değer saklanır; kullanıcı sonradan profilini değiştirse bile fatura bilgisi korunur.
+    invoiceInfo: {
+      tcKimlikNo: { type: String, default: "" },
+      vergiNo: { type: String, default: "" },
+      vergiDairesi: { type: String, default: "" },
+      // Fatura adresi teslimat adresi ile aynı mı?
+      sameAsShipping: { type: Boolean, default: true },
+      // Her durumda dolu saklanır (aynıysa teslimat adresinin kopyası)
+      address: {
+        street: { type: String, default: "" },
+        city: { type: String, default: "" },
+        district: { type: String, default: "" },
+        zipCode: { type: String, default: "" },
+      },
+    },
     itemsPrice: { type: Number, required: true, default: 0 },
     discountAmount: { type: Number, default: 0 },
     couponCode: { type: String, default: "" },

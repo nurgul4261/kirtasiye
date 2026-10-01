@@ -1,10 +1,13 @@
-const User = require('../models/User');
+const User = require("../models/User");
 
 // @desc    Tüm kullanıcılar (Admin)
 // @route   GET /api/users
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find({}).select('-password').sort({ createdAt: -1 });
+    // Hassas alanlar (şifre, sıfırlama token'ı, TC no) admin listesine dahil edilmez
+    const users = await User.find({})
+      .select("-password -resetToken -resetTokenExpiry -tcKimlikNo")
+      .sort({ createdAt: -1 });
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -17,9 +20,9 @@ const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (user) {
-      res.json({ message: 'Kullanıcı silindi' });
+      res.json({ message: "Kullanıcı silindi" });
     } else {
-      res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+      res.status(404).json({ message: "Kullanıcı bulunamadı" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -36,9 +39,14 @@ const updateUser = async (req, res) => {
       user.email = req.body.email || user.email;
       user.isAdmin = Boolean(req.body.isAdmin);
       const updated = await user.save();
-      res.json({ _id: updated._id, name: updated.name, email: updated.email, isAdmin: updated.isAdmin });
+      res.json({
+        _id: updated._id,
+        name: updated.name,
+        email: updated.email,
+        isAdmin: updated.isAdmin,
+      });
     } else {
-      res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+      res.status(404).json({ message: "Kullanıcı bulunamadı" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

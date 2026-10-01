@@ -26,6 +26,9 @@ export default function Profile() {
     city: "",
     district: "",
     zipCode: "",
+    tcKimlikNo: "",
+    vergiNo: "",
+    vergiDairesi: "",
     password: "",
     confirmPassword: "",
   });
@@ -50,6 +53,9 @@ export default function Profile() {
           city: data.address?.city || "",
           district: data.address?.district || "",
           zipCode: data.address?.zipCode || "",
+          tcKimlikNo: data.tcKimlikNo || "",
+          vergiNo: data.vergiNo || "",
+          vergiDairesi: data.vergiDairesi || "",
         }));
       })
       .catch(() => {});
@@ -57,6 +63,13 @@ export default function Profile() {
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
+
+  // Sadece rakam kabul eden, uzunluk sınırlı alanlar (TC / vergi no)
+  const handleDigits = (name, maxLen) => (e) =>
+    setForm({
+      ...form,
+      [name]: e.target.value.replace(/\D/g, "").slice(0, maxLen),
+    });
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -75,6 +88,9 @@ export default function Profile() {
           district: form.district,
           zipCode: form.zipCode,
         },
+        tcKimlikNo: form.tcKimlikNo,
+        vergiNo: form.vergiNo,
+        vergiDairesi: form.vergiDairesi,
       };
       if (form.password) payload.password = form.password;
       const { data } = await api.put("/auth/profile", payload);
@@ -321,6 +337,42 @@ export default function Profile() {
                       />
                     </div>
                   </div>
+
+                  <hr className="settings-divider" />
+                  <p className="settings-hint">Fatura bilgileri (opsiyonel)</p>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>TC Kimlik No</label>
+                      <input
+                        name="tcKimlikNo"
+                        value={form.tcKimlikNo}
+                        onChange={handleDigits("tcKimlikNo", 11)}
+                        inputMode="numeric"
+                        maxLength={11}
+                        placeholder="11 haneli"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Vergi No</label>
+                      <input
+                        name="vergiNo"
+                        value={form.vergiNo}
+                        onChange={handleDigits("vergiNo", 10)}
+                        inputMode="numeric"
+                        maxLength={10}
+                        placeholder="10 haneli"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Vergi Dairesi</label>
+                      <input
+                        name="vergiDairesi"
+                        value={form.vergiDairesi}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
                   <hr className="settings-divider" />
                   <p className="settings-hint">
                     Şifre değiştirmek istemiyorsan boş bırak
