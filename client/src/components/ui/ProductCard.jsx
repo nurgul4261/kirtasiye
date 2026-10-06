@@ -68,9 +68,12 @@ export default function ProductCard({ product }) {
         </label>
 
         <div className="product-footer">
-          <span className="product-price">
-            {(product.price + (giftWrap ? GIFT_WRAP_PRICE : 0)).toFixed(2)} ₺
-          </span>
+          <div className="product-price-wrap">
+            <span className="product-price">
+              {(product.price + (giftWrap ? GIFT_WRAP_PRICE : 0)).toFixed(2)} ₺
+            </span>
+            <span className="vat-note">KDV dahil</span>
+          </div>
           <button
             className="btn-primary add-cart-btn"
             onClick={handleAddToCart}

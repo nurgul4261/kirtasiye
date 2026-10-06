@@ -44,7 +44,10 @@ export default function Cart() {
                 <img src={item.image || "/placeholder.png"} alt={item.name} />
                 <div className="item-info">
                   <h3>{item.name}</h3>
-                  <p>{item.price.toFixed(2)} ₺</p>
+                  <p>
+                    {item.price.toFixed(2)} ₺{" "}
+                    <span className="vat-note">KDV dahil</span>
+                  </p>
                   {item.giftWrap && (
                     <span className="gift-wrap-badge">
                       🎁 Hediye Paketi (+{item.giftWrapPrice.toFixed(2)} ₺)
@@ -85,7 +88,7 @@ export default function Cart() {
         <div className="cart-summary card">
           <h3>Sipariş Özeti</h3>
           <div className="summary-row">
-            <span>Ürünler</span>
+            <span>Ürünler (KDV dahil)</span>
             <span>{totalPrice.toFixed(2)} ₺</span>
           </div>
           <div className="summary-row">
@@ -106,7 +109,9 @@ export default function Cart() {
             </p>
           )}
           <div className="summary-total">
-            <span>Toplam</span>
+            <span>
+              Toplam <span className="vat-note">KDV dahil</span>
+            </span>
             <span>{(totalPrice + shippingPrice).toFixed(2)} ₺</span>
           </div>
           <button
