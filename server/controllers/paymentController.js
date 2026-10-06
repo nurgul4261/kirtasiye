@@ -1,6 +1,5 @@
 const Order = require("../models/Order");
 const Product = require("../models/Product");
-const { Resend } = require("resend");
 const {
   generatePaytrToken,
   verifyCallbackHash,
@@ -8,8 +7,35 @@ const {
   queryPaymentStatus,
   generateEftToken,
 } = require("../utils/paytr");
+const {
+  sendOrderReceivedToCustomer,
+  sendPaymentReceivedToAdmin,
+} = require("../utils/orderMails");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Siparişi "ödendi" olarak işaretler ve mailleri gönderir.
+// Atomik güncelleme sayesinde callback ve durum sorgusu aynı anda gelse bile mail tek kez gider.
+const markOrderPaid = async (orderId) => {
+  const paidOrder = await Order.findOneAndUpdate(
+    { _id: orderId, isPaid: false },
+    { isPaid: true, paidAt: new Date(), status: "onaylandi" },
+    { new: true },
+  ).populate("user", "name email");
+
+  if (!paidOrder) return null; // zaten ödenmiş
+
+  try {
+    await sendPaymentReceivedToAdmin(paidOrder);
+  } catch (err) {
+    console.error("Admin ödeme maili gönderilemedi:", err.message);
+  }
+  try {
+    await sendOrderReceivedToCustomer(paidOrder);
+  } catch (err) {
+    console.error("Müşteri sipariş maili gönderilemedi:", err.message);
+  }
+
+  return paidOrder;
+};
 
 // @desc    Sipariş için PayTR ödeme token'ı oluştur
 // @route   POST /api/payment/init
@@ -43,11 +69,9 @@ const initPaytrPayment = async (req, res) => {
       if (eftResult.status === "success") {
         return res.json({ token: eftResult.token, method: "eft" });
       }
-      return res
-        .status(400)
-        .json({
-          message: eftResult.reason || "Havale/EFT ödemesi başlatılamadı",
-        });
+      return res.status(400).json({
+        message: eftResult.reason || "Havale/EFT ödemesi başlatılamadı",
+      });
     }
 
     // ── Kredi kartı ile ödeme (varsayılan) ──
@@ -89,63 +113,14 @@ const paytrCallback = async (req, res) => {
       return res.status(400).send("PAYTR notification failed: bad hash");
 
     const { merchant_oid, status } = req.body;
-    const order = await Order.findOne({
-      paytrMerchantOid: merchant_oid,
-    }).populate("user", "name email");
+    const order = await Order.findOne({ paytrMerchantOid: merchant_oid });
 
     if (order && !order.isPaid) {
       if (status === "success") {
-        order.isPaid = true;
-        order.paidAt = new Date();
-        order.status = "onaylandi";
-        await order.save();
-
-        // ── Ödeme onay maili (admin'e) ──
-        try {
-          const itemsHtml = order.orderItems
-            .map(
-              (item) =>
-                `<tr>
-              <td style="padding:8px;border-bottom:1px solid #eee">${item.name}</td>
-              <td style="padding:8px;border-bottom:1px solid #eee;text-align:center">${item.quantity}</td>
-              <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(item.price * item.quantity).toFixed(2)} ₺</td>
-            </tr>`,
-            )
-            .join("");
-
-          await resend.emails.send({
-            from: "Kovan Kırtasiye <bilgi@kovankirtasiye.com.tr>",
-            to: process.env.EMAIL_USER,
-            subject: `✅ Ödeme Alındı! Sipariş #${order._id.toString().slice(-6).toUpperCase()}`,
-            html: `
-              <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;border:1px solid #eee;border-radius:8px">
-                <h2 style="color:#16a34a">✅ Ödeme Başarıyla Alındı</h2>
-                <p><strong>Sipariş No:</strong> #${order._id.toString().slice(-6).toUpperCase()}</p>
-                <p><strong>Müşteri:</strong> ${order.shippingAddress.name}</p>
-                <p><strong>Telefon:</strong> ${order.shippingAddress.phone}</p>
-                <table style="width:100%;border-collapse:collapse;margin:16px 0">
-                  <thead>
-                    <tr style="background:#f5f5f5">
-                      <th style="padding:8px;text-align:left">Ürün</th>
-                      <th style="padding:8px;text-align:center">Adet</th>
-                      <th style="padding:8px;text-align:right">Tutar</th>
-                    </tr>
-                  </thead>
-                  <tbody>${itemsHtml}</tbody>
-                </table>
-                <p style="font-size:18px;font-weight:bold;color:#1a2744">Tahsil Edilen Tutar: ${order.totalPrice.toFixed(2)} ₺</p>
-                <a href="https://www.kovankirtasiye.com.tr/admin/orders"
-                   style="display:inline-block;margin-top:16px;padding:12px 24px;background:#16a34a;color:white;text-decoration:none;border-radius:8px;font-weight:600">
-                  Admin Panele Git
-                </a>
-              </div>
-            `,
-          });
-        } catch (emailErr) {
-          console.error("Ödeme onay maili gönderilemedi:", emailErr.message);
-        }
-      } else {
+        await markOrderPaid(order._id);
+      } else if (order.status !== "iptal_edildi") {
         // Ödeme başarısız → stoğu geri yükle, siparişi iptal et
+        // (iptal_edildi kontrolü: tekrarlayan callback'te stok iki kez eklenmesin)
         for (const item of order.orderItems) {
           await Product.findByIdAndUpdate(item.product, {
             $inc: { stock: item.quantity },
@@ -230,10 +205,7 @@ const checkPaymentStatus = async (req, res) => {
 
     // PayTR'de ödeme başarılı görünüyor ama bizde hâlâ "ödenmedi" ise senkronize et
     if (result.status === "success" && !order.isPaid) {
-      order.isPaid = true;
-      order.paidAt = new Date();
-      order.status = "onaylandi";
-      await order.save();
+      await markOrderPaid(order._id);
     }
 
     res.json(result);

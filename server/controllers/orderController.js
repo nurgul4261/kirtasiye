@@ -4,9 +4,48 @@ const { Resend } = require("resend");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const MAIL_FROM = "Kovan Kırtasiye <bilgi@kovankirtasiye.com.tr>";
+
 // Kargo ücreti ve ücretsiz kargo eşiği sunucu tarafında sabitlenir — client'tan gelen değere güvenilmez
 const SHIPPING_PRICE = 100;
 const FREE_SHIPPING_THRESHOLD = 2000;
+
+// ── Yardımcılar ──
+
+// Kullanıcıdan gelen metinleri HTML'e basmadan önce temizler
+const escapeHtml = (value) =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+const orderNoOf = (order) => order._id.toString().slice(-6).toUpperCase();
+
+const buildItemsHtml = (items) =>
+  items
+    .map(
+      (item) =>
+        `<tr>
+          <td style="padding:8px;border-bottom:1px solid #eee">${escapeHtml(item.name)}</td>
+          <td style="padding:8px;border-bottom:1px solid #eee;text-align:center">${escapeHtml(item.quantity)}</td>
+          <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(item.price * item.quantity).toFixed(2)} ₺</td>
+        </tr>`,
+    )
+    .join("");
+
+const itemsTableHtml = (items) => `
+  <table style="width:100%;border-collapse:collapse;margin:16px 0">
+    <thead>
+      <tr style="background:#f5f5f5">
+        <th style="padding:8px;text-align:left">Ürün</th>
+        <th style="padding:8px;text-align:center">Adet</th>
+        <th style="padding:8px;text-align:right">Tutar</th>
+      </tr>
+    </thead>
+    <tbody>${buildItemsHtml(items)}</tbody>
+  </table>`;
 
 // @desc    Sipariş oluştur
 // @route   POST /api/orders
@@ -15,7 +54,7 @@ const createOrder = async (req, res) => {
     const { orderItems, shippingAddress, notes, couponCode, invoiceInfo } =
       req.body;
 
-    if (!orderItems || orderItems.length === 0) {
+    if (!Array.isArray(orderItems) || orderItems.length === 0) {
       return res.status(400).json({ message: "Sepet boş" });
     }
 
@@ -59,24 +98,40 @@ const createOrder = async (req, res) => {
       });
     }
 
+    // ── Ürünleri doğrula; ad ve fiyatı sunucudaki Product kaydından al ──
     let calculatedItemsPrice = 0;
     let totalQuantity = 0;
+    const verifiedItems = [];
 
     for (const item of orderItems) {
+      const quantity = Number(item.quantity);
+      if (!Number.isInteger(quantity) || quantity < 1) {
+        return res.status(400).json({ message: "Geçersiz ürün adedi" });
+      }
+
       const product = await Product.findById(item.product);
       if (!product) {
         return res
           .status(404)
           .json({ message: `Ürün bulunamadı: ${item.name}` });
       }
-      // ✅ Stok sayısı mesajdan kaldırıldı
-      if (product.stock < item.quantity) {
+      if (product.stock < quantity) {
         return res.status(400).json({
           message: `"${product.name}" için yeterli stok bulunmamaktadır.`,
         });
       }
-      calculatedItemsPrice += product.price * item.quantity;
-      totalQuantity += item.quantity;
+
+      calculatedItemsPrice += product.price * quantity;
+      totalQuantity += quantity;
+
+      // Ürün, ad, fiyat ve adet sunucu değerlerinden gelir; görsel de üründen alınır
+      verifiedItems.push({
+        product: product._id,
+        name: product.name,
+        image: item.image || product.image,
+        price: product.price,
+        quantity,
+      });
     }
 
     const shippingPrice =
@@ -104,15 +159,10 @@ const createOrder = async (req, res) => {
     const finalItemsPrice = calculatedItemsPrice - discountAmount;
     const finalTotalPrice = finalItemsPrice + shippingPrice;
 
-    for (const item of orderItems) {
-      await Product.findByIdAndUpdate(item.product, {
-        $inc: { stock: -item.quantity },
-      });
-    }
-
+    // ── Siparişi oluştur (stok, sipariş başarılı olduktan sonra düşülür) ──
     const order = await Order.create({
       user: req.user._id,
-      orderItems,
+      orderItems: verifiedItems,
       shippingAddress,
       invoiceInfo: {
         tcKimlikNo,
@@ -129,59 +179,47 @@ const createOrder = async (req, res) => {
       notes,
     });
 
+    for (const item of verifiedItems) {
+      await Product.findByIdAndUpdate(item.product, {
+        $inc: { stock: -item.quantity },
+      });
+    }
+
+    const orderNo = orderNoOf(order);
+
     // ── Admin email bildirimi ──
     // Not: TC kimlik no gizlilik gereği e-postaya eklenmez, admin panelinden görülür.
     try {
-      const itemsHtml = orderItems
-        .map(
-          (item) =>
-            `<tr>
-          <td style="padding:8px;border-bottom:1px solid #eee">${item.name}</td>
-          <td style="padding:8px;border-bottom:1px solid #eee;text-align:center">${item.quantity}</td>
-          <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(item.price * item.quantity).toFixed(2)} ₺</td>
-        </tr>`,
-        )
-        .join("");
-
       const invoiceAddressHtml = sameAsShipping
         ? `<p><strong>Fatura Adresi:</strong> Teslimat adresi ile aynı</p>`
-        : `<p><strong>Fatura Adresi:</strong> ${invoiceAddress.street}, ${invoiceAddress.district} / ${invoiceAddress.city}</p>`;
+        : `<p><strong>Fatura Adresi:</strong> ${escapeHtml(invoiceAddress.street)}, ${escapeHtml(invoiceAddress.district)} / ${escapeHtml(invoiceAddress.city)}</p>`;
 
       const invoiceHtml =
         vergiNo || vergiDairesi
-          ? `<p><strong>Fatura:</strong> Vergi No: ${vergiNo || "-"} / Vergi Dairesi: ${vergiDairesi || "-"}</p>`
+          ? `<p><strong>Fatura:</strong> Vergi No: ${escapeHtml(vergiNo || "-")} / Vergi Dairesi: ${escapeHtml(vergiDairesi || "-")}</p>`
           : tcKimlikNo
             ? `<p><strong>Fatura:</strong> Bireysel (TC bilgisi admin panelinde)</p>`
             : "";
 
       await resend.emails.send({
-        from: "Kovan Kırtasiye <bilgi@kovankirtasiye.com.tr>",
+        from: MAIL_FROM,
         to: process.env.EMAIL_USER,
-        subject: `🛒 Yeni Sipariş! #${order._id.toString().slice(-6).toUpperCase()}`,
+        subject: `🛒 Yeni Sipariş! #${orderNo}`,
         html: `
           <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;border:1px solid #eee;border-radius:8px">
             <h2 style="color:#1a2744">🛒 Yeni Sipariş Geldi!</h2>
-            <p><strong>Sipariş No:</strong> #${order._id.toString().slice(-6).toUpperCase()}</p>
-            <p><strong>Müşteri:</strong> ${shippingAddress.name}</p>
-            <p><strong>Telefon:</strong> ${shippingAddress.phone}</p>
-            <p><strong>Adres:</strong> ${shippingAddress.street}, ${shippingAddress.district} / ${shippingAddress.city}</p>
+            <p><strong>Sipariş No:</strong> #${orderNo}</p>
+            <p><strong>Müşteri:</strong> ${escapeHtml(shippingAddress?.name)}</p>
+            <p><strong>Telefon:</strong> ${escapeHtml(shippingAddress?.phone)}</p>
+            <p><strong>Adres:</strong> ${escapeHtml(shippingAddress?.street)}, ${escapeHtml(shippingAddress?.district)} / ${escapeHtml(shippingAddress?.city)}</p>
             ${invoiceHtml}
             ${invoiceAddressHtml}
-            ${notes ? `<p><strong>Not:</strong> ${notes}</p>` : ""}
-            <table style="width:100%;border-collapse:collapse;margin:16px 0">
-              <thead>
-                <tr style="background:#f5f5f5">
-                  <th style="padding:8px;text-align:left">Ürün</th>
-                  <th style="padding:8px;text-align:center">Adet</th>
-                  <th style="padding:8px;text-align:right">Tutar</th>
-                </tr>
-              </thead>
-              <tbody>${itemsHtml}</tbody>
-            </table>
+            ${notes ? `<p><strong>Not:</strong> ${escapeHtml(notes)}</p>` : ""}
+            ${itemsTableHtml(verifiedItems)}
             ${discountAmount > 0 ? `<p style="color:#16a34a"><strong>İndirim:</strong> -${discountAmount.toFixed(2)} ₺</p>` : ""}
             <p><strong>Kargo:</strong> ${shippingPrice === 0 ? "Ücretsiz" : `${shippingPrice} ₺`}</p>
             <p style="font-size:18px;font-weight:bold;color:#1a2744">Toplam: ${finalTotalPrice.toFixed(2)} ₺</p>
-            <a href="https://www.kovankirtasiye.com.tr/admin/orders" 
+            <a href="https://www.kovankirtasiye.com.tr/admin/orders"
                style="display:inline-block;margin-top:16px;padding:12px 24px;background:#1a2744;color:white;text-decoration:none;border-radius:8px;font-weight:600">
               Admin Panele Git
             </a>
@@ -191,6 +229,8 @@ const createOrder = async (req, res) => {
     } catch (emailErr) {
       console.error("Bildirim emaili gönderilemedi:", emailErr.message);
     }
+
+    // Not: Müşteriye "Siparişiniz alındı" maili ödeme onaylanınca (paymentController) gönderilir.
 
     res.status(201).json(order);
   } catch (error) {
@@ -272,36 +312,18 @@ const sendStatusEmailToCustomer = async (order, status) => {
   const content = STATUS_EMAIL_CONTENT[status];
   if (!content || !order.user?.email) return;
 
-  const itemsHtml = order.orderItems
-    .map(
-      (item) =>
-        `<tr>
-      <td style="padding:8px;border-bottom:1px solid #eee">${item.name}</td>
-      <td style="padding:8px;border-bottom:1px solid #eee;text-align:center">${item.quantity}</td>
-      <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(item.price * item.quantity).toFixed(2)} ₺</td>
-    </tr>`,
-    )
-    .join("");
+  const orderNo = orderNoOf(order);
 
   await resend.emails.send({
-    from: "Kovan Kırtasiye <bilgi@kovankirtasiye.com.tr>",
+    from: MAIL_FROM,
     to: order.user.email,
-    subject: `${content.subject} — Sipariş #${order._id.toString().slice(-6).toUpperCase()}`,
+    subject: `${content.subject} — Sipariş #${orderNo}`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;border:1px solid #eee;border-radius:8px">
         <h2 style="color:${content.color}">${content.title}</h2>
-        <p><strong>Sipariş No:</strong> #${order._id.toString().slice(-6).toUpperCase()}</p>
+        <p><strong>Sipariş No:</strong> #${orderNo}</p>
         <p style="color:#444;line-height:1.6">${content.message}</p>
-        <table style="width:100%;border-collapse:collapse;margin:16px 0">
-          <thead>
-            <tr style="background:#f5f5f5">
-              <th style="padding:8px;text-align:left">Ürün</th>
-              <th style="padding:8px;text-align:center">Adet</th>
-              <th style="padding:8px;text-align:right">Tutar</th>
-            </tr>
-          </thead>
-          <tbody>${itemsHtml}</tbody>
-        </table>
+        ${itemsTableHtml(order.orderItems)}
         <p style="font-size:16px;font-weight:bold;color:#1a2744">Toplam: ${order.totalPrice.toFixed(2)} ₺</p>
         <a href="https://www.kovankirtasiye.com.tr/profile"
            style="display:inline-block;margin-top:16px;padding:12px 24px;background:#1a2744;color:white;text-decoration:none;border-radius:8px;font-weight:600">
